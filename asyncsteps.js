@@ -126,6 +126,12 @@ AsyncStepsProto.setCancel = function( oncancel )
 
 AsyncStepsProto.execute = function( )
 {
+    //
+    if ( !this._queue.length )
+    {
+        this._oncancel = null;
+        this._limit_event = null;
+    }
 };
 
 AsyncStepsProto.copyFrom = function( other )
