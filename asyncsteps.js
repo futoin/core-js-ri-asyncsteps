@@ -62,6 +62,17 @@ AsyncStepsProto.add = function( func, onerror )
 
 AsyncStepsProto.parallel = function( onerror )
 {
+    var p = parallel_step( this, this );
+
+    this.add(
+        function( as )
+        {
+            p.executeParallel( as );
+        },
+        onerror
+    );
+
+    return p;
 };
 
 AsyncStepsProto.success = function( )

@@ -129,6 +129,21 @@ describe( 'AsyncSteps', function(){
     );
     describe(
         '#parallel()', function(){
+            it("should add steps sequentially",function(){
+                var as = this.as;
+                as.parallel(
+                    function( as,err ){ as.success(); }
+                )
+                
+                as.parallel();
+                
+                as._queue.length.should.equal(2);
+                as._queue[0][0].should.be.instanceof( Function );
+                as._queue[0][1].should.be.instanceof( Function );
+                as._queue[1][0].should.be.instanceof( Function );
+                assert.equal(as._queue[1][1], undefined );
+            })
+
         }
     );
     describe(
