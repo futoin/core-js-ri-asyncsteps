@@ -1,6 +1,7 @@
 
 //
 var async_steps = require('../asyncsteps');
+var assert = require('assert');
 
 describe( 'AsyncTool', function(){
     describe(
@@ -17,7 +18,7 @@ describe( 'AsyncTool', function(){
                     function(){
                         var s = process.hrtime();
                         s = s[0]*1e3 + ( s[1] / 1e6 );
-                        s.should.be.greaterThan( t + 100 )
+                        s.should.be.greaterThan( t + 99 )
                         done();
                     },
                     100
@@ -94,8 +95,6 @@ describe( 'AsyncToolTest', function(){
 });
 
 describe( 'AsyncSteps', function(){
-    var that = this;
-    
     before(function(){
         async_steps.installAsyncToolTest();
     });
@@ -105,12 +104,27 @@ describe( 'AsyncSteps', function(){
     });
     
     beforeEach(function( done ){
-        //that.as = async_steps();
+        this.as = async_steps();
         done();
     });
     
     describe(
         '#add()', function(){
+            it("should add steps sequentially",function(){
+                var as = this.as;
+                as.add(
+                    function( as ){ as.success(); },
+                    function( as,err ){ as.success(); }
+                ).add(
+                    function( as ){ as.success(); }
+                );
+                
+                as._queue.length.should.equal(2);
+                as._queue[0][0].should.be.instanceof( Function );
+                as._queue[0][1].should.be.instanceof( Function );
+                as._queue[1][0].should.be.instanceof( Function );
+                assert.equal(as._queue[1][1], undefined );
+            })
         }
     );
     describe(
@@ -119,14 +133,40 @@ describe( 'AsyncSteps', function(){
     );
     describe(
         '#success()', function(){
+            it('should fail on top level',function(){
+                assert.throws(function(){
+                    this.as.success();
+                }, async_steps.FutoInError.InternalError );
+            });
         }
     );
     describe(
         '#successStep()', function(){
+            it('should fail on top level',function(){
+                assert.throws(function(){
+                    this.as.successStep();
+                }, async_steps.FutoInError.InternalError );
+            });
         }
     );
     describe(
         '#error()', function(){
+            it('should throw error',function(){
+                as = this.as
+                as.state.error_info.should.equal( '' );
+                
+                assert.throws(function(){
+                    as.error( "MyError" );
+                }, "MyError" );
+                
+                as.state.error_info.should.equal( '' );
+                
+                assert.throws(function(){
+                    as.error( "MyError", 'My Info' );
+                }, "MyError" );
+                
+                as.state.error_info.should.equal( 'My Info' );
+            });
         }
     );
     describe(

@@ -2,16 +2,18 @@
 var asp = require( './lib/asyncstep_protector' );
 var parallel_step = require( './lib/parallel_step' );
 var async_tool = require( './lib/asynctool' );
+var futoin_errors = require( './lib/futoin_errors' );
 
 /**
  * Call to get a new instance of AsyncSteps
  */
 exports = module.exports = function( )
 {
-    return new this.AsyncSteps();
+    return new module.exports.AsyncSteps();
 };
 
 exports.AsyncTool = async_tool;
+exports.FutoInError = futoin_errors;
 
 /* Use for unit testing */
 exports.installAsyncToolTest = function( install )
@@ -51,10 +53,11 @@ AsyncStepsProto.add = function( func, onerror )
 {
     if ( this._stack.length )
     {
-        this.error( "InternalError", "Top level add in execution" );
+        this.error( futoin_errors.InternalError, "Top level add in execution" );
     }
 
     this._queue.push( [ func, onerror ] );
+    return this;
 };
 
 AsyncStepsProto.parallel = function( onerror )
@@ -63,17 +66,17 @@ AsyncStepsProto.parallel = function( onerror )
 
 AsyncStepsProto.success = function( )
 {
-    this.error( "InternalError", "Invalid success() call" );
+    this.error( futoin_errors.InternalError, "Invalid success() call" );
 };
 
 AsyncStepsProto.successStep = function( )
 {
-    this.error( "InternalError", "Invalid successStep() call" );
+    this.error( futoin_errors.InternalError, "Invalid successStep() call" );
 };
 
 AsyncStepsProto.error = function( error, error_info )
 {
-    if ( error_info )
+    if ( error_info !== undefined )
     {
         this.state.error_info = error_info;
     }
@@ -95,7 +98,7 @@ AsyncStepsProto.setTimeout = function( timeout_ms )
         function()
         {
             _this._limit_event = null;
-            _this._handle_error( "Timeout" );
+            _this._handle_error( futoin_errors.Timeout );
         },
         timeout_ms
     );

@@ -1,6 +1,6 @@
 {
   "name": "futoin-asyncsteps",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "FutoIn AsyncSteps - Reference Implementation",
   "main": "asyncsteps.js",
   "scripts": {
@@ -18,7 +18,10 @@
     "async",
     "steps"
   ],
-  "author": "Andrey Galkin",
+  "author": {
+    "name" : "Andrey Galkin",
+    "email" : "andrey@futoin.eu"
+  },
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/futoin/core-js-ri-asyncsteps/issues"
