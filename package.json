@@ -8,7 +8,7 @@
     "checkStyle": "./node_modules/.bin/jscs .",
     "pretest": "npm run-script lint && npm run-script checkStyle",
     "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --recursive -R spec -r should",
-    "posttest": "./node_modules/.bin/istanbul check-coverage && rm -rf coverage"
+    "posttest": "./node_modules/.bin/istanbul check-coverage && ./node_modules/.bin/istanbul report html"
   },
   "repository": {
     "type": "git",

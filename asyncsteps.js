@@ -49,16 +49,34 @@ function AsyncSteps( state )
 /**
  * Prototype for AsyncSteps
  */
-function AsyncStepsProto()
+var AsyncStepsProto =
 {
-    this.success.apply( this, arguments );
-}
+    _execute_event : null,
+    _next_args : []
+};
 
-AsyncStepsProto._execute_event = null;
-AsyncStepsProto._next_args = [];
+AsyncStepsProto._check_func = function( func )
+{
+    if ( func.length < 1 )
+    {
+        this.error( futoin_errors.InternalError, "Step function must expect at least AsyncStep interface" );
+    }
+};
+
+AsyncStepsProto._check_onerror = function( onerror )
+{
+    if ( onerror &&
+         ( onerror.length != 2 ) )
+    {
+        this.error( futoin_errors.InternalError, "Error handler must take exactly two arguments" );
+    }
+};
 
 AsyncStepsProto.add = function( func, onerror )
 {
+    this._check_func( func );
+    this._check_onerror( onerror );
+
     if ( this._stack.length )
     {
         this.error( futoin_errors.InternalError, "Top level add in execution" );
@@ -96,6 +114,17 @@ AsyncStepsProto.error = function( error, error_info )
 AsyncStepsProto.copyFrom = function( other )
 {
     this._queue.push.apply( this._queue, other._queue );
+
+    var os = other.state;
+    var s = this.state;
+
+    for ( var k in os )
+    {
+        if ( typeof s[k] === 'undefined' )
+        {
+            s[k] = os[k];
+        }
+    }
 };
 
 AsyncStepsProto._handle_success = function( args )
@@ -199,7 +228,7 @@ AsyncStepsProto._handle_error = function( name )
     }
 };
 
-AsyncStepsProto._cancel = function()
+AsyncStepsProto.cancel = function()
 {
     this._next_args = [];
 
@@ -264,7 +293,7 @@ AsyncStepsProto.execute = function( )
 
     if ( curr[0] === null )
     {
-        this._handle_success();
+        this._handle_success( [] );
         return;
     }
 
