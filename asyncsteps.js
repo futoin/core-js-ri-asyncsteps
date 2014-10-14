@@ -1,5 +1,5 @@
 
-var asp = require( './lib/asyncstep_protector' );
+var asyncstep_protector = require( './lib/asyncstep_protector' );
 var parallel_step = require( './lib/parallel_step' );
 var async_tool = require( './lib/asynctool' );
 var futoin_errors = require( './lib/futoin_errors' );
@@ -36,6 +36,12 @@ function AsyncSteps( state )
     this.state = state || { error_info : "" };
     this._queue = [];
     this._stack = [];
+
+    var _this = this;
+    this._execute_cb = function()
+    {
+        _this.execute();
+    };
 }
 
 /**
@@ -46,8 +52,8 @@ function AsyncStepsProto()
     this.success.apply( this, arguments );
 }
 
-AsyncStepsProto._limit_event = null;
-AsyncStepsProto._oncancel = null;
+AsyncStepsProto._execute_event = null;
+AsyncStepsProto._next_args = [];
 
 AsyncStepsProto.add = function( func, onerror )
 {
@@ -75,16 +81,6 @@ AsyncStepsProto.parallel = function( onerror )
     return p;
 };
 
-AsyncStepsProto.success = function( )
-{
-    this.error( futoin_errors.InternalError, "Invalid success() call" );
-};
-
-AsyncStepsProto.successStep = function( )
-{
-    this.error( futoin_errors.InternalError, "Invalid successStep() call" );
-};
-
 AsyncStepsProto.error = function( error, error_info )
 {
     if ( error_info !== undefined )
@@ -95,52 +91,210 @@ AsyncStepsProto.error = function( error, error_info )
     throw error;
 };
 
-AsyncStepsProto.setTimeout = function( timeout_ms )
-{
-    if ( this._limit_event )
-    {
-        exports.AsyncTool.cancelCall( this._limit_event );
-        this._limit_event = null;
-    }
-
-    var _this = this;
-
-    exports.AsyncTool.callLater(
-        function()
-        {
-            _this._limit_event = null;
-            _this._handle_error( futoin_errors.Timeout );
-        },
-        timeout_ms
-    );
-};
-
-AsyncStepsProto.setCancel = function( oncancel )
-{
-    var _this = this;
-    this._oncancel = function()
-    {
-        oncancel.call( _this );
-    };
-};
-
-AsyncStepsProto.execute = function( )
-{
-    //
-    if ( !this._queue.length )
-    {
-        this._oncancel = null;
-        this._limit_event = null;
-    }
-};
-
 AsyncStepsProto.copyFrom = function( other )
 {
     this._queue.push.apply( this._queue, other._queue );
 };
 
-AsyncStepsProto._handle_error = function( error )
+AsyncStepsProto._handle_success = function( args )
 {
+    var stack = this._stack;
+
+    if ( !stack.length )
+    {
+        this.error( futoin_errors.InternalError, 'Invalid success completion' );
+    }
+
+    this._next_args = args;
+
+    for ( var asp = stack[ stack.length - 1 ];; )
+    {
+        if ( asp._limit_event )
+        {
+            exports.AsyncTool.cancelCall( asp._limit_event );
+            asp._limit_event = null;
+        }
+
+        asp._cleanup(); // aid GC
+
+        if ( !stack.length )
+        {
+            break;
+        }
+
+        asp = stack[ stack.length - 1 ];
+
+        if ( asp._queue.length )
+        {
+            break;
+        }
+    }
+
+    if ( stack.length ||
+         this._queue.length )
+    {
+        this._execute_event = exports.AsyncTool.callLater( this._execute_cb );
+    }
+};
+
+AsyncStepsProto._handle_error = function( name )
+{
+    this._next_args = [];
+
+    var stack = this._stack;
+    var asp;
+    var slen;
+
+    for ( ; stack.length; stack.pop() )
+    {
+        asp = stack[ stack.length - 1 ];
+
+        if ( asp._limit_event )
+        {
+            exports.AsyncTool.cancelCall( asp._limit_event );
+            asp._limit_event = null;
+        }
+
+        if ( asp._oncancel )
+        {
+            asp._oncancel.call( null );
+            asp._oncancel = null;
+        }
+
+        if ( asp._onerror )
+        {
+            slen = stack.length;
+            asp._queue = null; // suppress non-empty queue for success() in onerror
+
+            try
+            {
+                asp._onerror.call( null, asp, name );
+            }
+            catch ( e ) // not sure, if safe to put 'name' directly here
+            {
+                name = e;
+            }
+
+            if ( slen != stack.length )
+            {
+                return; // override with success()
+            }
+        }
+
+        asp._cleanup(); // aid GC
+    }
+
+    // Clear queue on finish
+    this._queue = [];
+
+    if ( this._execute_event )
+    {
+        exports.AsyncTool.cancelCall( this._execute_event );
+        this._execute_event = null;
+    }
+};
+
+AsyncStepsProto._cancel = function()
+{
+    this._next_args = [];
+
+    if ( this._execute_event )
+    {
+        exports.AsyncTool.cancelCall( this._execute_event );
+        this._execute_event = null;
+    }
+
+    var stack = this._stack;
+    var asp;
+
+    while ( stack.length )
+    {
+        asp = stack.pop();
+
+        if ( asp._limit_event )
+        {
+            exports.AsyncTool.cancelCall( asp._limit_event );
+            asp._limit_event = null;
+        }
+
+        if ( asp._oncancel )
+        {
+            asp._oncancel.call( null );
+            asp._oncancel = null;
+        }
+
+        asp._cleanup(); // aid GC
+    }
+
+    // Clear queue on finish
+    this._queue = [];
+};
+
+AsyncStepsProto.execute = function( )
+{
+    if ( this._execute_event )
+    {
+        exports.AsyncTool.cancelCall( this._execute_event );
+        this._execute_event = null;
+    }
+
+    var stack = this._stack;
+    var q;
+
+    if ( stack.length )
+    {
+        q = stack[ stack.length - 1 ]._queue;
+    }
+    else
+    {
+        q = this._queue;
+    }
+
+    if ( !q.length )
+    {
+        return;
+    }
+
+    var curr = q.shift();
+
+    if ( curr[0] === null )
+    {
+        this._handle_success();
+        return;
+    }
+
+    var asp = asyncstep_protector( this, this );
+
+    var next_args = this._next_args;
+    this._next_args = [];
+    next_args.unshift( asp );
+
+    try
+    {
+        asp._onerror = curr[1];
+        stack.push( asp );
+
+        var oc = stack.length;
+        curr[0].apply( null, next_args );
+
+        if ( oc === stack.length )
+        {
+            if ( asp._queue !== null )
+            {
+                this._execute_event = exports.AsyncTool.callLater( this._execute_cb );
+            }
+            else
+                if ( ( asp._limit_event === null ) &&
+                      ( asp._oncancel === null ) )
+            {
+                this.error( futoin_errors.InternalError, "Step executed with no result, substep, timeout or cancel" );
+            }
+        }
+    }
+    catch ( e )
+    {
+        this.handle_error( e );
+    }
 };
 
 AsyncSteps.prototype = AsyncStepsProto;
