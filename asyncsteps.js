@@ -1,6 +1,4 @@
 
-var asyncstep_protector = require( './lib/asyncstep_protector' );
-var parallel_step = require( './lib/parallel_step' );
 var async_tool = require( './lib/asynctool' );
 var futoin_errors = require( './lib/futoin_errors' );
 
@@ -11,6 +9,10 @@ exports = module.exports = function( )
 {
     return new module.exports.AsyncSteps();
 };
+
+// Prevent issues with cyclic deps
+var asyncstep_protector = require( './lib/asyncstep_protector' );
+var parallel_step = require( './lib/parallel_step' );
 
 exports.AsyncTool = async_tool;
 exports.FutoInError = futoin_errors;
@@ -124,10 +126,13 @@ AsyncStepsProto._handle_success = function( args )
 
         asp = stack[ stack.length - 1 ];
 
-        if ( asp._queue.length )
+        if ( ( asp._queue !== null ) &&
+             asp._queue.length )
         {
             break;
         }
+
+        stack.pop();
     }
 
     if ( stack.length ||
@@ -157,7 +162,7 @@ AsyncStepsProto._handle_error = function( name )
 
         if ( asp._oncancel )
         {
-            asp._oncancel.call( null );
+            asp._oncancel.call( null, asp );
             asp._oncancel = null;
         }
 
@@ -219,7 +224,7 @@ AsyncStepsProto._cancel = function()
 
         if ( asp._oncancel )
         {
-            asp._oncancel.call( null );
+            asp._oncancel.call( null, asp );
             asp._oncancel = null;
         }
 
@@ -293,7 +298,7 @@ AsyncStepsProto.execute = function( )
     }
     catch ( e )
     {
-        this.handle_error( e );
+        this._handle_error( e );
     }
 };
 
