@@ -298,12 +298,16 @@ describe( 'AsyncSteps', function(){
                 )
                 
                 as.parallel();
+                as.add(function(as){ as.success(); });
                 
-                as._queue.length.should.equal(2);
+                as._queue.length.should.equal(3);
                 as._queue[0][0].should.be.instanceof( Function );
                 as._queue[0][1].should.be.instanceof( Function );
                 as._queue[1][0].should.be.instanceof( Function );
                 assert.equal(as._queue[1][1], undefined );
+                
+                as.execute();
+                async_steps.AsyncTool.run();
             });
             
             it("should run in parallel",function(){
@@ -311,7 +315,11 @@ describe( 'AsyncSteps', function(){
                 
                 as.state.order = [];
                 
-                as.parallel(function( as, err){ console.dir(err) } )
+                as.parallel(
+                        function( as, err)
+                        {
+                            console.dir(as);
+                        } )
                     .add(function(as){
                         as.state.order.push( 1 );
                         as.add(function(as){
@@ -333,10 +341,14 @@ describe( 'AsyncSteps', function(){
                             as.success();
                         });
                     });
+                as.add(function(as){
+                    as.state.order.push( 7 );
+                    as.success();
+                });
                     
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.order.should.eql( [1,2,3,4,5,6] );
+                as.state.order.should.eql( [1,2,3,4,5,6,7] );
             });
             
             it("should run in parallel (inner)",function(){
@@ -368,10 +380,119 @@ describe( 'AsyncSteps', function(){
                             });
                         });
                 });
+                as.add(function(as){
+                    as.state.order.push( 7 );
+                    as.success();
+                });
+
                     
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.order.should.eql( [1,2,3,4,5,6] );
+                as.state.order.should.eql( [1,2,3,4,5,6,7] );
+            });
+            
+            it("should cancel on error in parallel (inner)",function(){
+                var as = this.as;
+                
+                as.state.order = [];
+                
+                as.add(function(as){
+                    as.parallel(
+                        function( as, err)
+                        {
+                            if ( err === 'MyError' ) as.success();
+                        } )
+                        .add(function(as){
+                            as.state.order.push( 1 );
+                            as.add(function(as){
+                                as.state.order.push( 4 );
+                                as.success();
+                            });
+                        })
+                        .add(function(as){
+                            as.state.order.push( 2 );
+                            as.add(function(as){
+                                as.state.order.push( 5 );
+                                as.error( 'MyError' );
+                            });
+                        })
+                        .add(function(as){
+                            as.state.order.push( 3 );
+                            as.add(function(as){
+                                as.state.order.push( 6 );
+                                as.success();
+                            });
+                        });
+                });
+                as.add(function(as){
+                    as.state.order.push( 7 );
+                    as.success();
+                });
+
+                    
+                as.execute();
+                async_steps.AsyncTool.run();
+                as.state.order.should.eql( [1,2,3,4,5,7] );
+            });
+            
+            it("should cancel on cancel in parallel (inner)",function(){
+                var as = this.as;
+                var root_as = as;
+                                
+                as.state.order = [];
+                
+                as.add(function(as){
+                    as.parallel(
+                        function( as, err)
+                        {
+                            console.dir( err );
+                            if ( err === 'MyError' ) as.success();
+                        } )
+                        .add(function(as){
+                            as.state.order.push( 1 );
+                            as.add(function(as){
+                                as.state.order.push( 4 );
+                                as.success();
+                            });
+                        })
+                        .add(function(as){
+                            as.state.order.push( 2 );
+                            as.add(function(as){
+                                as.state.order.push( 5 );
+                                as.success();
+                            });
+                            as.setCancel(function(as){
+                            });
+                            async_steps.AsyncTool.callLater(
+                                function()
+                                {
+                                    try
+                                    {
+                                        root_as.cancel();
+                                    }
+                                    catch ( e )
+                                    {
+                                        console.dir( e );
+                                    }
+                                } );
+                        })
+                        .add(function(as){
+                            as.state.order.push( 3 );
+                            as.add(function(as){
+                                as.state.order.push( 6 );
+                                as.success();
+                            });
+                        });
+                });
+                as.add(function(as){
+                    as.state.order.push( 7 );
+                    as.success();
+                });
+
+                    
+                as.execute();
+                async_steps.AsyncTool.run();
+                as.state.order.should.eql( [1,2,3,4] );
             });
         }
     );
@@ -510,6 +631,81 @@ describe( 'AsyncSteps', function(){
                 async_steps.AsyncTool.run();
                 as.state.executed.should.be.true;
             });
+            
+           it( 'should be possible to make async success', function(){
+                var as = this.as;
+                var _this = this;
+                
+                as.state.myerror = false;
+                
+                as.add(
+                    function( as ){
+                        async_steps.AsyncTool.callLater(function(){
+                            as.success();
+                        });
+                        as.setCancel(function(as){});
+                    },
+                    function( as, err )
+                    {
+                        as.state.myerror = true;
+                    }
+                ).
+                add( function( as ){
+                    as.success();
+                });
+
+                as.execute();
+                async_steps.AsyncTool.nextEvent();
+                assertHasEvents();
+                async_steps.AsyncTool.nextEvent();
+                assertNoEvents();
+                
+                as.state.myerror.should.be.false;
+            });
+
+            it( 'should ignore unexpected success', function(){
+                var as = this.as;
+                var _this = this;
+                var root_as = as;
+                
+                as.state.myerror = false;
+                as.state.executed = false;
+                
+                as.add(
+                    function( as ){
+                        async_steps.AsyncTool.callLater(function(){
+                            assert.throws(function(){
+                                as.success();
+                            }, Error, 'InternalError' );
+                        });
+
+                        as.success();
+                    },
+                    function( as, err )
+                    {
+                        console.log( err );
+                        as.state.myerror = true;
+                    }
+                ).
+                add(
+                    function( as ){
+                        as.state.executed = true;
+                        as.success();
+                    },
+                    function( as, err ){
+                        console.dir( err );
+                    }
+                );
+
+                as.execute();
+                async_steps.AsyncTool.nextEvent();
+                assertHasEvents();
+                async_steps.AsyncTool.nextEvent();
+                assertNoEvents();
+                
+                as.state.myerror.should.be.false;
+                as.state.executed.should.be.true;
+            });
         }
     );
     describe(
@@ -555,13 +751,13 @@ describe( 'AsyncSteps', function(){
                 
                 assert.throws(function(){
                     as.error( "MyError" );
-                }, "MyError" );
+                }, Error, "MyError" );
                 
                 as.state.error_info.should.equal( '' );
                 
                 assert.throws(function(){
                     as.error( "MyError", 'My Info' );
-                }, "MyError" );
+                }, Error, "MyError" );
                 
                 as.state.error_info.should.equal( 'My Info' );
             });
@@ -598,19 +794,110 @@ describe( 'AsyncSteps', function(){
                 var as = this.as;
                 var _this = this;
                 
-                as.add(function( as ){
+                as.state.myerror = false;
+                
+                as.add(
+                    function( as ){
                         async_steps.AsyncTool.callLater(function(){
-                            _this.as._handle_error( 'MyError' );
+                            try
+                            {
+                                as.error( 'MyError' );
+                            }
+                            catch ( e )
+                            {}
                         });
-                        as.success();
-                }).
+                        as.setCancel(function(as){});
+                    },
+                    function( as, err )
+                    {
+                        as.state.myerror = ( err === 'MyError' );
+                    }
+                ).
                 add( function( as ){
+                    as.success();
                 });
 
                 as.execute();
                 async_steps.AsyncTool.nextEvent();
                 assertNoEvents();
+                
+                as.state.myerror.should.be.true;
             });
+            
+            it( 'should be possible to make async error in execute', function(){
+                var as = this.as;
+                var _this = this;
+                var root_as = as;
+                
+                as.state.myerror = false;
+                as.state.executed = false;
+                
+                as.add(
+                    function( as ){
+                        as.success();
+                    },
+                    function( as, err )
+                    {
+                        as.state.myerror = ( err === 'MyError' );
+                    }
+                ).
+                add( function( as ){
+                    as.state.executed = true;
+                    as.success();
+                });
+
+                as.execute();
+                try
+                {
+                    as.error( 'MyError' );
+                }
+                catch ( e )
+                {}
+                assertNoEvents();
+                
+                as.state.myerror.should.be.false;
+                as.state.executed.should.be.false;
+            });
+            
+            it( 'should ignore unexpected error', function(){
+                var as = this.as;
+                var _this = this;
+                var root_as = as;
+                
+                as.state.myerror = false;
+                as.state.executed = false;
+                
+                as.add(
+                    function( as ){
+                        async_steps.AsyncTool.callLater(function(){
+                            assert.throws(function()
+                            {
+                                as.error( 'MyError' );
+                            }, Error, 'MyError' );
+                        });
+
+                        as.success();
+                    },
+                    function( as, err )
+                    {
+                        as.state.myerror = ( err === 'MyError' );
+                    }
+                ).
+                add( function( as ){
+                    as.state.executed = true;
+                    as.success();
+                });
+
+                as.execute();
+                async_steps.AsyncTool.nextEvent();
+                assertHasEvents();
+                async_steps.AsyncTool.nextEvent();
+                assertNoEvents();
+                
+                as.state.myerror.should.be.false;
+                as.state.executed.should.be.true;
+            });
+
         }
     );
     describe(
@@ -705,6 +992,8 @@ describe( 'AsyncSteps', function(){
                 var as = this.as;
                 as.state.old_v = false;
                 as.state.executed = false;
+                as.state.parallel1 = false;
+                as.state.parallel2 = false;
                 
                 var model_as = async_steps();
                 model_as.state.new_v = true;
@@ -718,7 +1007,18 @@ describe( 'AsyncSteps', function(){
                     }
                 ).add(function(as){
                     as.state.executed = true;
+                    as.success();
                 });
+                
+                model_as.parallel()
+                    .add(function(as){
+                        as.state.parallel1 = true;
+                        as.success();
+                    })
+                    .add(function(as){
+                        as.state.parallel2 = true;
+                        as.success();
+                    });;
                 
                 as.copyFrom( model_as );
                 as.state.should.have.property( 'old_v', false );
@@ -727,9 +1027,13 @@ describe( 'AsyncSteps', function(){
                 as.execute();
                 async_steps.AsyncTool.run();
                 as.state.executed.should.be.true;
-                
+                as.state.parallel1.should.be.true;
+                as.state.parallel2.should.be.true;
                 
                 as.state.executed = false;
+                as.state.parallel1 = false;
+                as.state.parallel2 = false;
+
                 
                 as.add(function(as){
                     model_as.state.new_v2 = true;
@@ -748,6 +1052,8 @@ describe( 'AsyncSteps', function(){
                 as.execute();
                 async_steps.AsyncTool.run();
                 as.state.executed.should.be.true;
+                as.state.parallel1.should.be.true;
+                as.state.parallel2.should.be.true;
             });
         }
     );

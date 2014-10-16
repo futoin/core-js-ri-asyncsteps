@@ -38,6 +38,7 @@ function AsyncSteps( state )
     this.state = state || { error_info : "" };
     this._queue = [];
     this._stack = [];
+    this._in_execute = false;
 
     var _this = this;
     this._execute_cb = function()
@@ -101,14 +102,19 @@ AsyncStepsProto.parallel = function( onerror )
     return p;
 };
 
-AsyncStepsProto.error = function( error, error_info )
+AsyncStepsProto.error = function( name, error_info )
 {
     if ( error_info !== undefined )
     {
         this.state.error_info = error_info;
     }
 
-    throw error;
+    if ( !this._in_execute )
+    {
+        this._handle_error( name );
+    }
+
+    throw new Error( name );
 };
 
 AsyncStepsProto.copyFrom = function( other )
@@ -202,11 +208,16 @@ AsyncStepsProto._handle_error = function( name )
 
             try
             {
+                this._in_execute = true;
                 asp._onerror.call( null, asp, name );
             }
-            catch ( e ) // not sure, if safe to put 'name' directly here
+            catch ( e )
             {
-                name = e;
+                name = e.message;
+            }
+            finally
+            {
+                this._in_execute = false;
             }
 
             if ( slen != stack.length )
@@ -309,6 +320,7 @@ AsyncStepsProto.execute = function( )
         stack.push( asp );
 
         var oc = stack.length;
+        this._in_execute = true;
         curr[0].apply( null, next_args );
 
         if ( oc === stack.length )
@@ -327,7 +339,12 @@ AsyncStepsProto.execute = function( )
     }
     catch ( e )
     {
-        this._handle_error( e );
+        this._in_execute = false;
+        this._handle_error( e.message );
+    }
+    finally
+    {
+        this._in_execute = false;
     }
 };
 
