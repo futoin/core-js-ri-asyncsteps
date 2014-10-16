@@ -1,6 +1,6 @@
 
 //
-var async_steps = require('../asyncsteps');
+var async_steps = require('../lib/asyncsteps');
 var assert = require('assert');
 
 describe( 'AsyncTool', function(){
