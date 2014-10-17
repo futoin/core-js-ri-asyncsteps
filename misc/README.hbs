@@ -18,7 +18,7 @@ supporting exceptions. error handlers, timeouts, unlimited number of sub-steps,
 execution parallelism and job state/context variables.
 
 Current version is targeted at Node.js, but should be easily used in
-web browser environment as well [not yet tested].
+web browser environment as well (not yet tested).
 
 It should be possible to use any other async framework from AsyncSteps by using
 setCancel() and/or setTimeout() methods which allow step completion without success() or
@@ -44,7 +44,327 @@ and/or package.json:
     "futoin-asyncsteps" : ">=0.99 <2.00"
 }
 ```
+
+# Concept
+
+*NOTE: copy-paste from [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)*
+
+This interface was born as a secondary option for
+executor concept. However, it quickly became clear that
+async/reactor/proactor/light threads/etc. should be base
+for scalable high performance server implementations, even though it is more difficult for understanding and/or debugging.
+Traditional synchronous program flow becomes an addon
+on top of asynchronous base for legacy code and/or too
+complex logic.
+
+Program flow is split into non-blocking execution steps, represented
+with execution callback function. Processing Unit (eg. CPU) halting/
+spinning/switching-to-another-task is seen as a blocking action in program flow.
+
+Any step must not call any of blocking functions, except for synchronization
+with guaranteed minimal period of lock acquisition.
+*Note: under minimal period, it is assumed that any acquired lock is 
+immediately released after action with O(1) complexity and no delay
+caused by programmatic suspension/locking of executing task*
+
+Every step is executed sequentially. Success result of any step
+becomes input for the following step.
+
+Each step can have own error handler. Error handler is called, if
+AsyncSteps.error() is called within step execution or any of its 
+sub-steps. Typical behavior is to ignore error and continue or
+to make cleanup actions and complete job with error.
+
+Each step can have own sequence of sub-steps. Sub-steps can be added
+only during that step execution. Sub-step sequence is executed after
+current step execution is finished.
+
+If there are any sub-steps added then current step must not call
+AsyncSteps.success() or AsyncSteps.error(). Otherwise, InternalError
+is raised.
+
+It is possible to create a special "parallel" sub-step and add
+independent sub-steps to it. Execution of each parallel sub-step
+is started all together. Parallel step completes with success
+when all sub-steps complete with success. If error is raised in
+any sub-step of parallel step then all other sub-steps are canceled.
+
+Out-of-order cancel of execution can occur by timeout, 
+execution control engine decision (e.g. Invoker disconnect) or
+failure of sibling parallel step. Each step can install custom
+on-cancel handler to free resources and/or cancel external jobs.
+After cancel, it must be safe to destroy AsyncSteps object.
+
+AsyncSteps must be used in Executor request processing. The same 
+[root] AsyncSteps object must be used for all asynchronous tasks within
+given request processing.
+
+AsyncSteps may be used by Invoker implementation.
+
+AsyncSteps must support derived classes in implementation-defined way.
+Typical use case: functionality extension (e.g. request processing API).
+
+For performance reasons, it is not economical to initialize AsyncSteps
+with business logic every time. Every implementation must support
+platform-specific AsyncSteps cloning/duplicating.
+
+## 1.1. Levels
+
+When AsyncSteps (or derived) object is created all steps are added
+sequentially in Level 0 through add() and/or parallel(). Note: each
+parallel() is seen as a step.
+
+After AsyncSteps execution is initiated, each step of Level 0 is executed.
+All sub-steps are added in Level n+1. Example:
+
+    add() -> Level 0 #1
+        add() -> Level 1 #1
+            add() -> Level 2 #1
+            parallel() -> Level 2 #2
+            add() -> Level 2 #3
+        parallel() -> Level 1 #2
+        add() -> Level 1 #3
+    parallel() -> Level 0 #2
+    add() -> Level 0 #3
+
     
+Execution cannot continue to the next step of current Level until all steps of higher Level
+are executed.
+
+The execution sequence would be:
+
+    Level 0 add #1
+    Level 1 add #1
+    Level 2 add #1
+    Level 2 parallel #2
+    Level 2 add #3
+    Level 1 parallel #2
+    Level 1 add #3
+    Level 0 parallel #2
+    Level 0 add #3
+
+## 1.2. Error handling
+
+Due to not linear programming, classic try/catch blocks are converted into execute/onerror.
+Each added step may have custom error handler. If error handler is not specified then
+control passed to lower Level error handler. If non is defined then execution is aborted.
+
+Example:
+
+    add( -> Level 0
+        func( as ){
+            print( "Level 0 func" )
+            add( -> Level 1
+                func( as ){
+                    print( "Level 1 func" )
+                    as.error( "myerror" )
+                },
+                onerror( as, error ){
+                    print( "Level 1 onerror: " + error )
+                    as.error( "newerror" )
+                }
+            )
+        },
+        onerror( as, error ){
+            print( "Level 0 onerror: " + error )
+            as.success( "Prm" )
+        }
+    )
+    add( -> Level 0
+        func( as, param ){
+            print( "Level 0 func2: " + param )
+            as.success()
+        }
+    )
+
+
+Output would be:
+
+    Level 0 func
+    Level 1 func
+    Level 1 onerror: myerror
+    Level 0 onerror: newerror
+    Level 0 func2: Prm
+    
+In synchronous way, it would look like:
+
+    variable = null
+
+    try
+    {
+        print( "Level 0 func" )
+        
+        try
+        {
+            print( "Level 1 func" )
+            throw "myerror"
+        }
+        catch ( error )
+        {
+            print( "Level 1 onerror: " + error )
+            throw "newerror"
+        }
+    }
+    catch( error )
+    {
+        print( "Level 0 onerror: " + error )
+        variable = "Prm"
+    }
+    
+    print( "Level 0 func2: " + variable )
+
+
+## 1.3. Wait for external resources
+
+Very often, execution of step cannot continue without waiting for external event like input from network or disk.
+It is forbidden to block execution in event waiting. As a solution, there are special setTimeout() and setCancel()
+methods.
+
+Example:
+
+    add(
+        func( as ){
+            socket.read( function( data ){
+                as.success( data )
+            } )
+            
+            as.setCancel( function(){
+                socket.cancel_read()
+            } )
+            
+            as.setTimeout( 30_000 ) // 30 seconds
+        },
+        onerror( as, error ){
+            if ( error == timeout ) {
+                print( "Timeout" )
+            }
+            else
+            {
+                print( "Read Error" )
+            }
+        }
+    )
+
+## 1.4. Parallel execution abort
+
+Definition of parallel steps makes no sense to continue execution if any of steps fails. To avoid
+excessive time and resources spent on other steps, there is a concept of canceling execution similar to 
+timeout above.
+
+Example:
+    
+    as.parallel()
+        .add(
+            func( as ){
+                as.setCancel( function(){ ... } )
+                
+                // do parallel job #1
+                as.state()->result1 = ...;
+            }
+        )
+        .add(
+            func( as ){
+                as.setCancel( function(){ ... } )
+
+                // do parallel job #1
+                as.state()->result2 = ...;
+            }
+        )
+        .add(
+            func( as ){
+                as.error( "Some Error" )
+            }
+        )
+    as.add(
+        func( as ){
+            print( as.state()->result1 + as.state->result2 )
+            as.success()
+        }
+    )
+
+## 1.5. AsyncSteps cloning
+
+In long living applications the same business logic may be re-used multiple times
+during execution.
+
+In a REST API server example, complex business logic can be defined only once and
+stored in a kind of AsyncSteps object repository.
+On each request, a reference object from the repository would be copied for actual
+processing with minimal overhead.
+
+However, there would be no performance difference in sub-step definition unless
+its callback function is also created at initialization time, but not at parent
+step execution time (the default concept). So, it should be possible to predefine
+those as well and copy/inherit during step execution. Copying steps must also
+involve copying of state variables.
+
+Example:
+
+    AsyncSteps req_repo_common;
+    req_repo_common.add(func( as ){
+        as.add( func( as ){ ... } );
+        as.copyFrom( as.state().business_logic );
+        as.add( func( as ){ ... } );
+    });
+    
+    AsyncSteps req_repo_buslog1;
+    req_repo_buslog1
+        .add(func( as ){ ... })
+        .add(func( as ){ ... });
+
+    AsyncSteps actual_exec = copy req_repo_common;
+    actual_exec.state().business_logic = req_repo_buslog1;
+    actual_exec.execute();
+
+However, this approach only make sense for deep performance optimizations.
+
+## 1.6. "Success Step" and Throw
+
+During development, when step flow is not known at coding time, but dynamically resolved
+based on configuration, internal state, etc., it is common to see the following logic:
+
+    as.add(func( as ){
+        someHelperA( as ); // adds sub-step
+        someHelperB( as ); // does nothing
+        
+        // Not effective
+        as.add(func( as ){
+            as->success();
+        })
+    })
+    
+The idea is that is it not known in advance if someHelper*() adds sub-steps or not. However, we must ensure
+that a) only one success() call is yield b) there are no sub-steps. 
+
+To make this elegant and efficient, a "success step" concept can be introduced:
+
+    as.add(func( as ){
+        someHelperA( as ); // adds sub-step
+        someHelperB( as ); // does nothing
+        
+        // Runtime optimized
+        as.successStep();
+    })
+    
+As a counterpart for error handling, we must ensure that execution has stopped after error
+is triggered in someHelper*() with no enclosing sub-step. The only safe way is to throw exception
+what is now done in as.error()
+
+### 1.6.1. Safety Rules of "Success" and "Error"
+
+1. as.success() should be called only in top-most function of the
+    step (the one passed to as.add() directly)
+1. if top-most functions calls abstract helpers then it should call as.successStep()
+    for safe and efficient successful termination
+
+
+## 1.7. Error Info
+
+Error code is not always descriptive enough, especially, if it can be generated in multiple ways.
+As a convention special "error_info" state field should hold descriptive information of the last error.
+
+For convenience, error() is extended with optional parameter error_info
+
 # Examples
 
 
