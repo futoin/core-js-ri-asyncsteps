@@ -68,6 +68,19 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
     * [module:futoin-asyncsteps.AsyncSteps.copyFrom(other)](#module_futoin-asyncsteps.AsyncSteps#copyFrom)
     * [module:futoin-asyncsteps.AsyncSteps.cancel()](#module_futoin-asyncsteps.AsyncSteps#cancel)
     * [module:futoin-asyncsteps.AsyncSteps.execute()](#module_futoin-asyncsteps.AsyncSteps#execute)
+  * [class: futoin-asyncsteps.AsyncTool](#module_futoin-asyncsteps.AsyncTool)
+    * [new futoin-asyncsteps.AsyncTool()](#new_module_futoin-asyncsteps.AsyncTool)
+    * [module:futoin-asyncsteps.AsyncTool.callLater(func, [timeout_ms])](#module_futoin-asyncsteps.AsyncTool.callLater)
+    * [module:futoin-asyncsteps.AsyncTool.callLater(handle)](#module_futoin-asyncsteps.AsyncTool.callLater)
+  * [class: futoin-asyncsteps.AsyncToolTest](#module_futoin-asyncsteps.AsyncToolTest)
+    * [new futoin-asyncsteps.AsyncToolTest()](#new_module_futoin-asyncsteps.AsyncToolTest)
+    * [module:futoin-asyncsteps.AsyncToolTest.callLater(func, [timeout_ms])](#module_futoin-asyncsteps.AsyncToolTest.callLater)
+    * [module:futoin-asyncsteps.AsyncToolTest.callLater(handle)](#module_futoin-asyncsteps.AsyncToolTest.callLater)
+    * [module:futoin-asyncsteps.AsyncToolTest.nextEvent()](#module_futoin-asyncsteps.AsyncToolTest.nextEvent)
+    * [module:futoin-asyncsteps.AsyncToolTest.hasEvents()](#module_futoin-asyncsteps.AsyncToolTest.hasEvents)
+    * [module:futoin-asyncsteps.AsyncToolTest.getEvents()](#module_futoin-asyncsteps.AsyncToolTest.getEvents)
+    * [module:futoin-asyncsteps.AsyncToolTest.resetEvents()](#module_futoin-asyncsteps.AsyncToolTest.resetEvents)
+    * [module:futoin-asyncsteps.AsyncToolTest.run()](#module_futoin-asyncsteps.AsyncToolTest.run)
   * [class: futoin-asyncsteps.FutoInErrors](#module_futoin-asyncsteps.FutoInErrors)
     * [new futoin-asyncsteps.FutoInErrors()](#new_module_futoin-asyncsteps.FutoInErrors)
     * [const: module:futoin-asyncsteps.FutoInErrors.ConnectError](#module_futoin-asyncsteps.FutoInErrors.ConnectError)
@@ -174,6 +187,93 @@ NOT standard. Use only on root AsyncSteps instance. Abort execution of AsyncStep
 <a name="module_futoin-asyncsteps.AsyncSteps#execute"></a>
 ###module:futoin-asyncsteps.AsyncSteps.execute()
 Start execution of AsyncSteps using {module:futoin-asyncsteps.AsyncTool}
+
+<a name="module_futoin-asyncsteps.AsyncTool"></a>
+##class: futoin-asyncsteps.AsyncTool
+**Members**
+
+* [class: futoin-asyncsteps.AsyncTool](#module_futoin-asyncsteps.AsyncTool)
+  * [new futoin-asyncsteps.AsyncTool()](#new_module_futoin-asyncsteps.AsyncTool)
+  * [module:futoin-asyncsteps.AsyncTool.callLater(func, [timeout_ms])](#module_futoin-asyncsteps.AsyncTool.callLater)
+  * [module:futoin-asyncsteps.AsyncTool.callLater(handle)](#module_futoin-asyncsteps.AsyncTool.callLater)
+
+<a name="new_module_futoin-asyncsteps.AsyncTool"></a>
+###new futoin-asyncsteps.AsyncTool()
+Neutral interface to event scheduler
+
+<a name="module_futoin-asyncsteps.AsyncTool.callLater"></a>
+###module:futoin-asyncsteps.AsyncTool.callLater(func, [timeout_ms])
+Wrapper for setTimeout()/setImmediate()
+
+**Params**
+
+- func `function` - callback to execute  
+- \[timeout_ms=0\] `number` - optional timeout in ms  
+
+**Returns**: `Object` - - timer handle  
+<a name="module_futoin-asyncsteps.AsyncTool.callLater"></a>
+###module:futoin-asyncsteps.AsyncTool.callLater(handle)
+Wrapper for clearTimeout()/clearImmediate()
+
+**Params**
+
+- handle `Object` - Handle returned from module:futoin-asyncsteps.AsyncTool.callLater  
+
+<a name="module_futoin-asyncsteps.AsyncToolTest"></a>
+##class: futoin-asyncsteps.AsyncToolTest
+**Members**
+
+* [class: futoin-asyncsteps.AsyncToolTest](#module_futoin-asyncsteps.AsyncToolTest)
+  * [new futoin-asyncsteps.AsyncToolTest()](#new_module_futoin-asyncsteps.AsyncToolTest)
+  * [module:futoin-asyncsteps.AsyncToolTest.callLater(func, [timeout_ms])](#module_futoin-asyncsteps.AsyncToolTest.callLater)
+  * [module:futoin-asyncsteps.AsyncToolTest.callLater(handle)](#module_futoin-asyncsteps.AsyncToolTest.callLater)
+  * [module:futoin-asyncsteps.AsyncToolTest.nextEvent()](#module_futoin-asyncsteps.AsyncToolTest.nextEvent)
+  * [module:futoin-asyncsteps.AsyncToolTest.hasEvents()](#module_futoin-asyncsteps.AsyncToolTest.hasEvents)
+  * [module:futoin-asyncsteps.AsyncToolTest.getEvents()](#module_futoin-asyncsteps.AsyncToolTest.getEvents)
+  * [module:futoin-asyncsteps.AsyncToolTest.resetEvents()](#module_futoin-asyncsteps.AsyncToolTest.resetEvents)
+  * [module:futoin-asyncsteps.AsyncToolTest.run()](#module_futoin-asyncsteps.AsyncToolTest.run)
+
+<a name="new_module_futoin-asyncsteps.AsyncToolTest"></a>
+###new futoin-asyncsteps.AsyncToolTest()
+Special event scheduler for testing to be installed with installAsyncToolTest()
+
+<a name="module_futoin-asyncsteps.AsyncToolTest.callLater"></a>
+###module:futoin-asyncsteps.AsyncToolTest.callLater(func, [timeout_ms])
+Adds callback to internal queue
+
+**Params**
+
+- func `function` - callback to execute  
+- \[timeout_ms=0\] `number` - optional timeout in ms  
+
+**Returns**: `Object` - - timer handle  
+<a name="module_futoin-asyncsteps.AsyncToolTest.callLater"></a>
+###module:futoin-asyncsteps.AsyncToolTest.callLater(handle)
+Removed callback from internal queue
+
+**Params**
+
+- handle `Object` - Handle returned from module:futoin-asyncsteps.AsyncToolTest.callLater  
+
+<a name="module_futoin-asyncsteps.AsyncToolTest.nextEvent"></a>
+###module:futoin-asyncsteps.AsyncToolTest.nextEvent()
+Process next even in the internal queue
+
+<a name="module_futoin-asyncsteps.AsyncToolTest.hasEvents"></a>
+###module:futoin-asyncsteps.AsyncToolTest.hasEvents()
+Check if there are any events scheduled
+
+<a name="module_futoin-asyncsteps.AsyncToolTest.getEvents"></a>
+###module:futoin-asyncsteps.AsyncToolTest.getEvents()
+Get internal even queue
+
+<a name="module_futoin-asyncsteps.AsyncToolTest.resetEvents"></a>
+###module:futoin-asyncsteps.AsyncToolTest.resetEvents()
+Clear internal event queue
+
+<a name="module_futoin-asyncsteps.AsyncToolTest.run"></a>
+###module:futoin-asyncsteps.AsyncToolTest.run()
+Execute all remaining events in the internal queue
 
 <a name="module_futoin-asyncsteps.FutoInErrors"></a>
 ##class: futoin-asyncsteps.FutoInErrors
