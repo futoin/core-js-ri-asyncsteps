@@ -9,7 +9,7 @@
     "pretest": "npm run-script lint && npm run-script checkStyle",
     "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --recursive -R spec -r should",
     "posttest": "./node_modules/.bin/istanbul check-coverage && ./node_modules/.bin/istanbul report html",
-    "doc" : "./node_modules/.bin/jsdoc2md -t misc/README.tpl lib/*.js > README.md"
+    "doc" : "./node_modules/.bin/jsdoc2md -t misc/README.hbs lib/*.js > README.md"
   },
   "repository": {
     "type": "git",
