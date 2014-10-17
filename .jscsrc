@@ -105,6 +105,7 @@
     "excludeFiles": [
         "node_modules/**",
         "test/**",
-        "coverage/**"
+        "coverage/**",
+        "out/**"
     ]
 }
