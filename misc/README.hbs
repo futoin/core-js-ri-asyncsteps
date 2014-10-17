@@ -47,7 +47,7 @@ and/or package.json:
 
 # Concept
 
-*NOTE: copy-paste from [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)*
+*NOTE: copy&paste from [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)*
 
 This interface was born as a secondary option for
 executor concept. However, it quickly became clear that
@@ -512,7 +512,7 @@ async success()
 Timeout: 
 ```
 
-## Model steps (closure creation overhead on repetitive execution)
+## Model steps (avoid closure creation overhead on repetitive execution)
 
 ```javascript
 var async_steps = require('futoin-asyncsteps');
@@ -545,8 +545,8 @@ for ( var i = 0; i < 3; ++i )
 }
 
 ```
-Result. Please note the order as only the first step is executed in a loop.
-The rest is executed quasi-parallel by nature async programming.
+Result. Please note the order as only the first step is executed in the loop.
+The rest is executed quasi-parallel by nature of async programming.
 The model_as closure gets executed 6 times, but created only once.
 
 ```

@@ -106,6 +106,7 @@
         "node_modules/**",
         "test/**",
         "coverage/**",
-        "out/**"
+        "out/**",
+	"examples/**"
     ]
 }
