@@ -367,7 +367,211 @@ For convenience, error() is extended with optional parameter error_info
 
 # Examples
 
+## Simple steps
 
+```javascript
+var async_steps = require('futoin-asyncsteps');
+
+var root_as = async_steps();
+
+root_as.add(
+    function( as ){
+        as.success( "MyValue" );
+    }
+).add(
+    function( as, arg ){
+        if ( arg === 'MyValue' )
+        {
+            as.add( function( as ){
+                as.error( 'MyError', 'Something bad has happened' );
+            });
+        }
+
+        as.successStep();
+    },
+    function( as, err )
+    {
+        if ( err === 'MyError' )
+        {
+            as.success( 'NotSoBad' );
+        }
+    }
+);
+
+root_as.add(
+    function( as, arg )
+    {
+        if ( arg === 'NotSoBad' )
+        {
+            console.log( 'MyError was ignored: ' + as.state.error_info );
+        }
+        
+        as.state.p1arg = 'abc';
+        as.state.p2arg = 'xyz';
+        
+        var p = as.parallel();
+        
+        p.add( function( as ){
+            console.log( 'Parallel Step 1' );
+            
+            as.add( function( as ){
+                console.log( 'Parallel Step 1.1' );
+                as.state.p1 = as.state.p1arg + '1';
+                as.success();
+            } );
+        } )
+        .add( function( as ){
+            console.log( 'Parallel Step 2' );
+            
+            as.add( function( as ){
+                console.log( 'Parallel Step 2.1' );
+                as.state.p2 = as.state.p2arg + '2';
+                as.success();
+            } );
+        } );
+    }
+).add( function( as ){
+    console.log( 'Parallel 1 result: ' + as.state.p1 );
+    console.log( 'Parallel 2 result: ' + as.state.p2 );
+} );
+            
+root_as.execute();
+```
+
+Result:
+```
+MyError was ignored: Something bad has happened
+Parallel Step 1
+Parallel Step 2
+Parallel Step 1.1
+Parallel Step 2.1
+Parallel 1 result: abc1
+Parallel 2 result: xyz2
+```
+
+
+## External event wait
+
+```javascript
+var async_steps = require('futoin-asyncsteps');
+
+
+function dummy_service_read( success, error ){
+    // We expect it calles success when data is available
+    // and error, if error occurs
+    // Returns some request handle
+}
+
+function dummy_service_cancel( reqhandle ){
+    // We assume it cancels previously scheduled reqhandle
+}
+
+var root_as = async_steps();
+
+root_as.add( function( as ){
+    setImmediate( function(){
+        as.success( 'async success()' );
+    } );
+    
+    as.setTimeout( 10 ); // ms
+} ).add(
+    function( as, arg ){
+        console.log( arg );
+        
+        var reqhandle = dummy_service_read(
+            function( data ){
+                as.success( data );
+            },
+            function( err ){
+                if ( err !== 'SomeSpecificCancelCode' )
+                {
+                    as.error( err );
+                }
+            }
+        );
+        
+        as.setCancel(function(as){
+            dummy_service_cancel( reqhandle );
+        });
+        
+        // OPTIONAL. Set timeout of 1s
+        as.setTimeout( 1000 );
+    },
+    function( as, err )
+    {
+        console.log( err + ": " + as.state.error_info );
+    }
+);
+
+root_as.execute();
+```
+Result:
+
+```
+async success()
+Timeout: 
+```
+
+## Model steps (closure creation overhead on repetitive execution)
+
+```javascript
+var async_steps = require('futoin-asyncsteps');
+
+
+var model_as = async_steps();
+model_as.state.var = 'Vanilla';
+
+model_as.add( function(as){
+    console.log('-----');
+    console.log( 'Hi! I am from model_as' );
+    console.log( 'State.var: ' + as.state.var );
+    as.state.var = 'Dirty';
+    as.success();
+});
+
+for ( var i = 0; i < 3; ++i )
+{
+    var root_as = async_steps();
+    root_as.copyFrom( model_as );
+    root_as.add( function(as){
+        as.add(function( as ){
+            console.log('>> The first inner step');
+            as.success();
+        });
+        as.copyFrom( model_as );
+        as.successStep();
+    });
+    root_as.execute();
+}
+
+```
+Result. Please note the order as only the first step is executed in a loop.
+The rest is executed quasi-parallel by nature async programming.
+The model_as closure gets executed 6 times, but created only once.
+
+```
+-----
+Hi! I am from model_as
+State.var: Vanilla
+-----
+Hi! I am from model_as
+State.var: Vanilla
+-----
+Hi! I am from model_as
+State.var: Vanilla
+>> The first inner step
+>> The first inner step
+>> The first inner step
+-----
+Hi! I am from model_as
+State.var: Dirty
+-----
+Hi! I am from model_as
+State.var: Dirty
+-----
+Hi! I am from model_as
+State.var: Dirty
+```
     
 # API documentation
 
