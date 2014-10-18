@@ -586,6 +586,8 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
     * [new futoin-asyncsteps.AsyncSteps([state])](#new_module_futoin-asyncsteps.AsyncSteps)
     * [module:futoin-asyncsteps.AsyncSteps.success([...arg])](#module_futoin-asyncsteps.AsyncSteps#success)
     * [module:futoin-asyncsteps.AsyncSteps.successStep()](#module_futoin-asyncsteps.AsyncSteps#successStep)
+    * [module:futoin-asyncsteps.AsyncSteps.setTimeout(timeout_ms)](#module_futoin-asyncsteps.AsyncSteps#setTimeout)
+    * [module:futoin-asyncsteps.AsyncSteps.setCancel()](#module_futoin-asyncsteps.AsyncSteps#setCancel)
     * [module:futoin-asyncsteps.AsyncSteps.add(func, [onerror])](#module_futoin-asyncsteps.AsyncSteps#add)
     * [module:futoin-asyncsteps.AsyncSteps.parallel([onerror])](#module_futoin-asyncsteps.AsyncSteps#parallel)
     * [module:futoin-asyncsteps.AsyncSteps.error(name, [error_info])](#module_futoin-asyncsteps.AsyncSteps#error)
@@ -638,6 +640,8 @@ It installs AsyncToolTest in place of AsyncTool
   * [new futoin-asyncsteps.AsyncSteps([state])](#new_module_futoin-asyncsteps.AsyncSteps)
   * [module:futoin-asyncsteps.AsyncSteps.success([...arg])](#module_futoin-asyncsteps.AsyncSteps#success)
   * [module:futoin-asyncsteps.AsyncSteps.successStep()](#module_futoin-asyncsteps.AsyncSteps#successStep)
+  * [module:futoin-asyncsteps.AsyncSteps.setTimeout(timeout_ms)](#module_futoin-asyncsteps.AsyncSteps#setTimeout)
+  * [module:futoin-asyncsteps.AsyncSteps.setCancel()](#module_futoin-asyncsteps.AsyncSteps#setCancel)
   * [module:futoin-asyncsteps.AsyncSteps.add(func, [onerror])](#module_futoin-asyncsteps.AsyncSteps#add)
   * [module:futoin-asyncsteps.AsyncSteps.parallel([onerror])](#module_futoin-asyncsteps.AsyncSteps#parallel)
   * [module:futoin-asyncsteps.AsyncSteps.error(name, [error_info])](#module_futoin-asyncsteps.AsyncSteps#error)
@@ -663,12 +667,27 @@ Successfully complete current step execution, optionally passing result variable
 
 <a name="module_futoin-asyncsteps.AsyncSteps#successStep"></a>
 ###module:futoin-asyncsteps.AsyncSteps.successStep()
-If sub-steps have been added then add dummy step with as.success() call.
+If sub-steps have been added then add efficient dummy step which behavior of as.success();
 Otherwise, simply call as.success();
+
+<a name="module_futoin-asyncsteps.AsyncSteps#setTimeout"></a>
+###module:futoin-asyncsteps.AsyncSteps.setTimeout(timeout_ms)
+Set timeout for external event completion with async success() or error() call.
+If step is not finished until timeout is reached then whole execution gets canceled.
+Can be used only within execute_callback body.
+
+**Params**
+
+- timeout_ms `number` - Timeout in ms  
+
+<a name="module_futoin-asyncsteps.AsyncSteps#setCancel"></a>
+###module:futoin-asyncsteps.AsyncSteps.setCancel()
+Set cancellation handler to properly handle timeouts and external cancellation.
+Can be used only within execute_callback body.
 
 <a name="module_futoin-asyncsteps.AsyncSteps#add"></a>
 ###module:futoin-asyncsteps.AsyncSteps.add(func, [onerror])
-Add root level step. Can be called multiple times.
+Add sub-step. Can be called multiple times.
 
 **Params**
 
@@ -679,7 +698,7 @@ Add root level step. Can be called multiple times.
 <a name="module_futoin-asyncsteps.AsyncSteps#parallel"></a>
 ###module:futoin-asyncsteps.AsyncSteps.parallel([onerror])
 Creates a step internally and returns specialized AsyncSteps interfaces all steps
-of which are executed in parallel.
+of which are executed in quasi-parallel.
 
 **Params**
 
@@ -688,7 +707,7 @@ of which are executed in parallel.
 **Returns**: `AsyncSteps`  
 <a name="module_futoin-asyncsteps.AsyncSteps#error"></a>
 ###module:futoin-asyncsteps.AsyncSteps.error(name, [error_info])
-Set error and throw to abort execution
+Set error and throw to abort execution.
 
 **Params**
 
@@ -706,11 +725,12 @@ Copy steps and not yet defined state variables from "model" AsyncSteps instance
 
 <a name="module_futoin-asyncsteps.AsyncSteps#cancel"></a>
 ###module:futoin-asyncsteps.AsyncSteps.cancel()
-NOT standard. Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
+Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
 
 <a name="module_futoin-asyncsteps.AsyncSteps#execute"></a>
 ###module:futoin-asyncsteps.AsyncSteps.execute()
-Start execution of AsyncSteps using {module:futoin-asyncsteps.AsyncTool}
+Start execution of AsyncSteps using module:futoin-asyncsteps.AsyncTool
+Must not be called more than once until cancel/complete (instance can be re-used)
 
 <a name="module_futoin-asyncsteps.AsyncTool"></a>
 ##class: futoin-asyncsteps.AsyncTool
