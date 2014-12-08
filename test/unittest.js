@@ -1121,4 +1121,276 @@ describe( 'AsyncSteps', function(){
 
         }
     );
+    
+    describe(
+        '#loop()', function(){
+            it('should complex loop', function(){
+                var as = this.as;
+                var i = 0;
+                var icheck = 1;
+                var s = [];
+                
+                as.add(
+                    function(as)
+                    {
+                        as.loop( function( as )
+                        {
+                            s.push( 'OUTER' );
+                            ++i;
+
+                            as.loop( function( as )
+                            {
+                                s.push( 'MEDIUM' );
+                                i.should.equal( icheck );
+                                
+                                as.loop( function( as )
+                                {
+                                    s.push( 'INNER1' );
+                                    if ( i > 2 )
+                                    {
+                                        as.break();
+                                    }
+                                    else if ( i == 1 )
+                                    {
+                                        ++i;
+                                        as.continue();
+                                    }
+                                    
+                                    ++i;
+                                }, "INNER1" );
+                            
+                                as.loop( function( as )
+                                {
+                                    s.push( 'INNER2' );
+                                    if ( i == 3 )
+                                    {
+                                        icheck = 4;
+                                        as.break( "MEDIUM" );
+                                    }
+                                    
+                                    as.break();
+                                }, "INNER2" );
+                        
+                                as.loop( function( as )
+                                {
+                                    s.push( 'INNER3' );
+                                    ++i;
+                                    as.break( "OUTER" );
+                                }, "INNER3" );
+                            }, "MEDIUM" );
+                        }, "OUTER" );
+                    },
+                    function( as, err )
+                    {
+                        console.dir( s );
+                        console.dir( err + ": " + as.state.error_info );
+                    }
+                );
+                
+                as.execute();
+                async_steps.AsyncTool.run();
+                assertNoEvents();
+                
+                s.should.eql( [ 'OUTER',
+                    'MEDIUM',
+                    'INNER1',
+                    'INNER1',
+                    'INNER1',
+                    'INNER2',
+                    'OUTER',
+                    'MEDIUM',
+                    'INNER1',
+                    'INNER2',
+                    'INNER3' ] );
+
+                i.should.equal( 5 );
+            });
+            
+            it('should forward regular error', function(){
+                var as = this.as;
+                var reserr;
+                
+                as.add(
+                    function(as)
+                    {
+                        as.loop( function( as )
+                        {
+                            as.error( "MyError" );
+                        } );
+                    },
+                    function( as, err )
+                    {
+                        reserr = err;
+                    }
+                );
+                
+                as.execute();
+                async_steps.AsyncTool.run();
+                assertNoEvents();
+                
+                reserr.should.equal( 'MyError' );
+            });
+            
+            it('should continue outer loop', function(){
+                var as = this.as;
+                var reserr = null;
+                
+                as.add(
+                    function(as)
+                    {
+                        var i = 0;
+                        
+                        as.loop( function( as )
+                        {
+                            ++i;
+                            
+                            if ( i === 3 )
+                            {
+                                as.break();
+                            }
+                            
+                            as.loop( function( as )
+                            {
+                                ++i;
+                                as.continue( "OUTER" );
+                            } );
+                        }, "OUTER" );
+                    },
+                    function( as, err )
+                    {
+                        reserr = err;
+                    }
+                );
+                
+                as.execute();
+                async_steps.AsyncTool.run();
+                assertNoEvents();
+                
+                assert.equal( reserr, null );
+            });
+            
+            it('should repeat count times', function(){
+                var as = this.as;
+                var reserr = null;
+                var i = 0;
+                
+                as.add(
+                    function(as)
+                    {
+                        as.repeat( 3, function( as )
+                        {
+                            ++i;
+                            
+                            if ( i == 2 )
+                            {
+                                as.continue();
+                            }
+                        } );
+                    },
+                    function( as, err )
+                    {
+                        reserr = err;
+                    }
+                );
+                
+                as.execute();
+                async_steps.AsyncTool.run();
+                assertNoEvents();
+                
+                assert.equal( reserr, null );
+                i.should.equal( 3 );
+            });
+            
+            it('should repeat break', function(){
+                var as = this.as;
+                var reserr = null;
+                var i = 0;
+                
+                as.add(
+                    function(as)
+                    {
+                        as.repeat( 3, function( as )
+                        {
+                            if ( i == 2 )
+                            {
+                                as.break();
+                            }
+                            
+                            ++i;
+                        } );
+                    },
+                    function( as, err )
+                    {
+                        reserr = err;
+                    }
+                );
+                
+                as.execute();
+                async_steps.AsyncTool.run();
+                assertNoEvents();
+                
+                assert.equal( reserr, null );
+                i.should.equal( 2 );
+            });
+            
+            it('should forEach array', function(){
+                var as = this.as;
+                var reserr = null;
+                var i = 0;
+                
+                as.add(
+                    function(as)
+                    {
+                        as.forEach( [ 1, 2, 3 ], function( as, k, v )
+                        {
+                            assert.equal( v, k + 1 );
+                            i += v;
+                        } );
+                    },
+                    function( as, err )
+                    {
+                        reserr = err;
+                    }
+                );
+                
+                as.execute();
+                async_steps.AsyncTool.run();
+                assertNoEvents();
+                
+                assert.equal( reserr, null );
+                i.should.equal( 6 );
+            });
+            
+            it('should forEach object', function(){
+                var as = this.as;
+                var reserr = null;
+                var i = 0;
+                
+                as.add(
+                    function(as)
+                    {
+                        as.forEach( { a: 1, b: 2, c: 3 }, function( as, k, v )
+                        {
+                            if ( v == 1 ) assert.equal( k, "a" );
+                            if ( v == 2 ) assert.equal( k, "b" );
+                            if ( v == 3 ) assert.equal( k, "c" );
+                            i += v;
+                        } );
+                    },
+                    function( as, err )
+                    {
+                        reserr = err;
+                    }
+                );
+                
+                as.execute();
+                async_steps.AsyncTool.run();
+                assertNoEvents();
+                
+                assert.equal( reserr, null );
+                i.should.equal( 6 );
+            });
+        }
+    );
+
 });
