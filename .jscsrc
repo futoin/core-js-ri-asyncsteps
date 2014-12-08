@@ -1,5 +1,14 @@
 {
-    "requireCurlyBraces" : true,
+    "requireCurlyBraces" :  [
+        "do",
+        "for",
+        "if",
+        "else",
+        "switch",
+        "try",
+        "catch",
+        "while"
+    ],
     "requireSpaceAfterKeywords": [
         "do",
         "for",
@@ -55,7 +64,7 @@
     
     "disallowMultipleVarDecl": true,
     
-    "requireBlocksOnNewline": true,
+    "requireBlocksOnNewline": 1,
     "requireSpacesInsideObjectBrackets": "all",
     "requireSpacesInsideArrayBrackets": "all",
     "requireSpacesInsideParentheses": "all",
@@ -72,7 +81,6 @@
     "disallowMixedSpacesAndTabs": true,
     "disallowTrailingWhitespace": true,
     "requireKeywordsOnNewLine" : [
-        "if",
         "else",
         "for",
         "while",
