@@ -41,9 +41,254 @@ $ npm install futoin-asyncsteps --save
 and/or package.json:
 ```
 "dependencies" : {
-    "futoin-asyncsteps" : "^1.1"
+    "futoin-asyncsteps" : "^1.2"
 }
 ```
+
+# Examples
+
+## Simple steps
+
+```javascript
+var async_steps = require('futoin-asyncsteps');
+
+var root_as = async_steps();
+
+root_as.add(
+    function( as ){
+        as.success( "MyValue" );
+    }
+).add(
+    function( as, arg ){
+        if ( arg === 'MyValue' )
+        {
+            as.add( function( as ){
+                as.error( 'MyError', 'Something bad has happened' );
+            });
+        }
+    },
+    function( as, err )
+    {
+        if ( err === 'MyError' )
+        {
+            as.success( 'NotSoBad' );
+        }
+    }
+);
+
+root_as.add(
+    function( as, arg )
+    {
+        if ( arg === 'NotSoBad' )
+        {
+            console.log( 'MyError was ignored: ' + as.state.error_info );
+        }
+        
+        as.state.p1arg = 'abc';
+        as.state.p2arg = 'xyz';
+        
+        var p = as.parallel();
+        
+        p.add( function( as ){
+            console.log( 'Parallel Step 1' );
+            
+            as.add( function( as ){
+                console.log( 'Parallel Step 1.1' );
+                as.state.p1 = as.state.p1arg + '1';
+            } );
+        } )
+        .add( function( as ){
+            console.log( 'Parallel Step 2' );
+            
+            as.add( function( as ){
+                console.log( 'Parallel Step 2.1' );
+                as.state.p2 = as.state.p2arg + '2';
+            } );
+        } );
+    }
+).add( function( as ){
+    console.log( 'Parallel 1 result: ' + as.state.p1 );
+    console.log( 'Parallel 2 result: ' + as.state.p2 );
+} );
+            
+root_as.execute();
+```
+
+Result:
+
+```
+MyError was ignored: Something bad has happened
+Parallel Step 1
+Parallel Step 2
+Parallel Step 1.1
+Parallel Step 2.1
+Parallel 1 result: abc1
+Parallel 2 result: xyz2
+```
+
+
+## External event wait
+
+```javascript
+var async_steps = require('futoin-asyncsteps');
+
+
+function dummy_service_read( success, error ){
+    // We expect it calles success when data is available
+    // and error, if error occurs
+    // Returns some request handle
+}
+
+function dummy_service_cancel( reqhandle ){
+    // We assume it cancels previously scheduled reqhandle
+}
+
+var root_as = async_steps();
+
+root_as.add( function( as ){
+    setImmediate( function(){
+        as.success( 'async success()' );
+    } );
+    
+    as.setTimeout( 10 ); // ms
+} ).add(
+    function( as, arg ){
+        console.log( arg );
+        
+        var reqhandle = dummy_service_read(
+            function( data ){
+                as.success( data );
+            },
+            function( err ){
+                if ( err !== 'SomeSpecificCancelCode' )
+                {
+                    as.error( err );
+                }
+            }
+        );
+        
+        as.setCancel(function(as){
+            dummy_service_cancel( reqhandle );
+        });
+        
+        // OPTIONAL. Set timeout of 1s
+        as.setTimeout( 1000 );
+    },
+    function( as, err )
+    {
+        console.log( err + ": " + as.state.error_info );
+    }
+);
+
+root_as.execute();
+```
+
+Result:
+
+```
+async success()
+Timeout: 
+```
+
+## Model steps (avoid closure creation overhead on repetitive execution)
+
+```javascript
+var async_steps = require('futoin-asyncsteps');
+
+
+var model_as = async_steps();
+model_as.state.var = 'Vanilla';
+
+model_as.add( function(as){
+    console.log('-----');
+    console.log( 'Hi! I am from model_as' );
+    console.log( 'State.var: ' + as.state.var );
+    as.state.var = 'Dirty';
+});
+
+for ( var i = 0; i < 3; ++i )
+{
+    var root_as = async_steps();
+    root_as.copyFrom( model_as );
+    root_as.add( function(as){
+        as.add(function( as ){
+            console.log('>> The first inner step');
+        });
+        as.copyFrom( model_as );
+    });
+    root_as.execute();
+}
+```
+
+Result. Please note the order as only the first step is executed in the loop.
+The rest is executed quasi-parallel by nature of async programming.
+The model_as closure gets executed 6 times, but created only once.
+
+```
+-----
+Hi! I am from model_as
+State.var: Vanilla
+-----
+Hi! I am from model_as
+State.var: Vanilla
+-----
+Hi! I am from model_as
+State.var: Vanilla
+>> The first inner step
+>> The first inner step
+>> The first inner step
+-----
+Hi! I am from model_as
+State.var: Dirty
+-----
+Hi! I am from model_as
+State.var: Dirty
+-----
+Hi! I am from model_as
+State.var: Dirty
+```
+
+## Simple Async Loops
+
+```javascript
+var async_steps = require('futoin-asyncsteps');
+
+var root_as = async_steps();
+
+root_as.add(
+    function( as ){
+        as.repeat( 3, function( as, i ) {
+            console.log( "> Repeat: " + i );
+        } );
+        
+        as.forEach( [ 1, 2, 3 ], function( as, k, v ) {
+            console.log( "> forEach: " + k + " = " + v );
+        } );
+        
+        as.forEach( { a: 1, b: 2, c: 3 }, function( as, k, v ) {
+            console.log( "> forEach: " + k + " = " + v );
+        } );
+    }
+);
+
+root_as.execute();
+
+```
+
+Result:
+
+```
+> Repeat: 0
+> Repeat: 1
+> Repeat: 2
+> forEach: 0 = 1
+> forEach: 1 = 2
+> forEach: 2 = 3
+> forEach: a = 1
+> forEach: b = 2
+> forEach: c = 3
+```
+
 
 # Concept
 
@@ -316,46 +561,14 @@ Example:
 
 However, this approach only make sense for deep performance optimizations.
 
-## 1.6. "Success Step" and Throw
+## 1.6. Implicit as.success()
 
-During development, when step flow is not known at coding time, but dynamically resolved
-based on configuration, internal state, etc., it is common to see the following logic:
-
-    as.add(func( as ){
-        someHelperA( as ); // adds sub-step
-        someHelperB( as ); // does nothing
-        
-        // Not effective
-        as.add(func( as ){
-            as->success();
-        })
-    })
-    
-The idea is that is it not known in advance if someHelper*() adds sub-steps or not. However, we must ensure
-that a) only one success() call is yield b) there are no sub-steps. 
-
-To make this elegant and efficient, a "success step" concept can be introduced:
+If there are no sub-steps added, no timeout set and no cancel handler set then
+implicit as.success() call is assumed to simplify code and increase efficiency.
 
     as.add(func( as ){
-        someHelperA( as ); // adds sub-step
-        someHelperB( as ); // does nothing
-        
-        // Runtime optimized
-        as.successStep();
+        doSomeStuff( as );
     })
-    
-As a counterpart for error handling, we must ensure that execution has stopped after error
-is triggered in someHelper*() with no enclosing sub-step. The only safe way is to throw exception
-what is now done in as.error()
-
-### 1.6.1. The Safety Rules of AsyncSteps helpers
-
-1. as.success() should be called only in top-most function of the
-    step (the one passed to as.add() directly)
-1. if top-most functions calls abstract helpers then it should call as.successStep()
-    for safe and efficient successful termination
-1. setCancel() and/or setTimeout() must be called only in top most function
-
 
 ## 1.7. Error Info
 
@@ -432,253 +645,13 @@ Abnormal termination is possible through as.error(), including timeout, or exter
 Abnormal termination is seen as as.error() call.
 
 
-# Examples
+## 1.9. The Safety Rules of libraries with AsyncSteps interface
 
-## Simple steps
+1. as.success() should be called only in top-most function of the
+    step (the one passed to as.add() directly)
+1. setCancel() and/or setTimeout() must be called only in top most function
+    as repeated call overrides in scope of step
 
-```javascript
-var async_steps = require('futoin-asyncsteps');
-
-var root_as = async_steps();
-
-root_as.add(
-    function( as ){
-        as.success( "MyValue" );
-    }
-).add(
-    function( as, arg ){
-        if ( arg === 'MyValue' )
-        {
-            as.add( function( as ){
-                as.error( 'MyError', 'Something bad has happened' );
-            });
-        }
-
-        as.successStep();
-    },
-    function( as, err )
-    {
-        if ( err === 'MyError' )
-        {
-            as.success( 'NotSoBad' );
-        }
-    }
-);
-
-root_as.add(
-    function( as, arg )
-    {
-        if ( arg === 'NotSoBad' )
-        {
-            console.log( 'MyError was ignored: ' + as.state.error_info );
-        }
-        
-        as.state.p1arg = 'abc';
-        as.state.p2arg = 'xyz';
-        
-        var p = as.parallel();
-        
-        p.add( function( as ){
-            console.log( 'Parallel Step 1' );
-            
-            as.add( function( as ){
-                console.log( 'Parallel Step 1.1' );
-                as.state.p1 = as.state.p1arg + '1';
-                as.success();
-            } );
-        } )
-        .add( function( as ){
-            console.log( 'Parallel Step 2' );
-            
-            as.add( function( as ){
-                console.log( 'Parallel Step 2.1' );
-                as.state.p2 = as.state.p2arg + '2';
-                as.success();
-            } );
-        } );
-    }
-).add( function( as ){
-    console.log( 'Parallel 1 result: ' + as.state.p1 );
-    console.log( 'Parallel 2 result: ' + as.state.p2 );
-} );
-            
-root_as.execute();
-```
-
-Result:
-```
-MyError was ignored: Something bad has happened
-Parallel Step 1
-Parallel Step 2
-Parallel Step 1.1
-Parallel Step 2.1
-Parallel 1 result: abc1
-Parallel 2 result: xyz2
-```
-
-
-## External event wait
-
-```javascript
-var async_steps = require('futoin-asyncsteps');
-
-
-function dummy_service_read( success, error ){
-    // We expect it calles success when data is available
-    // and error, if error occurs
-    // Returns some request handle
-}
-
-function dummy_service_cancel( reqhandle ){
-    // We assume it cancels previously scheduled reqhandle
-}
-
-var root_as = async_steps();
-
-root_as.add( function( as ){
-    setImmediate( function(){
-        as.success( 'async success()' );
-    } );
-    
-    as.setTimeout( 10 ); // ms
-} ).add(
-    function( as, arg ){
-        console.log( arg );
-        
-        var reqhandle = dummy_service_read(
-            function( data ){
-                as.success( data );
-            },
-            function( err ){
-                if ( err !== 'SomeSpecificCancelCode' )
-                {
-                    as.error( err );
-                }
-            }
-        );
-        
-        as.setCancel(function(as){
-            dummy_service_cancel( reqhandle );
-        });
-        
-        // OPTIONAL. Set timeout of 1s
-        as.setTimeout( 1000 );
-    },
-    function( as, err )
-    {
-        console.log( err + ": " + as.state.error_info );
-    }
-);
-
-root_as.execute();
-```
-Result:
-
-```
-async success()
-Timeout: 
-```
-
-## Model steps (avoid closure creation overhead on repetitive execution)
-
-```javascript
-var async_steps = require('futoin-asyncsteps');
-
-
-var model_as = async_steps();
-model_as.state.var = 'Vanilla';
-
-model_as.add( function(as){
-    console.log('-----');
-    console.log( 'Hi! I am from model_as' );
-    console.log( 'State.var: ' + as.state.var );
-    as.state.var = 'Dirty';
-    as.success();
-});
-
-for ( var i = 0; i < 3; ++i )
-{
-    var root_as = async_steps();
-    root_as.copyFrom( model_as );
-    root_as.add( function(as){
-        as.add(function( as ){
-            console.log('>> The first inner step');
-            as.success();
-        });
-        as.copyFrom( model_as );
-        as.successStep();
-    });
-    root_as.execute();
-}
-
-```
-Result. Please note the order as only the first step is executed in the loop.
-The rest is executed quasi-parallel by nature of async programming.
-The model_as closure gets executed 6 times, but created only once.
-
-```
------
-Hi! I am from model_as
-State.var: Vanilla
------
-Hi! I am from model_as
-State.var: Vanilla
------
-Hi! I am from model_as
-State.var: Vanilla
->> The first inner step
->> The first inner step
->> The first inner step
------
-Hi! I am from model_as
-State.var: Dirty
------
-Hi! I am from model_as
-State.var: Dirty
------
-Hi! I am from model_as
-State.var: Dirty
-```
-
-## Async Loops
-
-```javascript
-var async_steps = require('futoin-asyncsteps');
-
-var root_as = async_steps();
-
-root_as.add(
-    function( as ){
-        as.repeat( 3, function( as, i ) {
-            console.log( "> Repeat: " + i );
-        } );
-        
-        as.forEach( [ 1, 2, 3 ], function( as, k, v ) {
-            console.log( "> forEach: " + k + " = " + v );
-        } );
-        
-        as.forEach( { a: 1, b: 2, c: 3 }, function( as, k, v ) {
-            console.log( "> forEach: " + k + " = " + v );
-        } );
-    }
-);
-
-root_as.execute();
-```
-
-Result:
-
-```
-> Repeat: 0
-> Repeat: 1
-> Repeat: 2
-> forEach: 0 = 1
-> forEach: 1 = 2
-> forEach: 2 = 3
-> forEach: a = 1
-> forEach: b = 2
-> forEach: c = 3
-```
     
 # API documentation
 
@@ -692,7 +665,7 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
   * [class: futoin-asyncsteps.AsyncSteps](#module_futoin-asyncsteps.AsyncSteps)
     * [new futoin-asyncsteps.AsyncSteps([state])](#new_module_futoin-asyncsteps.AsyncSteps)
     * [AsyncSteps.success([...arg])](#module_futoin-asyncsteps.AsyncSteps#success)
-    * [AsyncSteps.successStep()](#module_futoin-asyncsteps.AsyncSteps#successStep)
+    * [~~AsyncSteps.successStep()~~](#module_futoin-asyncsteps.AsyncSteps#successStep)
     * [AsyncSteps.setTimeout(timeout_ms)](#module_futoin-asyncsteps.AsyncSteps#setTimeout)
     * [AsyncSteps.setCancel()](#module_futoin-asyncsteps.AsyncSteps#setCancel)
     * [AsyncSteps.loop(func, [label])](#module_futoin-asyncsteps.AsyncSteps#loop)
@@ -751,7 +724,7 @@ It installs AsyncToolTest in place of AsyncTool
 * [class: futoin-asyncsteps.AsyncSteps](#module_futoin-asyncsteps.AsyncSteps)
   * [new futoin-asyncsteps.AsyncSteps([state])](#new_module_futoin-asyncsteps.AsyncSteps)
   * [AsyncSteps.success([...arg])](#module_futoin-asyncsteps.AsyncSteps#success)
-  * [AsyncSteps.successStep()](#module_futoin-asyncsteps.AsyncSteps#successStep)
+  * [~~AsyncSteps.successStep()~~](#module_futoin-asyncsteps.AsyncSteps#successStep)
   * [AsyncSteps.setTimeout(timeout_ms)](#module_futoin-asyncsteps.AsyncSteps#setTimeout)
   * [AsyncSteps.setCancel()](#module_futoin-asyncsteps.AsyncSteps#setCancel)
   * [AsyncSteps.loop(func, [label])](#module_futoin-asyncsteps.AsyncSteps#loop)
@@ -783,10 +756,12 @@ Successfully complete current step execution, optionally passing result variable
 - \[...arg\] `*` - unlimited number of result variables with no type constraint  
 
 <a name="module_futoin-asyncsteps.AsyncSteps#successStep"></a>
-###AsyncSteps.successStep()
+###~~AsyncSteps.successStep()~~
+Deprecated with FTN12 v1.5
 If sub-steps have been added then add efficient dummy step which behavior of as.success();
 Otherwise, simply call as.success();
 
+***Deprecated***  
 <a name="module_futoin-asyncsteps.AsyncSteps#setTimeout"></a>
 ###AsyncSteps.setTimeout(timeout_ms)
 Set timeout for external event completion with async success() or error() call.

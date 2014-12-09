@@ -9,7 +9,6 @@ model_as.add( function(as){
     console.log( 'Hi! I am from model_as' );
     console.log( 'State.var: ' + as.state.var );
     as.state.var = 'Dirty';
-    as.success();
 });
 
 for ( var i = 0; i < 3; ++i )
@@ -19,10 +18,8 @@ for ( var i = 0; i < 3; ++i )
     root_as.add( function(as){
         as.add(function( as ){
             console.log('>> The first inner step');
-            as.success();
         });
         as.copyFrom( model_as );
-        as.successStep();
     });
     root_as.execute();
 }

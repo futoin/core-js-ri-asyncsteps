@@ -14,8 +14,6 @@ root_as.add(
                 as.error( 'MyError', 'Something bad has happened' );
             });
         }
-
-        as.successStep();
     },
     function( as, err )
     {
@@ -45,7 +43,6 @@ root_as.add(
             as.add( function( as ){
                 console.log( 'Parallel Step 1.1' );
                 as.state.p1 = as.state.p1arg + '1';
-                as.success();
             } );
         } )
         .add( function( as ){
@@ -54,7 +51,6 @@ root_as.add(
             as.add( function( as ){
                 console.log( 'Parallel Step 2.1' );
                 as.state.p2 = as.state.p2arg + '2';
-                as.success();
             } );
         } );
     }
