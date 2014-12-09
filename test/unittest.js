@@ -227,7 +227,7 @@ describe( 'AsyncSteps', function(){
                 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.order.should.eql( [ '1', '1_1', '1_1e', '1_2', '1_2e', '1_3', '2', '3', '3e', '4', '4_1', '4_2', '4e' ] );
+                as.state.order.should.eql( [ '1', '1_1', '1_1e', '1_2', '1_2e', '1_3', '2', '3'/*, '3e'*/, '4', '4_1', '4_2'/*, '4e'*/ ] );
             });
             
             it( 'should fail on add in execution', function(){
@@ -1086,6 +1086,20 @@ describe( 'AsyncSteps', function(){
                 as.execute();
                 async_steps.AsyncTool.run();
                 as.state.error_code.should.be.equal('InternalError');
+            });
+            
+            it('should implicitly success', function(){
+                var as = this.as;
+                as.add(
+                    function( as ){
+                        as.state.ok = true;
+                    }
+                );
+                as.execute();
+                async_steps.AsyncTool.run();
+                assertNoEvents();
+                
+                as.state.ok.should.be.true;
             });
         }
     );
