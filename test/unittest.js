@@ -1406,5 +1406,12 @@ describe( 'AsyncSteps', function(){
             });
         }
     );
-
+    describe(
+        '#state()', function(){
+            it('should return state', function(){
+                var as = this.as;
+                as.state().should.equal( as.state );
+            });
+        }
+    );
 });

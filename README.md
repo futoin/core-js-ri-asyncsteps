@@ -664,6 +664,7 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
   * [futoin-asyncsteps.installAsyncToolTest([install])](#module_futoin-asyncsteps.installAsyncToolTest)
   * [class: futoin-asyncsteps.AsyncSteps](#module_futoin-asyncsteps.AsyncSteps)
     * [new futoin-asyncsteps.AsyncSteps([state])](#new_module_futoin-asyncsteps.AsyncSteps)
+    * [AsyncSteps.state](#module_futoin-asyncsteps.AsyncSteps#state)
     * [AsyncSteps.success([...arg])](#module_futoin-asyncsteps.AsyncSteps#success)
     * [~~AsyncSteps.successStep()~~](#module_futoin-asyncsteps.AsyncSteps#successStep)
     * [AsyncSteps.setTimeout(timeout_ms)](#module_futoin-asyncsteps.AsyncSteps#setTimeout)
@@ -723,6 +724,7 @@ It installs AsyncToolTest in place of AsyncTool
 
 * [class: futoin-asyncsteps.AsyncSteps](#module_futoin-asyncsteps.AsyncSteps)
   * [new futoin-asyncsteps.AsyncSteps([state])](#new_module_futoin-asyncsteps.AsyncSteps)
+  * [AsyncSteps.state](#module_futoin-asyncsteps.AsyncSteps#state)
   * [AsyncSteps.success([...arg])](#module_futoin-asyncsteps.AsyncSteps#success)
   * [~~AsyncSteps.successStep()~~](#module_futoin-asyncsteps.AsyncSteps#successStep)
   * [AsyncSteps.setTimeout(timeout_ms)](#module_futoin-asyncsteps.AsyncSteps#setTimeout)
@@ -747,6 +749,12 @@ Root AsyncStep implementation
 
 - \[state\] `Object` - For internal use. State variable sharing  
 
+<a name="module_futoin-asyncsteps.AsyncSteps#state"></a>
+###AsyncSteps.state
+Get AsyncSteps state object.
+Note: As a JS-specific improvement as.state === as.state()
+
+**Returns**: `object`  
 <a name="module_futoin-asyncsteps.AsyncSteps#success"></a>
 ###AsyncSteps.success([...arg])
 Successfully complete current step execution, optionally passing result variables to the next step.
