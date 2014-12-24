@@ -747,13 +747,13 @@ describe( 'AsyncSteps', function(){
         '#error()', function(){
             it('should throw error',function(){
                 var as = this.as
-                as.state.error_info.should.equal( '' );
+                assert.equal( undefined, as.state.error_info );
                 
                 assert.throws(function(){
                     as.error( "MyError" );
                 }, Error, "MyError" );
                 
-                as.state.error_info.should.equal( '' );
+                assert.equal( undefined, as.state.error_info );
                 
                 assert.throws(function(){
                     as.error( "MyError", 'My Info' );
