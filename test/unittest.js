@@ -2,6 +2,7 @@
 //
 var async_steps = require('../lib/asyncsteps');
 var assert = require('assert');
+require( 'chai' ).should();
 
 describe( 'AsyncTool', function(){
     describe(
