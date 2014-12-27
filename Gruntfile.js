@@ -2,6 +2,7 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON( 'package.json' ),
+        bower: grunt.file.readJSON( 'bower.json' ),
                      
         pure_cjs: {
             dist: {
@@ -56,6 +57,28 @@ module.exports = function (grunt) {
             test: {
                 args: ["test"]
             }
+        },
+        bump: {
+            files: [
+                'package.json',
+                'bower.json'
+            ],
+            commitFiles: [
+                'package.json',
+                'bower.json'
+            ],
+            updateConfigs: [ 'pkg', 'bower' ],
+            commitMessage: 'Updated for release v%VERSION%',
+            tagMessage: 'Release %VERSION%'
+        },
+        sync: {
+            all: {
+                options: {
+                    sync: ['name', 'version','description','license','keywords','homepage','repository'],
+                    from: 'package.json',
+                    to: 'bower.json'
+                }
+            }
         }
     });
     
@@ -64,6 +87,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks( 'grunt-contrib-connect' );
     grunt.loadNpmTasks( 'grunt-mocha-phantomjs' );
     grunt.loadNpmTasks( 'grunt-npm-helper' );
+    grunt.loadNpmTasks( 'grunt-npm2bower-sync' );
 
     grunt.registerTask( 'build-browser', ['pure_cjs','uglify'] );
     grunt.registerTask( 'test-browser', ['connect','mocha_phantomjs'] );
@@ -71,5 +95,5 @@ module.exports = function (grunt) {
     grunt.registerTask( 'node', [ 'npm:test' ] );
     grunt.registerTask( 'browser', ['build-browser','test-browser'] );
 
-    grunt.registerTask( 'default', ['node','browser'] );
+    grunt.registerTask( 'default', ['sync','node','browser'] );
 };

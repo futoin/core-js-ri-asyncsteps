@@ -1,0 +1,41 @@
+{
+  "name": "futoin-asyncsteps",
+  "version": "1.2.2",
+  "main": "dist/futoin-asyncsteps.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "examples",
+    "lib",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "authors": [
+    {
+      "name": "Andrey Galkin",
+      "email": "andrey@futoin.eu"
+    }
+  ],
+  "description": "FutoIn AsyncSteps - Reference Implementation. Adds classical linear program flow structure to async programming supporting exceptions. error handlers, timeouts, unlimited number of sub-steps, execution parallelism, loops and job state/context variables.",
+  "keywords": [
+    "futoin",
+    "async",
+    "steps",
+    "parallel",
+    "exceptions",
+    "loops",
+    "browser",
+    "amd"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/futoin/core-js-ri-asyncsteps"
+  }
+}
