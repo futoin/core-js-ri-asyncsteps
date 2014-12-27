@@ -51,18 +51,24 @@ module.exports = function (grunt) {
                     ]
                 }
             }
+        },
+        npm: {
+            test: {
+                args: ["test"]
+            }
         }
     });
-
+    
     grunt.loadNpmTasks( 'grunt-pure-cjs' );
     grunt.loadNpmTasks( 'grunt-contrib-uglify' );
     grunt.loadNpmTasks( 'grunt-contrib-connect' );
     grunt.loadNpmTasks( 'grunt-mocha-phantomjs' );
+    grunt.loadNpmTasks( 'grunt-npm-helper' );
 
     grunt.registerTask( 'build-browser', ['pure_cjs','uglify'] );
     grunt.registerTask( 'test-browser', ['connect','mocha_phantomjs'] );
     
-    grunt.registerTask( 'node', [] );
+    grunt.registerTask( 'node', [ 'npm:test' ] );
     grunt.registerTask( 'browser', ['build-browser','test-browser'] );
 
     grunt.registerTask( 'default', ['node','browser'] );
