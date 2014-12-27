@@ -111,10 +111,12 @@
 
     
     "excludeFiles": [
+        "dist/**",
         "node_modules/**",
         "test/**",
         "coverage/**",
         "out/**",
-	"examples/**"
+        "Gruntfile.js",
+        "examples/**"
     ]
 }
