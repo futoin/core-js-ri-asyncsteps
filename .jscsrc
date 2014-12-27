@@ -111,6 +111,7 @@
 
     
     "excludeFiles": [
+        "lib/browser.js",
         "dist/**",
         "node_modules/**",
         "test/**",

@@ -1,8 +1,26 @@
 
 //
-var async_steps = require('../lib/asyncsteps');
-var assert = require('assert');
-require( 'chai' ).should();
+var async_steps;
+var undefined;
+var assert;
+
+if ( typeof $as !== 'undefined' )
+{
+    async_steps = $as;
+    chai.should();
+    assert = chai.assert;
+}
+else
+{
+    var hidereq = require;
+    async_steps = hidereq('../lib/asyncsteps');
+    var chai_module = hidereq( 'chai' );
+    chai_module.should();
+    assert = chai_module.assert;
+}
+
+var performance_now = require( "performance-now" );
+
 
 describe( 'AsyncTool', function(){
     describe(
@@ -12,13 +30,11 @@ describe( 'AsyncTool', function(){
             });
             
             it("should call later timeout", function( done ){
-                var t = process.hrtime();
-                t = t[0]*1e3 + ( t[1] / 1e6 );
+                var t = performance_now() * 1e3;
                 
                 async_steps.AsyncTool.callLater(
                     function(){
-                        var s = process.hrtime();
-                        s = s[0]*1e3 + ( s[1] / 1e6 );
+                        var s = performance_now() * 1e3;
                         s.should.be.greaterThan( t + 9 )
                         done();
                     },
@@ -144,7 +160,7 @@ describe( 'AsyncSteps', function(){
                 as._queue[0][0].should.be.instanceof( Function );
                 as._queue[0][1].should.be.instanceof( Function );
                 as._queue[1][0].should.be.instanceof( Function );
-                assert.equal(as._queue[1][1], undefined );
+                assert.isUndefined( as._queue[1][1] );
             });
             
             it("should call steps and errors in correct order",function(){
@@ -305,7 +321,7 @@ describe( 'AsyncSteps', function(){
                 as._queue[0][0].should.be.instanceof( Function );
                 as._queue[0][1].should.be.instanceof( Function );
                 as._queue[1][0].should.be.instanceof( Function );
-                assert.equal(as._queue[1][1], undefined );
+                assert.isUndefined( as._queue[1][1] );
                 
                 as.execute();
                 async_steps.AsyncTool.run();
@@ -748,13 +764,13 @@ describe( 'AsyncSteps', function(){
         '#error()', function(){
             it('should throw error',function(){
                 var as = this.as
-                assert.equal( undefined, as.state.error_info );
+                assert.isUndefined( as.state.error_info );
                 
                 assert.throws(function(){
                     as.error( "MyError" );
                 }, Error, "MyError" );
                 
-                assert.equal( undefined, as.state.error_info );
+                assert.isUndefined( as.state.error_info );
                 
                 assert.throws(function(){
                     as.error( "MyError", 'My Info' );
@@ -874,7 +890,7 @@ describe( 'AsyncSteps', function(){
                             assert.throws(function()
                             {
                                 as.error( 'MyError' );
-                            }, Error, 'MyError' );
+                            }, Error, 'InternalError' );
                         });
 
                         as.success();
@@ -1415,4 +1431,15 @@ describe( 'AsyncSteps', function(){
             });
         }
     );
+    
+    if ( typeof $as !== 'undefined' )
+    {
+        describe(
+            'FutoIn.AsyncSteps', function(){
+                it('should be set', function(){
+                    $as.AsyncSteps.should.equal( FutoIn.AsyncSteps );
+                });
+            }
+        );
+    }
 });

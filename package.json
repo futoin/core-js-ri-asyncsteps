@@ -3,13 +3,14 @@
   "version": "1.2.2",
   "description": "FutoIn AsyncSteps - Reference Implementation. Adds classical linear program flow structure to async programming supporting exceptions. error handlers, timeouts, unlimited number of sub-steps, execution parallelism, loops and job state/context variables.",
   "main": "lib/asyncsteps.js",
+  "browser": "lib/futoin-asyncsteps.js",
   "scripts": {
     "lint": "./node_modules/.bin/jshint lib --reporter=./node_modules/jshint-full-path/index.js",
     "checkStyle": "./node_modules/.bin/jscs .",
     "pretest": "npm run-script lint && npm run-script checkStyle",
     "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --recursive -R spec",
     "posttest": "./node_modules/.bin/istanbul check-coverage && ./node_modules/.bin/istanbul report html",
-    "doc" : "./node_modules/.bin/jsdoc2md -t misc/README.hbs lib/*.js > README.md && sed -i -e 's/module:futoin-asyncsteps\\.//g' README.md"
+    "doc": "./node_modules/.bin/jsdoc2md -t misc/README.hbs lib/*.js > README.md && sed -i -e 's/module:futoin-asyncsteps\\.//g' README.md"
   },
   "repository": {
     "type": "git",
@@ -21,11 +22,13 @@
     "steps",
     "parallel",
     "exceptions",
-    "loops"
+    "loops",
+    "browser",
+    "amd"
   ],
   "author": {
-    "name" : "Andrey Galkin",
-    "email" : "andrey@futoin.eu"
+    "name": "Andrey Galkin",
+    "email": "andrey@futoin.eu"
   },
   "license": "Apache-2.0",
   "bugs": {
@@ -33,15 +36,20 @@
     "email": "support@futoin.eu"
   },
   "devDependencies": {
-    "istanbul": "^0.3.2",
-    "jscs": "^1.7.1",
+    "chai": "*",
+    "grunt": "*",
+    "grunt-contrib-connect": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-mocha-phantomjs": "^*",
+    "grunt-pure-cjs": "^1.4.0",
+    "istanbul": "*",
+    "jscs": "*",
     "jsdoc": "~3.2",
     "jsdoc-to-markdown": "^0.5.9",
-    "jshint": "^2.5.6",
-    "jshint-full-path": "^1.1.1",
-    "mocha" : "*",
-    "chai" : "*",
-    "mocha-phantomjs" : "*",
-    "performance-now": "^0.2.0"
+    "jshint": "*",
+    "jshint-full-path": "*",
+    "mocha": "*",
+    "mocha-phantomjs": "*",
+    "performance-now": "*"
   }
 }

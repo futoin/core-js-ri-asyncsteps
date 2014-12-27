@@ -17,8 +17,11 @@ Adds classical linear program flow structure to async programming
 supporting exceptions. error handlers, timeouts, unlimited number of sub-steps,
 execution parallelism, loops and job state/context variables.
 
-Current version is targeted at Node.js, but should be easily used in
-web browser environment as well (not yet tested).
+The source itself is a Node.js module in CommonJS format.
+
+Starting from v1.3 a [dist/futoin-asyncsteps.js](dist/futoin-asyncsteps.js) version is provided
+repacked with [pure-sjc](https://github.com/RReverser/pure-cjs). It has been tested with
+[PhantomJS](http://phantomjs.org/). It should support plain inclusion and AMD.
 
 It should be possible to use any other async framework from AsyncSteps by using
 setCancel() and/or setTimeout() methods which allow step completion without success() or
@@ -32,7 +35,10 @@ To minimize cost of closure creation on repetitive execution, a special feature 
 is available: model step is created as usual, but must never get executed. It possible to copy steps
 and state variables using AsyncSteps#copyFrom() to a newly created object.
 
-# Installation
+There is also a family of async loop functions for unconditional iteration, iteration over data or
+iteration with limit.
+
+# Installation for Node.js
 
 Command line:
 ```sh
@@ -41,9 +47,13 @@ $ npm install futoin-asyncsteps --save
 and/or package.json:
 ```
 "dependencies" : {
-    "futoin-asyncsteps" : "^1.2"
+    "futoin-asyncsteps" : "^1.3"
 }
 ```
+
+# Installation for Browser
+
+TODO:
 
 # Examples
 
@@ -289,6 +299,27 @@ Result:
 > forEach: c = 3
 ```
 
+## Browser example
+
+```html
+<script src="../dist/futoin-asyncsteps.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+$as()
+.add(function(as){
+    console.log( 'Step1' );
+})
+.add(function(as){
+    console.log( 'Step2' );
+})
+.execute();
+</script>
+```
+
+Result:
+```
+Step1
+Step2
+```
 
 # Concept
 
@@ -839,7 +870,7 @@ Add sub-step. Can be called multiple times.
 - func <code>[ExecFunc](#ExecFunc)</code> - function defining non-blocking step execution  
 - \[onerror\] <code>[ErrorFunc](#ErrorFunc)</code> - Optional, provide error handler  
 
-**Returns**: `AsyncSteps`  
+**Returns**: [AsyncSteps](#AsyncSteps)  
 <a name="module_futoin-asyncsteps.AsyncSteps#parallel"></a>
 ###AsyncSteps.parallel([onerror])
 Creates a step internally and returns specialized AsyncSteps interfaces all steps
@@ -849,7 +880,7 @@ of which are executed in quasi-parallel.
 
 - \[onerror\] <code>[ErrorFunc](#ErrorFunc)</code> - Optional, provide error handler  
 
-**Returns**: `AsyncSteps`  
+**Returns**: [AsyncSteps](#AsyncSteps)  
 <a name="module_futoin-asyncsteps.AsyncSteps#error"></a>
 ###AsyncSteps.error(name, [error_info])
 Set error and throw to abort execution.
@@ -866,7 +897,7 @@ Copy steps and not yet defined state variables from "model" AsyncSteps instance
 
 **Params**
 
-- other `AsyncSteps` - model instance, which must get be executed  
+- other <code>[AsyncSteps](#AsyncSteps)</code> - model instance, which must get be executed  
 
 <a name="module_futoin-asyncsteps.AsyncSteps#cancel"></a>
 ###AsyncSteps.cancel()
@@ -986,9 +1017,7 @@ Execute all remaining events in the internal queue
 
 <a name="new_module_futoin-asyncsteps.FutoInErrors"></a>
 ###new futoin-asyncsteps.FutoInErrors()
-Semantically, not the correct place to define,
-but Core JS Api package would be an overkill for now as there is
-no concept of interfaces in JS.
+List of standard FutoIn Core errors. It may get extended in runtime.
 
 <a name="module_futoin-asyncsteps.FutoInErrors.ConnectError"></a>
 ###const: FutoInErrors.ConnectError

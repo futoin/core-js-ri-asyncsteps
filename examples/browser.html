@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Browser FutoIn AsyncSteps example</title>
+  </head>
+  <body>
+      <script src="../dist/futoin-asyncsteps.js" type="text/javascript" charset="utf-8"></script>
+      <script type="text/javascript" charset="utf-8">
+      $as()
+        .add(function(as){
+            console.log( 'Step1' );
+        })
+        .add(function(as){
+            console.log( 'Step2' );
+        })
+        .execute();
+      </script>
+  </body>
+</html>
