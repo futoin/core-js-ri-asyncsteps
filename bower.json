@@ -16,7 +16,8 @@
     "bower_components",
     "test",
     "tests",
-    "misc"
+    "misc",
+    "Gruntfile.js"
   ],
   "authors": [
     {
