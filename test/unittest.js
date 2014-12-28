@@ -1474,11 +1474,24 @@ describe( 'AsyncSteps', function(){
                 as.state.count++;
             })
             .copyFrom( model_as )
+            .loop(function( as ){
+                as.state.count++;
+                as.break();
+            })
+            .repeat( 2, function( as ){
+                as.state.count++;
+            })
+            .forEach( [1,2], function( as ){
+                as.state.count++;
+            })
+            .forEach( {a:1,b:2}, function( as ){
+                as.state.count++;
+            })
             .add(function( as ){
                 as.state.count++;
                 try
                 {
-                    as.state.count.should.equal( 12 );
+                    as.state.count.should.equal( 19 );
                     done();
                 }
                 catch ( e )

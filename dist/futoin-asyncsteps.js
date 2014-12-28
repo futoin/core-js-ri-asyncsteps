@@ -287,11 +287,9 @@
                 }
             };
             AsyncStepsProto.add = function (func, onerror) {
+                this._sanityCheck();
                 this._check_func(func);
                 this._check_onerror(onerror);
-                if (this._stack.length) {
-                    this.error(futoin_errors.InternalError, 'Top level add in execution');
-                }
                 this._queue.push([
                     func,
                     onerror
@@ -454,6 +452,15 @@
                 }
                 return this;
             };
+            AsyncStepsProto._sanityCheck = function () {
+                if (this._stack.length) {
+                    this.error(futoin_errors.InternalError, 'Top level add in execution');
+                }
+            };
+            var ASPProto = asyncstep_protector.AsyncStepProtector.prototype;
+            AsyncStepsProto.loop = ASPProto.loop;
+            AsyncStepsProto.repeat = ASPProto.repeat;
+            AsyncStepsProto.forEach = ASPProto.forEach;
             AsyncSteps.prototype = AsyncStepsProto;
             exports.AsyncSteps = AsyncSteps;
         },
