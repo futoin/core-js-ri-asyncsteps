@@ -22,9 +22,9 @@ module.exports = function (grunt) {
                 },
                 options: {
                     map : true,
+                    exports: 'unittest',
                     external : {
-                        'chai' : true,
-                        'assert' : true
+                        'chai' : true
                     }
                 }
             }

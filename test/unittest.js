@@ -1432,14 +1432,76 @@ describe( 'AsyncSteps', function(){
         }
     );
     
-    if ( typeof $as !== 'undefined' )
-    {
-        describe(
-            'FutoIn.AsyncSteps', function(){
-                it('should be set', function(){
-                    $as.AsyncSteps.should.equal( FutoIn.AsyncSteps );
-                });
+    it('should support chaining', function( done ){
+        var as = this.as;
+        
+        var empty_as = async_steps();
+        var model_as = async_steps();
+        model_as.add(
+            function( as ){
+                as.state.count++;
+                as
+                    .add(function( as ){
+                        as.state.count++;
+                    })
+                    .loop(function( as ){
+                        as.state.count++;
+                        as.break();
+                    })
+                    .repeat( 2, function( as ){
+                        as.state.count++;
+                    })
+                    .forEach( [1,2], function( as ){
+                        as.state.count++;
+                    })
+                    .forEach( {a:1,b:2}, function( as ){
+                        as.state.count++;
+                    })
+                    .copyFrom( empty_as )
+                    .add(function( as ){
+                        as.state.count++;
+                    });
+            },
+            function( as, err )
+            {
+                console.dir( err + ": " + as.state.error_info );
             }
         );
-    }
+        
+        
+        as
+            .add(function( as ){
+                as.state.count++;
+            })
+            .copyFrom( model_as )
+            .add(function( as ){
+                as.state.count++;
+                try
+                {
+                    as.state.count.should.equal( 12 );
+                    done();
+                }
+                catch ( e )
+                {
+                    done( e );
+                }
+            });
+            
+        as.state.count = 0;
+        as.execute();
+        async_steps.AsyncTool.run();
+        assertNoEvents();
+    });
 });
+
+if ( typeof $as !== 'undefined' )
+{
+    describe(
+        'FutoIn.AsyncSteps', function(){
+            it('should be set', function(){
+                $as.AsyncSteps.should.equal( FutoIn.AsyncSteps );
+            });
+        }
+    );
+}
+

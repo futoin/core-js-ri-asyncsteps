@@ -96,9 +96,11 @@
                     _this._limit_event = null;
                     _this._root._handle_error(futoin_errors.Timeout);
                 }, timeout_ms);
+                return this;
             };
             ASPProto.setCancel = function (oncancel) {
                 this._oncancel = oncancel;
+                return this;
             };
             ASPProto.copyFrom = function (other) {
                 this._sanityCheck();
@@ -117,6 +119,7 @@
                         s[k] = os[k];
                     }
                 }
+                return this;
             };
             ASPProto.loop = function (func, label) {
                 this._sanityCheck();
@@ -180,6 +183,7 @@
                     });
                     create_iteration();
                 });
+                return this;
             };
             ASPProto.repeat = function (count, func, label) {
                 var i = 0;
@@ -190,6 +194,7 @@
                         as.break();
                     }
                 }, label);
+                return this;
             };
             ASPProto.forEach = function (map_or_list, func, label) {
                 if (Array.isArray(map_or_list)) {
@@ -202,6 +207,7 @@
                         func(as, keys[i], map_or_list[keys[i]]);
                     }, label);
                 }
+                return this;
             };
             ASPProto.break = function (label) {
                 this._sanityCheck();
@@ -315,6 +321,7 @@
                         s[k] = os[k];
                     }
                 }
+                return this;
             };
             AsyncStepsProto._handle_success = function (args) {
                 var stack = this._stack;
@@ -400,6 +407,7 @@
                     asp._cleanup();
                 }
                 this._queue = [];
+                return this;
             };
             AsyncStepsProto.execute = function () {
                 if (this._execute_event) {
@@ -444,6 +452,7 @@
                 } finally {
                     this._in_execute = false;
                 }
+                return this;
             };
             AsyncSteps.prototype = AsyncStepsProto;
             exports.AsyncSteps = AsyncSteps;
