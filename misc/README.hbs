@@ -53,7 +53,9 @@ and/or package.json:
 
 # Installation for Browser
 
-TODO:
+```sh
+$ bower install futoin-asyncsteps --save
+```
 
 # Examples
 
