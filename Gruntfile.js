@@ -58,19 +58,19 @@ module.exports = function (grunt) {
                 args: ["test"]
             }
         },
-        bump: {
+        release: {
             options: {
-                files: [
-                    'package.json',
+                additionalFiles: [
                     'bower.json'
                 ],
                 commitFiles: [
                     'package.json',
                     'bower.json'
                 ],
-                updateConfigs: [ 'pkg', 'bower' ],
-                commitMessage: 'Updated for release v%VERSION%',
-                tagMessage: 'Release %VERSION%'
+                tagName: "v<%= version %>",
+                commitMessage: 'Updated for release v<%= version %>',
+                tagMessage: 'Release v<%= version %>',
+                npm: false
             }
         },
         sync: {
@@ -89,7 +89,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks( 'grunt-contrib-connect' );
     grunt.loadNpmTasks( 'grunt-mocha-phantomjs' );
     grunt.loadNpmTasks( 'grunt-npm-helper' );
-    grunt.loadNpmTasks( 'grunt-push-release' );
+    grunt.loadNpmTasks( 'grunt-release' );
     grunt.loadNpmTasks( 'grunt-npm2bower-sync' );
 
     grunt.registerTask( 'build-browser', ['pure_cjs','uglify'] );

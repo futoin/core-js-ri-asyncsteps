@@ -44,7 +44,7 @@
     "grunt-npm-helper": "0.0.2",
     "grunt-npm2bower-sync": "^0.4.0",
     "grunt-pure-cjs": "^1.4.0",
-    "grunt-push-release": "^0.1.1",
+    "grunt-release": "^0.9.0",
     "istanbul": "*",
     "jscs": "*",
     "jsdoc": "~3.2",
