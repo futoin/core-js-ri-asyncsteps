@@ -3,7 +3,7 @@
   "version": "1.4.0",
   "description": "FutoIn AsyncSteps - Reference Implementation. Adds classical linear program flow structure to async programming supporting exceptions. error handlers, timeouts, unlimited number of sub-steps, execution parallelism, loops and job state/context variables.",
   "main": "lib/asyncsteps.js",
-  "browser": "lib/futoin-asyncsteps.js",
+  "browser": "dist/futoin-asyncsteps.js",
   "scripts": {
     "lint": "./node_modules/.bin/jshint lib --reporter=./node_modules/jshint-full-path/index.js",
     "checkStyle": "./node_modules/.bin/jscs .",
