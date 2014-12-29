@@ -47,7 +47,7 @@ $ npm install futoin-asyncsteps --save
 and/or package.json:
 ```
 "dependencies" : {
-    "futoin-asyncsteps" : "^1.4.0"
+    "futoin-asyncsteps" : "^1.4.1"
 }
 ```
 
@@ -719,7 +719,7 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 * [class: AsyncTool](#AsyncTool)
   * [new AsyncTool()](#new_AsyncTool)
   * [AsyncTool.callLater(func, [timeout_ms])](#AsyncTool.callLater)
-  * [AsyncTool.callLater(handle)](#AsyncTool.callLater)
+  * [AsyncTool.cancelCall(handle)](#AsyncTool.cancelCall)
 * [class: AsyncToolTest](#AsyncToolTest)
   * [new AsyncToolTest()](#new_AsyncToolTest)
   * [AsyncToolTest.callLater(func, [timeout_ms])](#AsyncToolTest.callLater)
@@ -948,7 +948,7 @@ Must not be called more than once until cancel/complete (instance can be re-used
 * [class: AsyncTool](#AsyncTool)
   * [new AsyncTool()](#new_AsyncTool)
   * [AsyncTool.callLater(func, [timeout_ms])](#AsyncTool.callLater)
-  * [AsyncTool.callLater(handle)](#AsyncTool.callLater)
+  * [AsyncTool.cancelCall(handle)](#AsyncTool.cancelCall)
 
 <a name="new_AsyncTool"></a>
 ##new AsyncTool()
@@ -964,8 +964,8 @@ Wrapper for setTimeout()/setImmediate()
 - \[timeout_ms=0\] `number` - optional timeout in ms  
 
 **Returns**: `Object` - - timer handle  
-<a name="AsyncTool.callLater"></a>
-##AsyncTool.callLater(handle)
+<a name="AsyncTool.cancelCall"></a>
+##AsyncTool.cancelCall(handle)
 Wrapper for clearTimeout()/clearImmediate()
 
 **Params**
