@@ -47,7 +47,7 @@ $ npm install futoin-asyncsteps --save
 and/or package.json:
 ```
 "dependencies" : {
-    "futoin-asyncsteps" : "^1.3"
+    "futoin-asyncsteps" : "^1.4.0"
 }
 ```
 
@@ -695,53 +695,59 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 **Modules**
 
 * [futoin-asyncsteps](#module_futoin-asyncsteps)
-  * [futoin-asyncsteps.installAsyncToolTest([install])](#module_futoin-asyncsteps.installAsyncToolTest)
-  * [class: futoin-asyncsteps.AsyncSteps](#module_futoin-asyncsteps.AsyncSteps)
-    * [new futoin-asyncsteps.AsyncSteps([state])](#new_module_futoin-asyncsteps.AsyncSteps)
-    * [AsyncSteps.state](#module_futoin-asyncsteps.AsyncSteps#state)
-    * [AsyncSteps.success([...arg])](#module_futoin-asyncsteps.AsyncSteps#success)
-    * [~~AsyncSteps.successStep()~~](#module_futoin-asyncsteps.AsyncSteps#successStep)
-    * [AsyncSteps.setTimeout(timeout_ms)](#module_futoin-asyncsteps.AsyncSteps#setTimeout)
-    * [AsyncSteps.setCancel()](#module_futoin-asyncsteps.AsyncSteps#setCancel)
-    * [AsyncSteps.loop(func, [label])](#module_futoin-asyncsteps.AsyncSteps#loop)
-    * [AsyncSteps.repeat(count, func, [label])](#module_futoin-asyncsteps.AsyncSteps#repeat)
-    * [AsyncSteps.forEach(map_or_list, func, [label])](#module_futoin-asyncsteps.AsyncSteps#forEach)
-    * [AsyncSteps.break([label])](#module_futoin-asyncsteps.AsyncSteps#break)
-    * [AsyncSteps.continue([label])](#module_futoin-asyncsteps.AsyncSteps#continue)
-    * [AsyncSteps.add(func, [onerror])](#module_futoin-asyncsteps.AsyncSteps#add)
-    * [AsyncSteps.parallel([onerror])](#module_futoin-asyncsteps.AsyncSteps#parallel)
-    * [AsyncSteps.error(name, [error_info])](#module_futoin-asyncsteps.AsyncSteps#error)
-    * [AsyncSteps.copyFrom(other)](#module_futoin-asyncsteps.AsyncSteps#copyFrom)
-    * [AsyncSteps.cancel()](#module_futoin-asyncsteps.AsyncSteps#cancel)
-    * [AsyncSteps.execute()](#module_futoin-asyncsteps.AsyncSteps#execute)
-  * [class: futoin-asyncsteps.AsyncTool](#module_futoin-asyncsteps.AsyncTool)
-    * [new futoin-asyncsteps.AsyncTool()](#new_module_futoin-asyncsteps.AsyncTool)
-    * [AsyncTool.callLater(func, [timeout_ms])](#module_futoin-asyncsteps.AsyncTool.callLater)
-    * [AsyncTool.callLater(handle)](#module_futoin-asyncsteps.AsyncTool.callLater)
-  * [class: futoin-asyncsteps.AsyncToolTest](#module_futoin-asyncsteps.AsyncToolTest)
-    * [new futoin-asyncsteps.AsyncToolTest()](#new_module_futoin-asyncsteps.AsyncToolTest)
-    * [AsyncToolTest.callLater(func, [timeout_ms])](#module_futoin-asyncsteps.AsyncToolTest.callLater)
-    * [AsyncToolTest.callLater(handle)](#module_futoin-asyncsteps.AsyncToolTest.callLater)
-    * [AsyncToolTest.nextEvent()](#module_futoin-asyncsteps.AsyncToolTest.nextEvent)
-    * [AsyncToolTest.hasEvents()](#module_futoin-asyncsteps.AsyncToolTest.hasEvents)
-    * [AsyncToolTest.getEvents()](#module_futoin-asyncsteps.AsyncToolTest.getEvents)
-    * [AsyncToolTest.resetEvents()](#module_futoin-asyncsteps.AsyncToolTest.resetEvents)
-    * [AsyncToolTest.run()](#module_futoin-asyncsteps.AsyncToolTest.run)
-  * [class: futoin-asyncsteps.FutoInErrors](#module_futoin-asyncsteps.FutoInErrors)
-    * [new futoin-asyncsteps.FutoInErrors()](#new_module_futoin-asyncsteps.FutoInErrors)
-    * [const: FutoInErrors.ConnectError](#module_futoin-asyncsteps.FutoInErrors.ConnectError)
-    * [const: FutoInErrors.CommError](#module_futoin-asyncsteps.FutoInErrors.CommError)
-    * [const: FutoInErrors.UnknownInterface](#module_futoin-asyncsteps.FutoInErrors.UnknownInterface)
-    * [const: FutoInErrors.NotSupportedVersion](#module_futoin-asyncsteps.FutoInErrors.NotSupportedVersion)
-    * [const: FutoInErrors.NotImplemented](#module_futoin-asyncsteps.FutoInErrors.NotImplemented)
-    * [const: FutoInErrors.Unauthorized](#module_futoin-asyncsteps.FutoInErrors.Unauthorized)
-    * [const: FutoInErrors.InternalError](#module_futoin-asyncsteps.FutoInErrors.InternalError)
-    * [const: FutoInErrors.InvokerError](#module_futoin-asyncsteps.FutoInErrors.InvokerError)
-    * [const: FutoInErrors.InvalidRequest](#module_futoin-asyncsteps.FutoInErrors.InvalidRequest)
-    * [const: FutoInErrors.DefenseRejected](#module_futoin-asyncsteps.FutoInErrors.DefenseRejected)
-    * [const: FutoInErrors.PleaseReauth](#module_futoin-asyncsteps.FutoInErrors.PleaseReauth)
-    * [const: FutoInErrors.SecurityError](#module_futoin-asyncsteps.FutoInErrors.SecurityError)
-    * [const: FutoInErrors.Timeout](#module_futoin-asyncsteps.FutoInErrors.Timeout)
+
+**Classes**
+
+* [class: AsyncSteps](#AsyncSteps)
+  * [new AsyncSteps([state])](#new_AsyncSteps)
+  * [asyncSteps.state](#AsyncSteps#state)
+  * [asyncSteps.success([...arg])](#AsyncSteps#success)
+  * [~~asyncSteps.successStep()~~](#AsyncSteps#successStep)
+  * [asyncSteps.setTimeout(timeout_ms)](#AsyncSteps#setTimeout)
+  * [asyncSteps.setCancel()](#AsyncSteps#setCancel)
+  * [asyncSteps.loop(func, [label])](#AsyncSteps#loop)
+  * [asyncSteps.repeat(count, func, [label])](#AsyncSteps#repeat)
+  * [asyncSteps.forEach(map_or_list, func, [label])](#AsyncSteps#forEach)
+  * [asyncSteps.break([label])](#AsyncSteps#break)
+  * [asyncSteps.continue([label])](#AsyncSteps#continue)
+  * [asyncSteps.add(func, [onerror])](#AsyncSteps#add)
+  * [asyncSteps.parallel([onerror])](#AsyncSteps#parallel)
+  * [asyncSteps.error(name, [error_info])](#AsyncSteps#error)
+  * [asyncSteps.copyFrom(other)](#AsyncSteps#copyFrom)
+  * [asyncSteps.cancel()](#AsyncSteps#cancel)
+  * [asyncSteps.execute()](#AsyncSteps#execute)
+* [class: AsyncTool](#AsyncTool)
+  * [new AsyncTool()](#new_AsyncTool)
+  * [AsyncTool.callLater(func, [timeout_ms])](#AsyncTool.callLater)
+  * [AsyncTool.callLater(handle)](#AsyncTool.callLater)
+* [class: AsyncToolTest](#AsyncToolTest)
+  * [new AsyncToolTest()](#new_AsyncToolTest)
+  * [AsyncToolTest.callLater(func, [timeout_ms])](#AsyncToolTest.callLater)
+  * [AsyncToolTest.callLater(handle)](#AsyncToolTest.callLater)
+  * [AsyncToolTest.nextEvent()](#AsyncToolTest.nextEvent)
+  * [AsyncToolTest.hasEvents()](#AsyncToolTest.hasEvents)
+  * [AsyncToolTest.getEvents()](#AsyncToolTest.getEvents)
+  * [AsyncToolTest.resetEvents()](#AsyncToolTest.resetEvents)
+  * [AsyncToolTest.run()](#AsyncToolTest.run)
+* [class: FutoInErrors](#FutoInErrors)
+  * [new FutoInErrors()](#new_FutoInErrors)
+  * [const: FutoInErrors.ConnectError](#FutoInErrors.ConnectError)
+  * [const: FutoInErrors.CommError](#FutoInErrors.CommError)
+  * [const: FutoInErrors.UnknownInterface](#FutoInErrors.UnknownInterface)
+  * [const: FutoInErrors.NotSupportedVersion](#FutoInErrors.NotSupportedVersion)
+  * [const: FutoInErrors.NotImplemented](#FutoInErrors.NotImplemented)
+  * [const: FutoInErrors.Unauthorized](#FutoInErrors.Unauthorized)
+  * [const: FutoInErrors.InternalError](#FutoInErrors.InternalError)
+  * [const: FutoInErrors.InvokerError](#FutoInErrors.InvokerError)
+  * [const: FutoInErrors.InvalidRequest](#FutoInErrors.InvalidRequest)
+  * [const: FutoInErrors.DefenseRejected](#FutoInErrors.DefenseRejected)
+  * [const: FutoInErrors.PleaseReauth](#FutoInErrors.PleaseReauth)
+  * [const: FutoInErrors.SecurityError](#FutoInErrors.SecurityError)
+  * [const: FutoInErrors.Timeout](#FutoInErrors.Timeout)
+
+**Functions**
+
+* [installAsyncToolTest([install])](#installAsyncToolTest)
 
 **Members**
 
@@ -749,6 +755,22 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 * [$as](#$as)
 * [FutoInError](#FutoInError)
 * [AsyncSteps](#AsyncSteps)
+  * [asyncSteps.state](#AsyncSteps#state)
+  * [asyncSteps.success([...arg])](#AsyncSteps#success)
+  * [~~asyncSteps.successStep()~~](#AsyncSteps#successStep)
+  * [asyncSteps.setTimeout(timeout_ms)](#AsyncSteps#setTimeout)
+  * [asyncSteps.setCancel()](#AsyncSteps#setCancel)
+  * [asyncSteps.loop(func, [label])](#AsyncSteps#loop)
+  * [asyncSteps.repeat(count, func, [label])](#AsyncSteps#repeat)
+  * [asyncSteps.forEach(map_or_list, func, [label])](#AsyncSteps#forEach)
+  * [asyncSteps.break([label])](#AsyncSteps#break)
+  * [asyncSteps.continue([label])](#AsyncSteps#continue)
+  * [asyncSteps.add(func, [onerror])](#AsyncSteps#add)
+  * [asyncSteps.parallel([onerror])](#AsyncSteps#parallel)
+  * [asyncSteps.error(name, [error_info])](#AsyncSteps#error)
+  * [asyncSteps.copyFrom(other)](#AsyncSteps#copyFrom)
+  * [asyncSteps.cancel()](#AsyncSteps#cancel)
+  * [asyncSteps.execute()](#AsyncSteps#execute)
 
 **Typedefs**
 
@@ -760,120 +782,60 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
  
 <a name="module_futoin-asyncsteps"></a>
 #futoin-asyncsteps
+<a name="AsyncSteps"></a>
+#class: AsyncSteps
 **Members**
 
-* [futoin-asyncsteps](#module_futoin-asyncsteps)
-  * [futoin-asyncsteps.installAsyncToolTest([install])](#module_futoin-asyncsteps.installAsyncToolTest)
-  * [class: futoin-asyncsteps.AsyncSteps](#module_futoin-asyncsteps.AsyncSteps)
-    * [new futoin-asyncsteps.AsyncSteps([state])](#new_module_futoin-asyncsteps.AsyncSteps)
-    * [AsyncSteps.state](#module_futoin-asyncsteps.AsyncSteps#state)
-    * [AsyncSteps.success([...arg])](#module_futoin-asyncsteps.AsyncSteps#success)
-    * [~~AsyncSteps.successStep()~~](#module_futoin-asyncsteps.AsyncSteps#successStep)
-    * [AsyncSteps.setTimeout(timeout_ms)](#module_futoin-asyncsteps.AsyncSteps#setTimeout)
-    * [AsyncSteps.setCancel()](#module_futoin-asyncsteps.AsyncSteps#setCancel)
-    * [AsyncSteps.loop(func, [label])](#module_futoin-asyncsteps.AsyncSteps#loop)
-    * [AsyncSteps.repeat(count, func, [label])](#module_futoin-asyncsteps.AsyncSteps#repeat)
-    * [AsyncSteps.forEach(map_or_list, func, [label])](#module_futoin-asyncsteps.AsyncSteps#forEach)
-    * [AsyncSteps.break([label])](#module_futoin-asyncsteps.AsyncSteps#break)
-    * [AsyncSteps.continue([label])](#module_futoin-asyncsteps.AsyncSteps#continue)
-    * [AsyncSteps.add(func, [onerror])](#module_futoin-asyncsteps.AsyncSteps#add)
-    * [AsyncSteps.parallel([onerror])](#module_futoin-asyncsteps.AsyncSteps#parallel)
-    * [AsyncSteps.error(name, [error_info])](#module_futoin-asyncsteps.AsyncSteps#error)
-    * [AsyncSteps.copyFrom(other)](#module_futoin-asyncsteps.AsyncSteps#copyFrom)
-    * [AsyncSteps.cancel()](#module_futoin-asyncsteps.AsyncSteps#cancel)
-    * [AsyncSteps.execute()](#module_futoin-asyncsteps.AsyncSteps#execute)
-  * [class: futoin-asyncsteps.AsyncTool](#module_futoin-asyncsteps.AsyncTool)
-    * [new futoin-asyncsteps.AsyncTool()](#new_module_futoin-asyncsteps.AsyncTool)
-    * [AsyncTool.callLater(func, [timeout_ms])](#module_futoin-asyncsteps.AsyncTool.callLater)
-    * [AsyncTool.callLater(handle)](#module_futoin-asyncsteps.AsyncTool.callLater)
-  * [class: futoin-asyncsteps.AsyncToolTest](#module_futoin-asyncsteps.AsyncToolTest)
-    * [new futoin-asyncsteps.AsyncToolTest()](#new_module_futoin-asyncsteps.AsyncToolTest)
-    * [AsyncToolTest.callLater(func, [timeout_ms])](#module_futoin-asyncsteps.AsyncToolTest.callLater)
-    * [AsyncToolTest.callLater(handle)](#module_futoin-asyncsteps.AsyncToolTest.callLater)
-    * [AsyncToolTest.nextEvent()](#module_futoin-asyncsteps.AsyncToolTest.nextEvent)
-    * [AsyncToolTest.hasEvents()](#module_futoin-asyncsteps.AsyncToolTest.hasEvents)
-    * [AsyncToolTest.getEvents()](#module_futoin-asyncsteps.AsyncToolTest.getEvents)
-    * [AsyncToolTest.resetEvents()](#module_futoin-asyncsteps.AsyncToolTest.resetEvents)
-    * [AsyncToolTest.run()](#module_futoin-asyncsteps.AsyncToolTest.run)
-  * [class: futoin-asyncsteps.FutoInErrors](#module_futoin-asyncsteps.FutoInErrors)
-    * [new futoin-asyncsteps.FutoInErrors()](#new_module_futoin-asyncsteps.FutoInErrors)
-    * [const: FutoInErrors.ConnectError](#module_futoin-asyncsteps.FutoInErrors.ConnectError)
-    * [const: FutoInErrors.CommError](#module_futoin-asyncsteps.FutoInErrors.CommError)
-    * [const: FutoInErrors.UnknownInterface](#module_futoin-asyncsteps.FutoInErrors.UnknownInterface)
-    * [const: FutoInErrors.NotSupportedVersion](#module_futoin-asyncsteps.FutoInErrors.NotSupportedVersion)
-    * [const: FutoInErrors.NotImplemented](#module_futoin-asyncsteps.FutoInErrors.NotImplemented)
-    * [const: FutoInErrors.Unauthorized](#module_futoin-asyncsteps.FutoInErrors.Unauthorized)
-    * [const: FutoInErrors.InternalError](#module_futoin-asyncsteps.FutoInErrors.InternalError)
-    * [const: FutoInErrors.InvokerError](#module_futoin-asyncsteps.FutoInErrors.InvokerError)
-    * [const: FutoInErrors.InvalidRequest](#module_futoin-asyncsteps.FutoInErrors.InvalidRequest)
-    * [const: FutoInErrors.DefenseRejected](#module_futoin-asyncsteps.FutoInErrors.DefenseRejected)
-    * [const: FutoInErrors.PleaseReauth](#module_futoin-asyncsteps.FutoInErrors.PleaseReauth)
-    * [const: FutoInErrors.SecurityError](#module_futoin-asyncsteps.FutoInErrors.SecurityError)
-    * [const: FutoInErrors.Timeout](#module_futoin-asyncsteps.FutoInErrors.Timeout)
+* [class: AsyncSteps](#AsyncSteps)
+  * [new AsyncSteps([state])](#new_AsyncSteps)
+  * [asyncSteps.state](#AsyncSteps#state)
+  * [asyncSteps.success([...arg])](#AsyncSteps#success)
+  * [~~asyncSteps.successStep()~~](#AsyncSteps#successStep)
+  * [asyncSteps.setTimeout(timeout_ms)](#AsyncSteps#setTimeout)
+  * [asyncSteps.setCancel()](#AsyncSteps#setCancel)
+  * [asyncSteps.loop(func, [label])](#AsyncSteps#loop)
+  * [asyncSteps.repeat(count, func, [label])](#AsyncSteps#repeat)
+  * [asyncSteps.forEach(map_or_list, func, [label])](#AsyncSteps#forEach)
+  * [asyncSteps.break([label])](#AsyncSteps#break)
+  * [asyncSteps.continue([label])](#AsyncSteps#continue)
+  * [asyncSteps.add(func, [onerror])](#AsyncSteps#add)
+  * [asyncSteps.parallel([onerror])](#AsyncSteps#parallel)
+  * [asyncSteps.error(name, [error_info])](#AsyncSteps#error)
+  * [asyncSteps.copyFrom(other)](#AsyncSteps#copyFrom)
+  * [asyncSteps.cancel()](#AsyncSteps#cancel)
+  * [asyncSteps.execute()](#AsyncSteps#execute)
 
-<a name="module_futoin-asyncsteps.installAsyncToolTest"></a>
-##futoin-asyncsteps.installAsyncToolTest([install])
-Use for unit testing to fine control step execution.
-It installs AsyncToolTest in place of AsyncTool
-
-**Params**
-
-- \[install=true\] `boolean` - true - install AsyncToolTest, false - AsyncTool as scheduler  
-
-<a name="module_futoin-asyncsteps.AsyncSteps"></a>
-##class: futoin-asyncsteps.AsyncSteps
-**Members**
-
-* [class: futoin-asyncsteps.AsyncSteps](#module_futoin-asyncsteps.AsyncSteps)
-  * [new futoin-asyncsteps.AsyncSteps([state])](#new_module_futoin-asyncsteps.AsyncSteps)
-  * [AsyncSteps.state](#module_futoin-asyncsteps.AsyncSteps#state)
-  * [AsyncSteps.success([...arg])](#module_futoin-asyncsteps.AsyncSteps#success)
-  * [~~AsyncSteps.successStep()~~](#module_futoin-asyncsteps.AsyncSteps#successStep)
-  * [AsyncSteps.setTimeout(timeout_ms)](#module_futoin-asyncsteps.AsyncSteps#setTimeout)
-  * [AsyncSteps.setCancel()](#module_futoin-asyncsteps.AsyncSteps#setCancel)
-  * [AsyncSteps.loop(func, [label])](#module_futoin-asyncsteps.AsyncSteps#loop)
-  * [AsyncSteps.repeat(count, func, [label])](#module_futoin-asyncsteps.AsyncSteps#repeat)
-  * [AsyncSteps.forEach(map_or_list, func, [label])](#module_futoin-asyncsteps.AsyncSteps#forEach)
-  * [AsyncSteps.break([label])](#module_futoin-asyncsteps.AsyncSteps#break)
-  * [AsyncSteps.continue([label])](#module_futoin-asyncsteps.AsyncSteps#continue)
-  * [AsyncSteps.add(func, [onerror])](#module_futoin-asyncsteps.AsyncSteps#add)
-  * [AsyncSteps.parallel([onerror])](#module_futoin-asyncsteps.AsyncSteps#parallel)
-  * [AsyncSteps.error(name, [error_info])](#module_futoin-asyncsteps.AsyncSteps#error)
-  * [AsyncSteps.copyFrom(other)](#module_futoin-asyncsteps.AsyncSteps#copyFrom)
-  * [AsyncSteps.cancel()](#module_futoin-asyncsteps.AsyncSteps#cancel)
-  * [AsyncSteps.execute()](#module_futoin-asyncsteps.AsyncSteps#execute)
-
-<a name="new_module_futoin-asyncsteps.AsyncSteps"></a>
-###new futoin-asyncsteps.AsyncSteps([state])
+<a name="new_AsyncSteps"></a>
+##new AsyncSteps([state])
 Root AsyncStep implementation
 
 **Params**
 
 - \[state\] `Object` - For internal use. State variable sharing  
 
-<a name="module_futoin-asyncsteps.AsyncSteps#state"></a>
-###AsyncSteps.state
+<a name="AsyncSteps#state"></a>
+##asyncSteps.state
 Get AsyncSteps state object.
 Note: As a JS-specific improvement as.state === as.state()
 
 **Returns**: `object`  
-<a name="module_futoin-asyncsteps.AsyncSteps#success"></a>
-###AsyncSteps.success([...arg])
+<a name="AsyncSteps#success"></a>
+##asyncSteps.success([...arg])
 Successfully complete current step execution, optionally passing result variables to the next step.
 
 **Params**
 
 - \[...arg\] `*` - unlimited number of result variables with no type constraint  
 
-<a name="module_futoin-asyncsteps.AsyncSteps#successStep"></a>
-###~~AsyncSteps.successStep()~~
+<a name="AsyncSteps#successStep"></a>
+##~~asyncSteps.successStep()~~
 Deprecated with FTN12 v1.5
 If sub-steps have been added then add efficient dummy step which behavior of as.success();
 Otherwise, simply call as.success();
 
 ***Deprecated***  
-<a name="module_futoin-asyncsteps.AsyncSteps#setTimeout"></a>
-###AsyncSteps.setTimeout(timeout_ms)
+<a name="AsyncSteps#setTimeout"></a>
+##asyncSteps.setTimeout(timeout_ms)
 Set timeout for external event completion with async success() or error() call.
 If step is not finished until timeout is reached then whole execution gets canceled.
 Can be used only within execute_callback body.
@@ -882,13 +844,13 @@ Can be used only within execute_callback body.
 
 - timeout_ms `number` - Timeout in ms  
 
-<a name="module_futoin-asyncsteps.AsyncSteps#setCancel"></a>
-###AsyncSteps.setCancel()
+<a name="AsyncSteps#setCancel"></a>
+##asyncSteps.setCancel()
 Set cancellation handler to properly handle timeouts and external cancellation.
 Can be used only within execute_callback body.
 
-<a name="module_futoin-asyncsteps.AsyncSteps#loop"></a>
-###AsyncSteps.loop(func, [label])
+<a name="AsyncSteps#loop"></a>
+##asyncSteps.loop(func, [label])
 Execute loop until as.break() is called
 
 **Params**
@@ -896,8 +858,8 @@ Execute loop until as.break() is called
 - func <code>[LoopFunc](#LoopFunc)</code> - loop body  
 - \[label\] `string` - optional label to use for *as.break()* and *as.continue()* in inner loops  
 
-<a name="module_futoin-asyncsteps.AsyncSteps#repeat"></a>
-###AsyncSteps.repeat(count, func, [label])
+<a name="AsyncSteps#repeat"></a>
+##asyncSteps.repeat(count, func, [label])
 Call *func(as, i)* for *count* times
 
 **Params**
@@ -906,8 +868,8 @@ Call *func(as, i)* for *count* times
 - func <code>[RepeatFunc](#RepeatFunc)</code> - loop body  
 - \[label\] `string` - optional label to use for *as.break()* and *as.continue()* in inner loops  
 
-<a name="module_futoin-asyncsteps.AsyncSteps#forEach"></a>
-###AsyncSteps.forEach(map_or_list, func, [label])
+<a name="AsyncSteps#forEach"></a>
+##asyncSteps.forEach(map_or_list, func, [label])
 For each *map* or *list* element call *func( as, key, value )*
 
 **Params**
@@ -916,24 +878,24 @@ For each *map* or *list* element call *func( as, key, value )*
 - func <code>[ForEachFunc](#ForEachFunc)</code> - loop body  
 - \[label\] `string` - optional label to use for *as.break()* and *as.continue()* in inner loops  
 
-<a name="module_futoin-asyncsteps.AsyncSteps#break"></a>
-###AsyncSteps.break([label])
+<a name="AsyncSteps#break"></a>
+##asyncSteps.break([label])
 Break execution of current loop, throws exception
 
 **Params**
 
 - \[label\] `string` - Optional. unwind loops, until *label* named loop is exited  
 
-<a name="module_futoin-asyncsteps.AsyncSteps#continue"></a>
-###AsyncSteps.continue([label])
+<a name="AsyncSteps#continue"></a>
+##asyncSteps.continue([label])
 Continue loop execution from the next iteration, throws exception
 
 **Params**
 
 - \[label\] `string` - Optional. unwind loops, until *label* named loop is found  
 
-<a name="module_futoin-asyncsteps.AsyncSteps#add"></a>
-###AsyncSteps.add(func, [onerror])
+<a name="AsyncSteps#add"></a>
+##asyncSteps.add(func, [onerror])
 Add sub-step. Can be called multiple times.
 
 **Params**
@@ -942,8 +904,8 @@ Add sub-step. Can be called multiple times.
 - \[onerror\] <code>[ErrorFunc](#ErrorFunc)</code> - Optional, provide error handler  
 
 **Returns**: [AsyncSteps](#AsyncSteps)  
-<a name="module_futoin-asyncsteps.AsyncSteps#parallel"></a>
-###AsyncSteps.parallel([onerror])
+<a name="AsyncSteps#parallel"></a>
+##asyncSteps.parallel([onerror])
 Creates a step internally and returns specialized AsyncSteps interfaces all steps
 of which are executed in quasi-parallel.
 
@@ -952,8 +914,8 @@ of which are executed in quasi-parallel.
 - \[onerror\] <code>[ErrorFunc](#ErrorFunc)</code> - Optional, provide error handler  
 
 **Returns**: [AsyncSteps](#AsyncSteps)  
-<a name="module_futoin-asyncsteps.AsyncSteps#error"></a>
-###AsyncSteps.error(name, [error_info])
+<a name="AsyncSteps#error"></a>
+##asyncSteps.error(name, [error_info])
 Set error and throw to abort execution.
 
 **Params**
@@ -962,38 +924,38 @@ Set error and throw to abort execution.
 - \[error_info\] `string` - optional descriptive message assigned to as.state.error_info  
 
 **Type**: `Error`  
-<a name="module_futoin-asyncsteps.AsyncSteps#copyFrom"></a>
-###AsyncSteps.copyFrom(other)
+<a name="AsyncSteps#copyFrom"></a>
+##asyncSteps.copyFrom(other)
 Copy steps and not yet defined state variables from "model" AsyncSteps instance
 
 **Params**
 
 - other <code>[AsyncSteps](#AsyncSteps)</code> - model instance, which must get be executed  
 
-<a name="module_futoin-asyncsteps.AsyncSteps#cancel"></a>
-###AsyncSteps.cancel()
+<a name="AsyncSteps#cancel"></a>
+##asyncSteps.cancel()
 Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
 
-<a name="module_futoin-asyncsteps.AsyncSteps#execute"></a>
-###AsyncSteps.execute()
+<a name="AsyncSteps#execute"></a>
+##asyncSteps.execute()
 Start execution of AsyncSteps using AsyncTool
 Must not be called more than once until cancel/complete (instance can be re-used)
 
-<a name="module_futoin-asyncsteps.AsyncTool"></a>
-##class: futoin-asyncsteps.AsyncTool
+<a name="AsyncTool"></a>
+#class: AsyncTool
 **Members**
 
-* [class: futoin-asyncsteps.AsyncTool](#module_futoin-asyncsteps.AsyncTool)
-  * [new futoin-asyncsteps.AsyncTool()](#new_module_futoin-asyncsteps.AsyncTool)
-  * [AsyncTool.callLater(func, [timeout_ms])](#module_futoin-asyncsteps.AsyncTool.callLater)
-  * [AsyncTool.callLater(handle)](#module_futoin-asyncsteps.AsyncTool.callLater)
+* [class: AsyncTool](#AsyncTool)
+  * [new AsyncTool()](#new_AsyncTool)
+  * [AsyncTool.callLater(func, [timeout_ms])](#AsyncTool.callLater)
+  * [AsyncTool.callLater(handle)](#AsyncTool.callLater)
 
-<a name="new_module_futoin-asyncsteps.AsyncTool"></a>
-###new futoin-asyncsteps.AsyncTool()
+<a name="new_AsyncTool"></a>
+##new AsyncTool()
 Neutral interface to event scheduler
 
-<a name="module_futoin-asyncsteps.AsyncTool.callLater"></a>
-###AsyncTool.callLater(func, [timeout_ms])
+<a name="AsyncTool.callLater"></a>
+##AsyncTool.callLater(func, [timeout_ms])
 Wrapper for setTimeout()/setImmediate()
 
 **Params**
@@ -1002,34 +964,34 @@ Wrapper for setTimeout()/setImmediate()
 - \[timeout_ms=0\] `number` - optional timeout in ms  
 
 **Returns**: `Object` - - timer handle  
-<a name="module_futoin-asyncsteps.AsyncTool.callLater"></a>
-###AsyncTool.callLater(handle)
+<a name="AsyncTool.callLater"></a>
+##AsyncTool.callLater(handle)
 Wrapper for clearTimeout()/clearImmediate()
 
 **Params**
 
 - handle `Object` - Handle returned from AsyncTool.callLater  
 
-<a name="module_futoin-asyncsteps.AsyncToolTest"></a>
-##class: futoin-asyncsteps.AsyncToolTest
+<a name="AsyncToolTest"></a>
+#class: AsyncToolTest
 **Members**
 
-* [class: futoin-asyncsteps.AsyncToolTest](#module_futoin-asyncsteps.AsyncToolTest)
-  * [new futoin-asyncsteps.AsyncToolTest()](#new_module_futoin-asyncsteps.AsyncToolTest)
-  * [AsyncToolTest.callLater(func, [timeout_ms])](#module_futoin-asyncsteps.AsyncToolTest.callLater)
-  * [AsyncToolTest.callLater(handle)](#module_futoin-asyncsteps.AsyncToolTest.callLater)
-  * [AsyncToolTest.nextEvent()](#module_futoin-asyncsteps.AsyncToolTest.nextEvent)
-  * [AsyncToolTest.hasEvents()](#module_futoin-asyncsteps.AsyncToolTest.hasEvents)
-  * [AsyncToolTest.getEvents()](#module_futoin-asyncsteps.AsyncToolTest.getEvents)
-  * [AsyncToolTest.resetEvents()](#module_futoin-asyncsteps.AsyncToolTest.resetEvents)
-  * [AsyncToolTest.run()](#module_futoin-asyncsteps.AsyncToolTest.run)
+* [class: AsyncToolTest](#AsyncToolTest)
+  * [new AsyncToolTest()](#new_AsyncToolTest)
+  * [AsyncToolTest.callLater(func, [timeout_ms])](#AsyncToolTest.callLater)
+  * [AsyncToolTest.callLater(handle)](#AsyncToolTest.callLater)
+  * [AsyncToolTest.nextEvent()](#AsyncToolTest.nextEvent)
+  * [AsyncToolTest.hasEvents()](#AsyncToolTest.hasEvents)
+  * [AsyncToolTest.getEvents()](#AsyncToolTest.getEvents)
+  * [AsyncToolTest.resetEvents()](#AsyncToolTest.resetEvents)
+  * [AsyncToolTest.run()](#AsyncToolTest.run)
 
-<a name="new_module_futoin-asyncsteps.AsyncToolTest"></a>
-###new futoin-asyncsteps.AsyncToolTest()
+<a name="new_AsyncToolTest"></a>
+##new AsyncToolTest()
 Special event scheduler for testing to be installed with installAsyncToolTest()
 
-<a name="module_futoin-asyncsteps.AsyncToolTest.callLater"></a>
-###AsyncToolTest.callLater(func, [timeout_ms])
+<a name="AsyncToolTest.callLater"></a>
+##AsyncToolTest.callLater(func, [timeout_ms])
 Adds callback to internal queue
 
 **Params**
@@ -1038,138 +1000,147 @@ Adds callback to internal queue
 - \[timeout_ms=0\] `number` - optional timeout in ms  
 
 **Returns**: `Object` - - timer handle  
-<a name="module_futoin-asyncsteps.AsyncToolTest.callLater"></a>
-###AsyncToolTest.callLater(handle)
+<a name="AsyncToolTest.callLater"></a>
+##AsyncToolTest.callLater(handle)
 Removed callback from internal queue
 
 **Params**
 
 - handle `Object` - Handle returned from AsyncToolTest.callLater  
 
-<a name="module_futoin-asyncsteps.AsyncToolTest.nextEvent"></a>
-###AsyncToolTest.nextEvent()
+<a name="AsyncToolTest.nextEvent"></a>
+##AsyncToolTest.nextEvent()
 Process next even in the internal queue
 
-<a name="module_futoin-asyncsteps.AsyncToolTest.hasEvents"></a>
-###AsyncToolTest.hasEvents()
+<a name="AsyncToolTest.hasEvents"></a>
+##AsyncToolTest.hasEvents()
 Check if there are any events scheduled
 
-<a name="module_futoin-asyncsteps.AsyncToolTest.getEvents"></a>
-###AsyncToolTest.getEvents()
+<a name="AsyncToolTest.getEvents"></a>
+##AsyncToolTest.getEvents()
 Get internal even queue
 
-<a name="module_futoin-asyncsteps.AsyncToolTest.resetEvents"></a>
-###AsyncToolTest.resetEvents()
+<a name="AsyncToolTest.resetEvents"></a>
+##AsyncToolTest.resetEvents()
 Clear internal event queue
 
-<a name="module_futoin-asyncsteps.AsyncToolTest.run"></a>
-###AsyncToolTest.run()
+<a name="AsyncToolTest.run"></a>
+##AsyncToolTest.run()
 Execute all remaining events in the internal queue
 
-<a name="module_futoin-asyncsteps.FutoInErrors"></a>
-##class: futoin-asyncsteps.FutoInErrors
+<a name="FutoInErrors"></a>
+#class: FutoInErrors
 **Members**
 
-* [class: futoin-asyncsteps.FutoInErrors](#module_futoin-asyncsteps.FutoInErrors)
-  * [new futoin-asyncsteps.FutoInErrors()](#new_module_futoin-asyncsteps.FutoInErrors)
-  * [const: FutoInErrors.ConnectError](#module_futoin-asyncsteps.FutoInErrors.ConnectError)
-  * [const: FutoInErrors.CommError](#module_futoin-asyncsteps.FutoInErrors.CommError)
-  * [const: FutoInErrors.UnknownInterface](#module_futoin-asyncsteps.FutoInErrors.UnknownInterface)
-  * [const: FutoInErrors.NotSupportedVersion](#module_futoin-asyncsteps.FutoInErrors.NotSupportedVersion)
-  * [const: FutoInErrors.NotImplemented](#module_futoin-asyncsteps.FutoInErrors.NotImplemented)
-  * [const: FutoInErrors.Unauthorized](#module_futoin-asyncsteps.FutoInErrors.Unauthorized)
-  * [const: FutoInErrors.InternalError](#module_futoin-asyncsteps.FutoInErrors.InternalError)
-  * [const: FutoInErrors.InvokerError](#module_futoin-asyncsteps.FutoInErrors.InvokerError)
-  * [const: FutoInErrors.InvalidRequest](#module_futoin-asyncsteps.FutoInErrors.InvalidRequest)
-  * [const: FutoInErrors.DefenseRejected](#module_futoin-asyncsteps.FutoInErrors.DefenseRejected)
-  * [const: FutoInErrors.PleaseReauth](#module_futoin-asyncsteps.FutoInErrors.PleaseReauth)
-  * [const: FutoInErrors.SecurityError](#module_futoin-asyncsteps.FutoInErrors.SecurityError)
-  * [const: FutoInErrors.Timeout](#module_futoin-asyncsteps.FutoInErrors.Timeout)
+* [class: FutoInErrors](#FutoInErrors)
+  * [new FutoInErrors()](#new_FutoInErrors)
+  * [const: FutoInErrors.ConnectError](#FutoInErrors.ConnectError)
+  * [const: FutoInErrors.CommError](#FutoInErrors.CommError)
+  * [const: FutoInErrors.UnknownInterface](#FutoInErrors.UnknownInterface)
+  * [const: FutoInErrors.NotSupportedVersion](#FutoInErrors.NotSupportedVersion)
+  * [const: FutoInErrors.NotImplemented](#FutoInErrors.NotImplemented)
+  * [const: FutoInErrors.Unauthorized](#FutoInErrors.Unauthorized)
+  * [const: FutoInErrors.InternalError](#FutoInErrors.InternalError)
+  * [const: FutoInErrors.InvokerError](#FutoInErrors.InvokerError)
+  * [const: FutoInErrors.InvalidRequest](#FutoInErrors.InvalidRequest)
+  * [const: FutoInErrors.DefenseRejected](#FutoInErrors.DefenseRejected)
+  * [const: FutoInErrors.PleaseReauth](#FutoInErrors.PleaseReauth)
+  * [const: FutoInErrors.SecurityError](#FutoInErrors.SecurityError)
+  * [const: FutoInErrors.Timeout](#FutoInErrors.Timeout)
 
-<a name="new_module_futoin-asyncsteps.FutoInErrors"></a>
-###new futoin-asyncsteps.FutoInErrors()
+<a name="new_FutoInErrors"></a>
+##new FutoInErrors()
 List of standard FutoIn Core errors. It may get extended in runtime.
 
-<a name="module_futoin-asyncsteps.FutoInErrors.ConnectError"></a>
-###const: FutoInErrors.ConnectError
+<a name="FutoInErrors.ConnectError"></a>
+##const: FutoInErrors.ConnectError
 Connection error before request is sent.
 Must be generated on Invoker side
 
 **Default**: `ConnectError`  
-<a name="module_futoin-asyncsteps.FutoInErrors.CommError"></a>
-###const: FutoInErrors.CommError
+<a name="FutoInErrors.CommError"></a>
+##const: FutoInErrors.CommError
 Communication error at any stage after request is sent
 and before response is received.
 Must be generated on Invoker side
 
 **Default**: `CommError`  
-<a name="module_futoin-asyncsteps.FutoInErrors.UnknownInterface"></a>
-###const: FutoInErrors.UnknownInterface
+<a name="FutoInErrors.UnknownInterface"></a>
+##const: FutoInErrors.UnknownInterface
 Unknown interface requested.
 Must be generated only on Executor side
 
 **Default**: `UnknownInterface`  
-<a name="module_futoin-asyncsteps.FutoInErrors.NotSupportedVersion"></a>
-###const: FutoInErrors.NotSupportedVersion
+<a name="FutoInErrors.NotSupportedVersion"></a>
+##const: FutoInErrors.NotSupportedVersion
 Not supported interface version.
 Must be generated only on Executor side
 
 **Default**: `NotSupportedVersion`  
-<a name="module_futoin-asyncsteps.FutoInErrors.NotImplemented"></a>
-###const: FutoInErrors.NotImplemented
+<a name="FutoInErrors.NotImplemented"></a>
+##const: FutoInErrors.NotImplemented
 In case interface function is not implemented on Executor side
 Must be generated on Executor side
 
 **Default**: `NotImplemented`  
-<a name="module_futoin-asyncsteps.FutoInErrors.Unauthorized"></a>
-###const: FutoInErrors.Unauthorized
+<a name="FutoInErrors.Unauthorized"></a>
+##const: FutoInErrors.Unauthorized
 Security policy on Executor side does not allow to
 access interface or specific function.
 Must be generated only on Executor side
 
 **Default**: `Unauthorized`  
-<a name="module_futoin-asyncsteps.FutoInErrors.InternalError"></a>
-###const: FutoInErrors.InternalError
+<a name="FutoInErrors.InternalError"></a>
+##const: FutoInErrors.InternalError
 Unexpected internal error on Executor side, including internal CommError.
 Must be generated only on Executor side
 
 **Default**: `InternalError`  
-<a name="module_futoin-asyncsteps.FutoInErrors.InvokerError"></a>
-###const: FutoInErrors.InvokerError
+<a name="FutoInErrors.InvokerError"></a>
+##const: FutoInErrors.InvokerError
 Unexpected internal error on Invoker side, not related to CommError.
 Must be generated only on Invoker side
 
 **Default**: `InvokerError`  
-<a name="module_futoin-asyncsteps.FutoInErrors.InvalidRequest"></a>
-###const: FutoInErrors.InvalidRequest
+<a name="FutoInErrors.InvalidRequest"></a>
+##const: FutoInErrors.InvalidRequest
 Invalid data is passed as FutoIn request.
 Must be generated only on Executor side
 
 **Default**: `InvalidRequest`  
-<a name="module_futoin-asyncsteps.FutoInErrors.DefenseRejected"></a>
-###const: FutoInErrors.DefenseRejected
+<a name="FutoInErrors.DefenseRejected"></a>
+##const: FutoInErrors.DefenseRejected
 Defense system has triggered rejection
 Must be generated on Executor side, but also possible to be triggered on Invoker
 
 **Default**: `DefenseRejected`  
-<a name="module_futoin-asyncsteps.FutoInErrors.PleaseReauth"></a>
-###const: FutoInErrors.PleaseReauth
+<a name="FutoInErrors.PleaseReauth"></a>
+##const: FutoInErrors.PleaseReauth
 Executor requests re-authorization
 Must be generated only on Executor side
 
 **Default**: `PleaseReauth`  
-<a name="module_futoin-asyncsteps.FutoInErrors.SecurityError"></a>
-###const: FutoInErrors.SecurityError
+<a name="FutoInErrors.SecurityError"></a>
+##const: FutoInErrors.SecurityError
 'sec' request section has invalid data or not SecureChannel
 Must be generated only on Executor side
 
 **Default**: `SecurityError`  
-<a name="module_futoin-asyncsteps.FutoInErrors.Timeout"></a>
-###const: FutoInErrors.Timeout
+<a name="FutoInErrors.Timeout"></a>
+##const: FutoInErrors.Timeout
 Timeout occurred in any stage
 Must be used only internally and should never travel in request message
 
 **Default**: `Timeout`  
+<a name="installAsyncToolTest"></a>
+#installAsyncToolTest([install])
+Use for unit testing to fine control step execution.
+It installs AsyncToolTest in place of AsyncTool
+
+**Params**
+
+- \[install=true\] `boolean` - true - install AsyncToolTest, false - AsyncTool as scheduler  
+
 <a name="$as"></a>
 #$as
 Browser-only reference to futoin-asyncsteps module
