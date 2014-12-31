@@ -32,11 +32,11 @@ It also possible to use FutoIn AsyncSteps from any other event framework. Just m
 external framework from the top most error handler (for errors) and last step (for success).
 
 To minimize cost of closure creation on repetitive execution, a special feature of "model" step
-is available: model step is created as usual, but must never get executed. It possible to copy steps
-and state variables using AsyncSteps#copyFrom() to a newly created object.
+is available: model step is created as usual, but must never get executed. It is possible to copy steps
+and state variables using AsyncSteps#copyFrom() to a newly created AsyncSteps object.
 
 There is also a family of async loop functions for unconditional iteration, iteration over data or
-iteration with limit.
+iteration with count limit.
 
 # Installation for Node.js
 
@@ -47,7 +47,7 @@ $ npm install futoin-asyncsteps --save
 and/or package.json:
 ```
 "dependencies" : {
-    "futoin-asyncsteps" : "^$$pkg.version$$"
+    "futoin-asyncsteps" : "^1"
 }
 ```
 
@@ -56,6 +56,14 @@ and/or package.json:
 ```sh
 $ bower install futoin-asyncsteps --save
 ```
+
+Note: there are the following globals available:
+
+* $as - global reference to futoin-asyncsteps module
+* futoin - global namespace-like object for name clashing cases
+* futoin.$as - another reference tp futoin-asyncsteps module
+* FutoInError - global reference to standard FutoIn error codes object
+* futoin.AsyncSteps - global reference to futoin-asyncsteps.AsyncSteps class
 
 # Examples
 

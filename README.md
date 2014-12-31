@@ -32,11 +32,11 @@ It also possible to use FutoIn AsyncSteps from any other event framework. Just m
 external framework from the top most error handler (for errors) and last step (for success).
 
 To minimize cost of closure creation on repetitive execution, a special feature of "model" step
-is available: model step is created as usual, but must never get executed. It possible to copy steps
-and state variables using AsyncSteps#copyFrom() to a newly created object.
+is available: model step is created as usual, but must never get executed. It is possible to copy steps
+and state variables using AsyncSteps#copyFrom() to a newly created AsyncSteps object.
 
 There is also a family of async loop functions for unconditional iteration, iteration over data or
-iteration with limit.
+iteration with count limit.
 
 # Installation for Node.js
 
@@ -47,7 +47,7 @@ $ npm install futoin-asyncsteps --save
 and/or package.json:
 ```
 "dependencies" : {
-    "futoin-asyncsteps" : "^1.4.2"
+    "futoin-asyncsteps" : "^1"
 }
 ```
 
@@ -56,6 +56,14 @@ and/or package.json:
 ```sh
 $ bower install futoin-asyncsteps --save
 ```
+
+Note: there are the following globals available:
+
+* $as - global reference to futoin-asyncsteps module
+* futoin - global namespace-like object for name clashing cases
+* futoin.$as - another reference tp futoin-asyncsteps module
+* FutoInError - global reference to standard FutoIn error codes object
+* futoin.AsyncSteps - global reference to futoin-asyncsteps.AsyncSteps class
 
 # Examples
 
@@ -816,7 +824,8 @@ Root AsyncStep implementation
 <a name="AsyncSteps#state"></a>
 ##asyncSteps.state
 Get AsyncSteps state object.
-Note: As a JS-specific improvement as.state === as.state()
+
+*Note: There is a JS-specific improvement: as.state === as.state()*
 
 **Returns**: `object`  
 <a name="AsyncSteps#success"></a>
@@ -831,14 +840,15 @@ Successfully complete current step execution, optionally passing result variable
 ##~~asyncSteps.successStep()~~
 Deprecated with FTN12 v1.5
 If sub-steps have been added then add efficient dummy step which behavior of as.success();
-Otherwise, simply call as.success();
+Otherwise, simply call *as.success();*
 
 ***Deprecated***  
 <a name="AsyncSteps#setTimeout"></a>
 ##asyncSteps.setTimeout(timeout_ms)
-Set timeout for external event completion with async success() or error() call.
-If step is not finished until timeout is reached then whole execution gets canceled.
-Can be used only within execute_callback body.
+Set timeout for external event completion with async *as.success()* or *as.error()* call.
+If step is not finished until timeout is reached then Timeout error is raised.
+
+*Note: Can be used only within **ExecFunc** body.*
 
 **Params**
 
@@ -847,11 +857,12 @@ Can be used only within execute_callback body.
 <a name="AsyncSteps#setCancel"></a>
 ##asyncSteps.setCancel()
 Set cancellation handler to properly handle timeouts and external cancellation.
-Can be used only within execute_callback body.
+
+*Note: Can be used only within **ExecFunc** body.*
 
 <a name="AsyncSteps#loop"></a>
 ##asyncSteps.loop(func, [label])
-Execute loop until as.break() is called
+Execute loop until *as.break()* or *as.error()* is called
 
 **Params**
 
@@ -918,6 +929,8 @@ of which are executed in quasi-parallel.
 ##asyncSteps.error(name, [error_info])
 Set error and throw to abort execution.
 
+*NOTE: If called outside of AsyncSteps stack (e.g. by external event), make sure you catch the exception*
+
 **Params**
 
 - name `string` - error message, expected to be identifier "InternalError"  
@@ -939,7 +952,8 @@ Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in 
 <a name="AsyncSteps#execute"></a>
 ##asyncSteps.execute()
 Start execution of AsyncSteps using AsyncTool
-Must not be called more than once until cancel/complete (instance can be re-used)
+
+It must not be called more than once until cancel/complete (instance can be re-used)
 
 <a name="AsyncTool"></a>
 #class: AsyncTool
@@ -1143,23 +1157,23 @@ It installs AsyncToolTest in place of AsyncTool
 
 <a name="$as"></a>
 #$as
-Browser-only reference to futoin-asyncsteps module
+**window.$as** - browser-only reference to futoin-asyncsteps module
 
 <a name="$as"></a>
 #$as
-Browser-only reference to futoin-asyncsteps module
+**window.FutoIn.$as** - browser-only reference to futoin-asyncsteps module
 
 <a name="FutoInError"></a>
 #FutoInError
-Browser-only reference to futoin-asyncsteps.FutoInError
+**window.FutoInError** - browser-only reference to futoin-asyncsteps.FutoInError
 
 <a name="AsyncSteps"></a>
 #AsyncSteps
-Browser-only reference to futoin-asyncsteps.AsyncSteps
+**window.futoin.AsyncSteps** - browser-only reference to futoin-asyncsteps.AsyncSteps
 
 <a name="LoopFunc"></a>
 #callback: LoopFunc
-It is just a subset of execute_callback
+It is just a subset of *ExecFunc*
 
 **Params**
 
@@ -1168,7 +1182,7 @@ It is just a subset of execute_callback
 **Type**: `function`  
 <a name="RepeatFunc"></a>
 #callback: RepeatFunc
-It is just a subset of execute_callback
+It is just a subset of *ExecFunc*
 
 **Params**
 
@@ -1178,7 +1192,7 @@ It is just a subset of execute_callback
 **Type**: `function`  
 <a name="ForEachFunc"></a>
 #callback: ForEachFunc
-It is just a subset of execute_callback
+It is just a subset of *ExecFunc*
 
 **Params**
 
@@ -1188,8 +1202,8 @@ It is just a subset of execute_callback
 **Type**: `function`  
 <a name="ExecFunc"></a>
 #callback: ExecFunc
-execute_callback as defined in FTN12: FutoIn AsyncSteps specification. Function must have
-non-blocking body calling:  as.success() or as.error() or as.add()/as.parallel().
+*execute_callback* as defined in **FTN12: FutoIn AsyncSteps** specification. Function must have
+non-blocking body calling:  *as.success()* or *as.error()* or *as.add()/as.parallel()*.
 
 **Params**
 
@@ -1199,11 +1213,11 @@ non-blocking body calling:  as.success() or as.error() or as.add()/as.parallel()
 **Type**: `function`  
 <a name="ErrorFunc"></a>
 #callback: ErrorFunc
-error_callback as defined in FTN12: FutoIn AsyncSteps specification.
+*error_callback* as defined in **FTN12: FutoIn AsyncSteps** specification.
 Function can:
 a) do nothing
-b) override error message with as.error( new_error )
-c) continue execution with as.success()
+b) override error message with *as.error( new_error )*
+c) continue execution with *as.success()*
 
 **Params**
 
