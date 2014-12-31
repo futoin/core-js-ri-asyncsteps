@@ -368,6 +368,7 @@
                             this._in_execute = true;
                             asp._onerror.call(null, asp, name);
                         } catch (e) {
+                            this.state.last_exception = e;
                             name = e.message;
                         } finally {
                             this._in_execute = false;
@@ -446,7 +447,7 @@
                     }
                 } catch (e) {
                     this._in_execute = false;
-                    this.state.last_error = e;
+                    this.state.last_exception = e;
                     this._handle_error(e.message);
                 } finally {
                     this._in_execute = false;

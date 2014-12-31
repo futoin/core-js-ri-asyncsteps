@@ -712,7 +712,7 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
   * [asyncSteps.success([...arg])](#AsyncSteps#success)
   * [~~asyncSteps.successStep()~~](#AsyncSteps#successStep)
   * [asyncSteps.setTimeout(timeout_ms)](#AsyncSteps#setTimeout)
-  * [asyncSteps.setCancel()](#AsyncSteps#setCancel)
+  * [asyncSteps.setCancel(oncancel)](#AsyncSteps#setCancel)
   * [asyncSteps.loop(func, [label])](#AsyncSteps#loop)
   * [asyncSteps.repeat(count, func, [label])](#AsyncSteps#repeat)
   * [asyncSteps.forEach(map_or_list, func, [label])](#AsyncSteps#forEach)
@@ -767,7 +767,7 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
   * [asyncSteps.success([...arg])](#AsyncSteps#success)
   * [~~asyncSteps.successStep()~~](#AsyncSteps#successStep)
   * [asyncSteps.setTimeout(timeout_ms)](#AsyncSteps#setTimeout)
-  * [asyncSteps.setCancel()](#AsyncSteps#setCancel)
+  * [asyncSteps.setCancel(oncancel)](#AsyncSteps#setCancel)
   * [asyncSteps.loop(func, [label])](#AsyncSteps#loop)
   * [asyncSteps.repeat(count, func, [label])](#AsyncSteps#repeat)
   * [asyncSteps.forEach(map_or_list, func, [label])](#AsyncSteps#forEach)
@@ -787,6 +787,7 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 * [callback: ForEachFunc](#ForEachFunc)
 * [callback: ExecFunc](#ExecFunc)
 * [callback: ErrorFunc](#ErrorFunc)
+* [callback: CancelFunc](#CancelFunc)
  
 <a name="module_futoin-asyncsteps"></a>
 #futoin-asyncsteps
@@ -800,7 +801,7 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
   * [asyncSteps.success([...arg])](#AsyncSteps#success)
   * [~~asyncSteps.successStep()~~](#AsyncSteps#successStep)
   * [asyncSteps.setTimeout(timeout_ms)](#AsyncSteps#setTimeout)
-  * [asyncSteps.setCancel()](#AsyncSteps#setCancel)
+  * [asyncSteps.setCancel(oncancel)](#AsyncSteps#setCancel)
   * [asyncSteps.loop(func, [label])](#AsyncSteps#loop)
   * [asyncSteps.repeat(count, func, [label])](#AsyncSteps#repeat)
   * [asyncSteps.forEach(map_or_list, func, [label])](#AsyncSteps#forEach)
@@ -826,6 +827,11 @@ Root AsyncStep implementation
 Get AsyncSteps state object.
 
 *Note: There is a JS-specific improvement: as.state === as.state()*
+
+The are the following pre-defined state variables:
+
+* **error_info** - error description, if provided to *as.error()*
+* **last_exception** - the last exception caught
 
 **Returns**: `object`  
 <a name="AsyncSteps#success"></a>
@@ -855,10 +861,14 @@ If step is not finished until timeout is reached then Timeout error is raised.
 - timeout_ms `number` - Timeout in ms  
 
 <a name="AsyncSteps#setCancel"></a>
-##asyncSteps.setCancel()
+##asyncSteps.setCancel(oncancel)
 Set cancellation handler to properly handle timeouts and external cancellation.
 
 *Note: Can be used only within **ExecFunc** body.*
+
+**Params**
+
+- oncancel <code>[CancelFunc](#CancelFunc)</code> - cleanup/cancel logic of external processing  
 
 <a name="AsyncSteps#loop"></a>
 ##asyncSteps.loop(func, [label])
@@ -1215,14 +1225,24 @@ non-blocking body calling:  *as.success()* or *as.error()* or *as.add()/as.paral
 #callback: ErrorFunc
 *error_callback* as defined in **FTN12: FutoIn AsyncSteps** specification.
 Function can:
-a) do nothing
-b) override error message with *as.error( new_error )*
-c) continue execution with *as.success()*
+
+* do nothing
+* override error message with *as.error( new_error )*
+* continue execution with *as.success()*
 
 **Params**
 
 - as <code>[AsyncSteps](#AsyncSteps)</code> - the only valid reference to AsyncSteps with required level of protection  
 - err `string` - error message  
+
+**Type**: `function`  
+<a name="CancelFunc"></a>
+#callback: CancelFunc
+*cancel_callback* as defined in **FTN12: FutoIn AsyncSteps** specification.
+
+**Params**
+
+- as <code>[AsyncSteps](#AsyncSteps)</code> - the only valid reference to AsyncSteps with required level of protection  
 
 **Type**: `function`  
 

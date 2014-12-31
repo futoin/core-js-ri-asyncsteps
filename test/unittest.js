@@ -1430,17 +1430,25 @@ describe( 'AsyncSteps', function(){
                 as.state().should.equal( as.state );
             });
             
-            it('should set error_info and last_error', function(){
+            it('should set error_info and last_exception', function(){
                 var as = this.as;
-                as.add( function( as )
-                {
-                    as.error( 'MyError', 'MyInfo' );
-                } );
+                as.add(
+                    function( as )
+                    {
+                        as.error( 'FirstError', 'FirstInfo' );
+                    },
+                    function( as, err )
+                    {
+                        as.state.error_info.should.equal( 'FirstInfo' );
+                        as.state.last_exception.message.should.equal( 'FirstError' );
+                        as.error( 'SecondError', 'SecondInfo' );
+                    }
+                );
                 as.execute();
                 async_steps.AsyncTool.run();
                 assertNoEvents();
-                as.state.error_info.should.equal( 'MyInfo' );
-                as.state.last_error.message.should.equal( 'MyError' );
+                as.state.error_info.should.equal( 'SecondInfo' );
+                as.state.last_exception.message.should.equal( 'SecondError' );
             });
         }
     );
