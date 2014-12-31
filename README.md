@@ -47,7 +47,7 @@ $ npm install futoin-asyncsteps --save
 and/or package.json:
 ```
 "dependencies" : {
-    "futoin-asyncsteps" : "^1.4.1"
+    "futoin-asyncsteps" : "^1.4.2"
 }
 ```
 

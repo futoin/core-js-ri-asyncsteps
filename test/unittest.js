@@ -1429,6 +1429,19 @@ describe( 'AsyncSteps', function(){
                 var as = this.as;
                 as.state().should.equal( as.state );
             });
+            
+            it('should set error_info and last_error', function(){
+                var as = this.as;
+                as.add( function( as )
+                {
+                    as.error( 'MyError', 'MyInfo' );
+                } );
+                as.execute();
+                async_steps.AsyncTool.run();
+                assertNoEvents();
+                as.state.error_info.should.equal( 'MyInfo' );
+                as.state.last_error.message.should.equal( 'MyError' );
+            });
         }
     );
     

@@ -446,6 +446,7 @@
                     }
                 } catch (e) {
                     this._in_execute = false;
+                    this.state.last_error = e;
                     this._handle_error(e.message);
                 } finally {
                     this._in_execute = false;
