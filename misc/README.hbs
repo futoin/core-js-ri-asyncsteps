@@ -1,8 +1,8 @@
 
-[![NPM Version](https://img.shields.io/npm/v/futoin-asyncsteps.svg?style=flat)](https://www.npmjs.com/package/futoin-asyncsteps)
-[![NPM Downloads](https://img.shields.io/npm/dm/futoin-asyncsteps.svg?style=flat)](https://www.npmjs.com/package/futoin-asyncsteps)
-[![Build Status](https://travis-ci.org/futoin/core-js-ri-asyncsteps.svg)](https://travis-ci.org/futoin/core-js-ri-asyncsteps)
-[![stable](https://img.shields.io/badge/stability-stable-green.svg?style=flat)](https://www.npmjs.com/package/futoin-asyncsteps)
+    [![NPM Version](https://img.shields.io/npm/v/futoin-asyncsteps.svg?style=flat)](https://www.npmjs.com/package/futoin-asyncsteps)
+    [![NPM Downloads](https://img.shields.io/npm/dm/futoin-asyncsteps.svg?style=flat)](https://www.npmjs.com/package/futoin-asyncsteps)
+    [![Build Status](https://travis-ci.org/futoin/core-js-ri-asyncsteps.svg)](https://travis-ci.org/futoin/core-js-ri-asyncsteps)
+    [![stable](https://img.shields.io/badge/stability-stable-green.svg?style=flat)](https://www.npmjs.com/package/futoin-asyncsteps)
 
 **Stability: 3 - Stable**
 
