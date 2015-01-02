@@ -1,10 +1,15 @@
 
+[![NPM Version](https://img.shields.io/npm/v/futoin-asyncsteps.svg)](https://www.npmjs.com/package/futoin-asyncsteps)
+[![NPM Downloads](https://img.shields.io/npm/dm/futoin-asyncsteps.svg)](https://www.npmjs.com/package/futoin-asyncsteps)
 [![Build Status](https://travis-ci.org/futoin/core-js-ri-asyncsteps.svg)](https://travis-ci.org/futoin/core-js-ri-asyncsteps)
+[![stable](http://hughsk.github.io/stability-badges/dist/stable.svg)](http://github.com/hughsk/stability-badges)
+
+**Stability: 3 - Stable**
 
 Reference implementation of:
  
     FTN12: FutoIn Async API
-    Version: 1.5
+    Version: 1.6
     
 Spec: [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)
 
@@ -611,12 +616,19 @@ implicit as.success() call is assumed to simplify code and increase efficiency.
         doSomeStuff( as );
     })
 
-## 1.7. Error Info
+## 1.7. Error Info and Last Exception
+
+Pre-defined state variables:
+
+* **error_info** - value of the second parameter passed to the last *as.error()* call
+* **last_exception** - the last exception caught, if feasible
 
 Error code is not always descriptive enough, especially, if it can be generated in multiple ways.
 As a convention special "error_info" state field should hold descriptive information of the last error.
+Therefore, *as.error()* is extended with optional parameter error_info.
 
-For convenience, error() is extended with optional parameter error_info
+"last_exception" state variables may hold the last exception object caught, if feasible
+to implement. It should be populated with FutoIn errors as well.
 
 
 ## 1.8. Async Loops
