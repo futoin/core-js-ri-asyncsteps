@@ -133,7 +133,6 @@
                     };
                     model_as.add(function (as) {
                         func(as);
-                        as.successStep();
                     }, function (as, err) {
                         var term_label;
                         if (err === futoin_errors.LoopCont) {
