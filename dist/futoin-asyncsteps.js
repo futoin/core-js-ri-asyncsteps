@@ -94,7 +94,10 @@
                 var _this = this;
                 this._limit_event = async_steps.AsyncTool.callLater(function () {
                     _this._limit_event = null;
-                    _this._root._handle_error(futoin_errors.Timeout);
+                    try {
+                        _this._root.error(futoin_errors.Timeout);
+                    } catch (e) {
+                    }
                 }, timeout_ms);
                 return this;
             };

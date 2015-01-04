@@ -951,7 +951,8 @@ describe( 'AsyncSteps', function(){
                     function( as, err )
                     {
                         as.state.order.push( '4' );
-                        err.should.eql( 'Timeout' );
+                        err.should.equal( 'Timeout' );
+                        assert.isUndefined( as.state.error_info );
                         done_wrap( as.state.order );
                     }
                 );
