@@ -4,6 +4,8 @@
   [![Build Status](https://travis-ci.org/futoin/core-js-ri-asyncsteps.svg)](https://travis-ci.org/futoin/core-js-ri-asyncsteps)
   [![stable](https://img.shields.io/badge/stability-stable-green.svg?style=flat)](https://www.npmjs.com/package/futoin-asyncsteps)
 
+  [![NPM](https://nodei.co/npm/futoin-asyncsteps.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/futoin-asyncsteps/)
+
 **Stability: 3 - Stable**
 
 Reference implementation of:
