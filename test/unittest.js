@@ -511,6 +511,32 @@ describe( 'AsyncSteps', function(){
                 async_steps.AsyncTool.run();
                 as.state.order.should.eql( [1,2,3,4] );
             });
+            
+            it("should not loose error_info (bug #1)",function(){
+                var as = this.as;
+                
+                as.add(function(as){
+                    as.parallel(function( as, err)
+                    {
+                        err.should.equal( "MyError" );
+                        as.state.error_info.should.equal( "MyInfo" );
+                    } )
+                        .add(function(as){
+                        })
+                        .add(function(as){
+                            as.error( "MyError", "MyInfo" );
+                        })
+                        .add(function(as){
+                        });
+                });
+                as.add(function(as){
+                    false.should.be.true;
+                });
+
+                    
+                as.execute();
+                async_steps.AsyncTool.run();
+            });
         }
     );
     describe(

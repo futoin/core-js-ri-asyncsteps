@@ -614,9 +614,9 @@
                     this._cleanup();
                 }
             };
-            ParallelStepProto._error = function (name) {
+            ParallelStepProto._error = function (name, info) {
                 try {
-                    this._as.error(name);
+                    this._as.error(name, info);
                 } catch (e) {
                 }
             };
@@ -644,7 +644,7 @@
                     _this._complete();
                 };
                 var error_func = function (as, err) {
-                    _this._error(err);
+                    _this._error(err, as.state.error_info);
                 };
                 var step_func_gen = this._step_func_gen;
                 q.forEach(function (p) {
