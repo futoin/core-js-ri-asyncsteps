@@ -34,13 +34,12 @@
                 this._root = root;
                 this.state = root.state;
             };
-            var ASPProto = {
-                    _root: null,
-                    _queue: null,
-                    _onerror: null,
-                    _oncancel: null,
-                    _limit_event: null
-                };
+            var ASPProto = AsyncStepProtector.prototype;
+            ASPProto._root = null;
+            ASPProto._queue = null;
+            ASPProto._onerror = null;
+            ASPProto._oncancel = null;
+            ASPProto._limit_event = null;
             ASPProto.add = function (func, onerror) {
                 this._sanityCheck();
                 this._root._check_func(func);
@@ -162,7 +161,10 @@
                                 });
                             } else {
                                 async_steps.AsyncTool.callLater(function () {
-                                    outer_as.success();
+                                    try {
+                                        outer_as.success();
+                                    } catch (ex) {
+                                    }
                                 });
                             }
                         } else {
@@ -237,7 +239,6 @@
                     this._root.error(futoin_errors.InternalError, 'Invalid call (sanity check)');
                 }
             };
-            AsyncStepProtector.prototype = ASPProto;
             exports.AsyncStepProtector = AsyncStepProtector;
         },
         function (module, exports) {
@@ -269,15 +270,15 @@
                 this._queue = [];
                 this._stack = [];
                 this._in_execute = false;
+                this._next_args = [];
                 var _this = this;
                 this._execute_cb = function () {
                     _this.execute();
                 };
             }
-            var AsyncStepsProto = {
-                    _execute_event: null,
-                    _next_args: []
-                };
+            var AsyncStepsProto = AsyncSteps.prototype;
+            AsyncStepsProto._execute_event = null;
+            AsyncStepsProto._next_args = null;
             AsyncStepsProto._check_func = function (func) {
                 if (func.length < 1) {
                     this.error(futoin_errors.InternalError, 'Step function must expect at least AsyncStep interface');
@@ -465,7 +466,6 @@
             AsyncStepsProto.loop = ASPProto.loop;
             AsyncStepsProto.repeat = ASPProto.repeat;
             AsyncStepsProto.forEach = ASPProto.forEach;
-            AsyncSteps.prototype = AsyncStepsProto;
             exports.AsyncSteps = AsyncSteps;
         },
         function (module, exports) {
@@ -592,7 +592,7 @@
                 this._psteps = [];
                 this._complete_count = 0;
             };
-            var ParallelStepProto = {};
+            var ParallelStepProto = ParallelStep.prototype;
             ParallelStepProto._root = null;
             ParallelStepProto._as = null;
             ParallelStepProto._psteps = null;
@@ -673,7 +673,6 @@
                 this._as = null;
                 this._psteps = null;
             };
-            ParallelStep.prototype = ParallelStepProto;
             exports.ParallelStep = ParallelStep;
         },
         function (module, exports) {
