@@ -1,6 +1,6 @@
 {
   "name": "futoin-asyncsteps",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "main": "dist/futoin-asyncsteps.js",
   "moduleType": [
     "amd",
