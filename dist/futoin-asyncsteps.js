@@ -34,7 +34,8 @@
                 this._root = root;
                 this.state = root.state;
             };
-            var ASPProto = AsyncStepProtector.prototype;
+            var ASPProto = {};
+            AsyncStepProtector.prototype = ASPProto;
             ASPProto._root = null;
             ASPProto._queue = null;
             ASPProto._onerror = null;
@@ -276,7 +277,8 @@
                     _this.execute();
                 };
             }
-            var AsyncStepsProto = AsyncSteps.prototype;
+            var AsyncStepsProto = {};
+            AsyncSteps.prototype = AsyncStepsProto;
             AsyncStepsProto._execute_event = null;
             AsyncStepsProto._next_args = null;
             AsyncStepsProto._check_func = function (func) {
@@ -592,7 +594,8 @@
                 this._psteps = [];
                 this._complete_count = 0;
             };
-            var ParallelStepProto = ParallelStep.prototype;
+            var ParallelStepProto = {};
+            ParallelStep.prototype = ParallelStepProto;
             ParallelStepProto._root = null;
             ParallelStepProto._as = null;
             ParallelStepProto._psteps = null;
