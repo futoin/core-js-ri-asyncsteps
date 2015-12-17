@@ -712,132 +712,105 @@ Abnormal termination is seen as as.error() call.
 
 The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)
 
-#Index
+## Modules
 
-**Modules**
+<dl>
+<dt><a href="#module_futoin-asyncsteps">futoin-asyncsteps</a></dt>
+<dd></dd>
+</dl>
 
-* [futoin-asyncsteps](#module_futoin-asyncsteps)
+## Classes
 
-**Classes**
+<dl>
+<dt><a href="#AsyncSteps">AsyncSteps</a></dt>
+<dd></dd>
+<dt><a href="#AsyncTool">AsyncTool</a></dt>
+<dd><p>Neutral interface to event scheduler</p>
+</dd>
+<dt><a href="#AsyncToolTest">AsyncToolTest</a></dt>
+<dd><p>Special event scheduler for testing to be installed with installAsyncToolTest()</p>
+</dd>
+<dt><a href="#FutoInErrors">FutoInErrors</a></dt>
+<dd><p>List of standard FutoIn Core errors. It may get extended in runtime.</p>
+</dd>
+</dl>
 
-* [class: AsyncSteps](#AsyncSteps)
-  * [new AsyncSteps([state])](#new_AsyncSteps)
-  * [asyncSteps.state](#AsyncSteps#state)
-  * [asyncSteps.success([...arg])](#AsyncSteps#success)
-  * [~~asyncSteps.successStep()~~](#AsyncSteps#successStep)
-  * [asyncSteps.setTimeout(timeout_ms)](#AsyncSteps#setTimeout)
-  * [asyncSteps.setCancel(oncancel)](#AsyncSteps#setCancel)
-  * [asyncSteps.loop(func, [label])](#AsyncSteps#loop)
-  * [asyncSteps.repeat(count, func, [label])](#AsyncSteps#repeat)
-  * [asyncSteps.forEach(map_or_list, func, [label])](#AsyncSteps#forEach)
-  * [asyncSteps.break([label])](#AsyncSteps#break)
-  * [asyncSteps.continue([label])](#AsyncSteps#continue)
-  * [asyncSteps.add(func, [onerror])](#AsyncSteps#add)
-  * [asyncSteps.parallel([onerror])](#AsyncSteps#parallel)
-  * [asyncSteps.error(name, [error_info])](#AsyncSteps#error)
-  * [asyncSteps.copyFrom(other)](#AsyncSteps#copyFrom)
-  * [asyncSteps.cancel()](#AsyncSteps#cancel)
-  * [asyncSteps.execute()](#AsyncSteps#execute)
-* [class: AsyncTool](#AsyncTool)
-  * [new AsyncTool()](#new_AsyncTool)
-  * [AsyncTool.callLater(func, [timeout_ms])](#AsyncTool.callLater)
-  * [AsyncTool.cancelCall(handle)](#AsyncTool.cancelCall)
-* [class: AsyncToolTest](#AsyncToolTest)
-  * [new AsyncToolTest()](#new_AsyncToolTest)
-  * [AsyncToolTest.callLater(func, [timeout_ms])](#AsyncToolTest.callLater)
-  * [AsyncToolTest.callLater(handle)](#AsyncToolTest.callLater)
-  * [AsyncToolTest.nextEvent()](#AsyncToolTest.nextEvent)
-  * [AsyncToolTest.hasEvents()](#AsyncToolTest.hasEvents)
-  * [AsyncToolTest.getEvents()](#AsyncToolTest.getEvents)
-  * [AsyncToolTest.resetEvents()](#AsyncToolTest.resetEvents)
-  * [AsyncToolTest.run()](#AsyncToolTest.run)
-* [class: FutoInErrors](#FutoInErrors)
-  * [new FutoInErrors()](#new_FutoInErrors)
-  * [const: FutoInErrors.ConnectError](#FutoInErrors.ConnectError)
-  * [const: FutoInErrors.CommError](#FutoInErrors.CommError)
-  * [const: FutoInErrors.UnknownInterface](#FutoInErrors.UnknownInterface)
-  * [const: FutoInErrors.NotSupportedVersion](#FutoInErrors.NotSupportedVersion)
-  * [const: FutoInErrors.NotImplemented](#FutoInErrors.NotImplemented)
-  * [const: FutoInErrors.Unauthorized](#FutoInErrors.Unauthorized)
-  * [const: FutoInErrors.InternalError](#FutoInErrors.InternalError)
-  * [const: FutoInErrors.InvokerError](#FutoInErrors.InvokerError)
-  * [const: FutoInErrors.InvalidRequest](#FutoInErrors.InvalidRequest)
-  * [const: FutoInErrors.DefenseRejected](#FutoInErrors.DefenseRejected)
-  * [const: FutoInErrors.PleaseReauth](#FutoInErrors.PleaseReauth)
-  * [const: FutoInErrors.SecurityError](#FutoInErrors.SecurityError)
-  * [const: FutoInErrors.Timeout](#FutoInErrors.Timeout)
+## Members
 
-**Functions**
+<dl>
+<dt><a href="#$as">$as</a></dt>
+<dd><p><strong>window.$as</strong> - browser-only reference to futoin-asyncsteps module</p>
+</dd>
+<dt><a href="#$as">$as</a></dt>
+<dd><p><strong>window.FutoIn.$as</strong> - browser-only reference to futoin-asyncsteps module</p>
+</dd>
+<dt><a href="#FutoInError">FutoInError</a></dt>
+<dd><p><strong>window.FutoInError</strong> - browser-only reference to futoin-asyncsteps.FutoInError</p>
+</dd>
+<dt><a href="#AsyncSteps">AsyncSteps</a></dt>
+<dd><p><strong>window.futoin.AsyncSteps</strong> - browser-only reference to futoin-asyncsteps.AsyncSteps</p>
+</dd>
+</dl>
 
-* [installAsyncToolTest([install])](#installAsyncToolTest)
+## Functions
 
-**Members**
+<dl>
+<dt><a href="#installAsyncToolTest">installAsyncToolTest([install])</a></dt>
+<dd><p>Use for unit testing to fine control step execution.
+It installs AsyncToolTest in place of AsyncTool</p>
+</dd>
+</dl>
 
-* [$as](#$as)
-* [$as](#$as)
-* [FutoInError](#FutoInError)
-* [AsyncSteps](#AsyncSteps)
-  * [asyncSteps.state](#AsyncSteps#state)
-  * [asyncSteps.success([...arg])](#AsyncSteps#success)
-  * [~~asyncSteps.successStep()~~](#AsyncSteps#successStep)
-  * [asyncSteps.setTimeout(timeout_ms)](#AsyncSteps#setTimeout)
-  * [asyncSteps.setCancel(oncancel)](#AsyncSteps#setCancel)
-  * [asyncSteps.loop(func, [label])](#AsyncSteps#loop)
-  * [asyncSteps.repeat(count, func, [label])](#AsyncSteps#repeat)
-  * [asyncSteps.forEach(map_or_list, func, [label])](#AsyncSteps#forEach)
-  * [asyncSteps.break([label])](#AsyncSteps#break)
-  * [asyncSteps.continue([label])](#AsyncSteps#continue)
-  * [asyncSteps.add(func, [onerror])](#AsyncSteps#add)
-  * [asyncSteps.parallel([onerror])](#AsyncSteps#parallel)
-  * [asyncSteps.error(name, [error_info])](#AsyncSteps#error)
-  * [asyncSteps.copyFrom(other)](#AsyncSteps#copyFrom)
-  * [asyncSteps.cancel()](#AsyncSteps#cancel)
-  * [asyncSteps.execute()](#AsyncSteps#execute)
+## Typedefs
 
-**Typedefs**
+<dl>
+<dt><a href="#LoopFunc">LoopFunc</a> : <code>function</code></dt>
+<dd><p>It is just a subset of <em>ExecFunc</em></p>
+</dd>
+<dt><a href="#RepeatFunc">RepeatFunc</a> : <code>function</code></dt>
+<dd><p>It is just a subset of <em>ExecFunc</em></p>
+</dd>
+<dt><a href="#ForEachFunc">ForEachFunc</a> : <code>function</code></dt>
+<dd><p>It is just a subset of <em>ExecFunc</em></p>
+</dd>
+</dl>
 
-* [callback: LoopFunc](#LoopFunc)
-* [callback: RepeatFunc](#RepeatFunc)
-* [callback: ForEachFunc](#ForEachFunc)
-* [callback: ExecFunc](#ExecFunc)
-* [callback: ErrorFunc](#ErrorFunc)
-* [callback: CancelFunc](#CancelFunc)
- 
 <a name="module_futoin-asyncsteps"></a>
-#futoin-asyncsteps
+## futoin-asyncsteps
 <a name="AsyncSteps"></a>
-#class: AsyncSteps
-**Members**
+## AsyncSteps
+**Kind**: global class  
 
-* [class: AsyncSteps](#AsyncSteps)
-  * [new AsyncSteps([state])](#new_AsyncSteps)
-  * [asyncSteps.state](#AsyncSteps#state)
-  * [asyncSteps.success([...arg])](#AsyncSteps#success)
-  * [~~asyncSteps.successStep()~~](#AsyncSteps#successStep)
-  * [asyncSteps.setTimeout(timeout_ms)](#AsyncSteps#setTimeout)
-  * [asyncSteps.setCancel(oncancel)](#AsyncSteps#setCancel)
-  * [asyncSteps.loop(func, [label])](#AsyncSteps#loop)
-  * [asyncSteps.repeat(count, func, [label])](#AsyncSteps#repeat)
-  * [asyncSteps.forEach(map_or_list, func, [label])](#AsyncSteps#forEach)
-  * [asyncSteps.break([label])](#AsyncSteps#break)
-  * [asyncSteps.continue([label])](#AsyncSteps#continue)
-  * [asyncSteps.add(func, [onerror])](#AsyncSteps#add)
-  * [asyncSteps.parallel([onerror])](#AsyncSteps#parallel)
-  * [asyncSteps.error(name, [error_info])](#AsyncSteps#error)
-  * [asyncSteps.copyFrom(other)](#AsyncSteps#copyFrom)
-  * [asyncSteps.cancel()](#AsyncSteps#cancel)
-  * [asyncSteps.execute()](#AsyncSteps#execute)
+* [AsyncSteps](#AsyncSteps)
+    * [new AsyncSteps([state])](#new_AsyncSteps_new)
+    * [.state](#AsyncSteps+state) ⇒ <code>object</code>
+    * [.success([...arg])](#AsyncSteps+success)
+    * ~~[.successStep()](#AsyncSteps+successStep)~~
+    * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout)
+    * [.setCancel(oncancel)](#AsyncSteps+setCancel)
+    * [.loop(func, [label])](#AsyncSteps+loop)
+    * [.repeat(count, func, [label])](#AsyncSteps+repeat)
+    * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach)
+    * [.break([label])](#AsyncSteps+break)
+    * [.continue([label])](#AsyncSteps+continue)
+    * [.add(func, [onerror])](#AsyncSteps+add) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
+    * [.parallel([onerror])](#AsyncSteps+parallel) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
+    * [.error(name, [error_info])](#AsyncSteps+error)
+    * [.copyFrom(other)](#AsyncSteps+copyFrom)
+    * [.cancel()](#AsyncSteps+cancel)
+    * [.execute()](#AsyncSteps+execute)
 
-<a name="new_AsyncSteps"></a>
-##new AsyncSteps([state])
+<a name="new_AsyncSteps_new"></a>
+### new AsyncSteps([state])
 Root AsyncStep implementation
 
-**Params**
 
-- \[state\] `Object` - For internal use. State variable sharing  
+| Param | Type | Description |
+| --- | --- | --- |
+| [state] | <code>Object</code> | For internal use. State variable sharing |
 
-<a name="AsyncSteps#state"></a>
-##asyncSteps.state
+<a name="AsyncSteps+state"></a>
+### asyncSteps.state ⇒ <code>object</code>
 Get AsyncSteps state object.
 
 *Note: There is a JS-specific improvement: as.state === as.state()*
@@ -847,418 +820,641 @@ The are the following pre-defined state variables:
 * **error_info** - error description, if provided to *as.error()*
 * **last_exception** - the last exception caught
 
-**Returns**: `object`  
-<a name="AsyncSteps#success"></a>
-##asyncSteps.success([...arg])
+**Kind**: instance property of <code>[AsyncSteps](#AsyncSteps)</code>  
+<a name="AsyncSteps+success"></a>
+### asyncSteps.success([...arg])
 Successfully complete current step execution, optionally passing result variables to the next step.
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 
-- \[...arg\] `*` - unlimited number of result variables with no type constraint  
+| Param | Type | Description |
+| --- | --- | --- |
+| [...arg] | <code>\*</code> | unlimited number of result variables with no type constraint |
 
-<a name="AsyncSteps#successStep"></a>
-##~~asyncSteps.successStep()~~
+<a name="AsyncSteps+successStep"></a>
+### ~~asyncSteps.successStep()~~
+***Deprecated***
+
 Deprecated with FTN12 v1.5
 If sub-steps have been added then add efficient dummy step which behavior of as.success();
 Otherwise, simply call *as.success();*
 
-***Deprecated***  
-<a name="AsyncSteps#setTimeout"></a>
-##asyncSteps.setTimeout(timeout_ms)
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+<a name="AsyncSteps+setTimeout"></a>
+### asyncSteps.setTimeout(timeout_ms)
 Set timeout for external event completion with async *as.success()* or *as.error()* call.
 If step is not finished until timeout is reached then Timeout error is raised.
 
 *Note: Can be used only within **ExecFunc** body.*
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 
-- timeout_ms `number` - Timeout in ms  
+| Param | Type | Description |
+| --- | --- | --- |
+| timeout_ms | <code>number</code> | Timeout in ms |
 
-<a name="AsyncSteps#setCancel"></a>
-##asyncSteps.setCancel(oncancel)
+<a name="AsyncSteps+setCancel"></a>
+### asyncSteps.setCancel(oncancel)
 Set cancellation handler to properly handle timeouts and external cancellation.
 
 *Note: Can be used only within **ExecFunc** body.*
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 
-- oncancel <code>[CancelFunc](#CancelFunc)</code> - cleanup/cancel logic of external processing  
+| Param | Type | Description |
+| --- | --- | --- |
+| oncancel | <code>CancelFunc</code> | cleanup/cancel logic of external processing |
 
-<a name="AsyncSteps#loop"></a>
-##asyncSteps.loop(func, [label])
+<a name="AsyncSteps+loop"></a>
+### asyncSteps.loop(func, [label])
 Execute loop until *as.break()* or *as.error()* is called
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 
-- func <code>[LoopFunc](#LoopFunc)</code> - loop body  
-- \[label\] `string` - optional label to use for *as.break()* and *as.continue()* in inner loops  
+| Param | Type | Description |
+| --- | --- | --- |
+| func | <code>[LoopFunc](#LoopFunc)</code> | loop body |
+| [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
 
-<a name="AsyncSteps#repeat"></a>
-##asyncSteps.repeat(count, func, [label])
+<a name="AsyncSteps+repeat"></a>
+### asyncSteps.repeat(count, func, [label])
 Call *func(as, i)* for *count* times
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 
-- count `integer` - how many times to call the *func*  
-- func <code>[RepeatFunc](#RepeatFunc)</code> - loop body  
-- \[label\] `string` - optional label to use for *as.break()* and *as.continue()* in inner loops  
+| Param | Type | Description |
+| --- | --- | --- |
+| count | <code>integer</code> | how many times to call the *func* |
+| func | <code>[RepeatFunc](#RepeatFunc)</code> | loop body |
+| [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
 
-<a name="AsyncSteps#forEach"></a>
-##asyncSteps.forEach(map_or_list, func, [label])
+<a name="AsyncSteps+forEach"></a>
+### asyncSteps.forEach(map_or_list, func, [label])
 For each *map* or *list* element call *func( as, key, value )*
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 
-- map_or_list `integer` - map or list to iterate over  
-- func <code>[ForEachFunc](#ForEachFunc)</code> - loop body  
-- \[label\] `string` - optional label to use for *as.break()* and *as.continue()* in inner loops  
+| Param | Type | Description |
+| --- | --- | --- |
+| map_or_list | <code>integer</code> | map or list to iterate over |
+| func | <code>[ForEachFunc](#ForEachFunc)</code> | loop body |
+| [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
 
-<a name="AsyncSteps#break"></a>
-##asyncSteps.break([label])
+<a name="AsyncSteps+break"></a>
+### asyncSteps.break([label])
 Break execution of current loop, throws exception
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 
-- \[label\] `string` - Optional. unwind loops, until *label* named loop is exited  
+| Param | Type | Description |
+| --- | --- | --- |
+| [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is exited |
 
-<a name="AsyncSteps#continue"></a>
-##asyncSteps.continue([label])
+<a name="AsyncSteps+continue"></a>
+### asyncSteps.continue([label])
 Continue loop execution from the next iteration, throws exception
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 
-- \[label\] `string` - Optional. unwind loops, until *label* named loop is found  
+| Param | Type | Description |
+| --- | --- | --- |
+| [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is found |
 
-<a name="AsyncSteps#add"></a>
-##asyncSteps.add(func, [onerror])
+<a name="AsyncSteps+add"></a>
+### asyncSteps.add(func, [onerror]) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
 Add sub-step. Can be called multiple times.
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 
-- func <code>[ExecFunc](#ExecFunc)</code> - function defining non-blocking step execution  
-- \[onerror\] <code>[ErrorFunc](#ErrorFunc)</code> - Optional, provide error handler  
+| Param | Type | Description |
+| --- | --- | --- |
+| func | <code>ExecFunc</code> | function defining non-blocking step execution |
+| [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
 
-**Returns**: [AsyncSteps](#AsyncSteps)  
-<a name="AsyncSteps#parallel"></a>
-##asyncSteps.parallel([onerror])
+<a name="AsyncSteps+parallel"></a>
+### asyncSteps.parallel([onerror]) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
 Creates a step internally and returns specialized AsyncSteps interfaces all steps
 of which are executed in quasi-parallel.
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 
-- \[onerror\] <code>[ErrorFunc](#ErrorFunc)</code> - Optional, provide error handler  
+| Param | Type | Description |
+| --- | --- | --- |
+| [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
 
-**Returns**: [AsyncSteps](#AsyncSteps)  
-<a name="AsyncSteps#error"></a>
-##asyncSteps.error(name, [error_info])
+<a name="AsyncSteps+error"></a>
+### asyncSteps.error(name, [error_info])
 Set error and throw to abort execution.
 
 *NOTE: If called outside of AsyncSteps stack (e.g. by external event), make sure you catch the exception*
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+**Throws**:
 
-- name `string` - error message, expected to be identifier "InternalError"  
-- \[error_info\] `string` - optional descriptive message assigned to as.state.error_info  
+- <code>Error</code> 
 
-**Type**: `Error`  
-<a name="AsyncSteps#copyFrom"></a>
-##asyncSteps.copyFrom(other)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | error message, expected to be identifier "InternalError" |
+| [error_info] | <code>string</code> | optional descriptive message assigned to as.state.error_info |
+
+<a name="AsyncSteps+copyFrom"></a>
+### asyncSteps.copyFrom(other)
 Copy steps and not yet defined state variables from "model" AsyncSteps instance
 
-**Params**
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 
-- other <code>[AsyncSteps](#AsyncSteps)</code> - model instance, which must get be executed  
+| Param | Type | Description |
+| --- | --- | --- |
+| other | <code>[AsyncSteps](#AsyncSteps)</code> | model instance, which must get be executed |
 
-<a name="AsyncSteps#cancel"></a>
-##asyncSteps.cancel()
+<a name="AsyncSteps+cancel"></a>
+### asyncSteps.cancel()
 Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
 
-<a name="AsyncSteps#execute"></a>
-##asyncSteps.execute()
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+<a name="AsyncSteps+execute"></a>
+### asyncSteps.execute()
 Start execution of AsyncSteps using AsyncTool
 
 It must not be called more than once until cancel/complete (instance can be re-used)
 
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 <a name="AsyncTool"></a>
-#class: AsyncTool
-**Members**
-
-* [class: AsyncTool](#AsyncTool)
-  * [new AsyncTool()](#new_AsyncTool)
-  * [AsyncTool.callLater(func, [timeout_ms])](#AsyncTool.callLater)
-  * [AsyncTool.cancelCall(handle)](#AsyncTool.cancelCall)
-
-<a name="new_AsyncTool"></a>
-##new AsyncTool()
+## AsyncTool
 Neutral interface to event scheduler
 
+**Kind**: global class  
+
+* [AsyncTool](#AsyncTool)
+    * [.callLater(func, [timeout_ms])](#AsyncTool.callLater) ⇒ <code>Object</code>
+    * [.cancelCall(handle)](#AsyncTool.cancelCall)
+
 <a name="AsyncTool.callLater"></a>
-##AsyncTool.callLater(func, [timeout_ms])
+### AsyncTool.callLater(func, [timeout_ms]) ⇒ <code>Object</code>
 Wrapper for setTimeout()/setImmediate()
 
-**Params**
+**Kind**: static method of <code>[AsyncTool](#AsyncTool)</code>  
+**Returns**: <code>Object</code> - - timer handle  
 
-- func `function` - callback to execute  
-- \[timeout_ms=0\] `number` - optional timeout in ms  
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| func | <code>function</code> |  | callback to execute |
+| [timeout_ms] | <code>number</code> | <code>0</code> | optional timeout in ms |
 
-**Returns**: `Object` - - timer handle  
 <a name="AsyncTool.cancelCall"></a>
-##AsyncTool.cancelCall(handle)
+### AsyncTool.cancelCall(handle)
 Wrapper for clearTimeout()/clearImmediate()
 
-**Params**
+**Kind**: static method of <code>[AsyncTool](#AsyncTool)</code>  
 
-- handle `Object` - Handle returned from AsyncTool.callLater  
+| Param | Type | Description |
+| --- | --- | --- |
+| handle | <code>Object</code> | Handle returned from AsyncTool.callLater |
 
 <a name="AsyncToolTest"></a>
-#class: AsyncToolTest
-**Members**
-
-* [class: AsyncToolTest](#AsyncToolTest)
-  * [new AsyncToolTest()](#new_AsyncToolTest)
-  * [AsyncToolTest.callLater(func, [timeout_ms])](#AsyncToolTest.callLater)
-  * [AsyncToolTest.callLater(handle)](#AsyncToolTest.callLater)
-  * [AsyncToolTest.nextEvent()](#AsyncToolTest.nextEvent)
-  * [AsyncToolTest.hasEvents()](#AsyncToolTest.hasEvents)
-  * [AsyncToolTest.getEvents()](#AsyncToolTest.getEvents)
-  * [AsyncToolTest.resetEvents()](#AsyncToolTest.resetEvents)
-  * [AsyncToolTest.run()](#AsyncToolTest.run)
-
-<a name="new_AsyncToolTest"></a>
-##new AsyncToolTest()
+## AsyncToolTest
 Special event scheduler for testing to be installed with installAsyncToolTest()
 
+**Kind**: global class  
+
+* [AsyncToolTest](#AsyncToolTest)
+    * [.callLater(func, [timeout_ms])](#AsyncToolTest.callLater) ⇒ <code>Object</code>
+    * [.callLater(handle)](#AsyncToolTest.callLater)
+    * [.nextEvent()](#AsyncToolTest.nextEvent)
+    * [.hasEvents()](#AsyncToolTest.hasEvents)
+    * [.getEvents()](#AsyncToolTest.getEvents)
+    * [.resetEvents()](#AsyncToolTest.resetEvents)
+    * [.run()](#AsyncToolTest.run)
+
 <a name="AsyncToolTest.callLater"></a>
-##AsyncToolTest.callLater(func, [timeout_ms])
+### AsyncToolTest.callLater(func, [timeout_ms]) ⇒ <code>Object</code>
 Adds callback to internal queue
 
-**Params**
+**Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
+**Returns**: <code>Object</code> - - timer handle  
 
-- func `function` - callback to execute  
-- \[timeout_ms=0\] `number` - optional timeout in ms  
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| func | <code>function</code> |  | callback to execute |
+| [timeout_ms] | <code>number</code> | <code>0</code> | optional timeout in ms |
 
-**Returns**: `Object` - - timer handle  
 <a name="AsyncToolTest.callLater"></a>
-##AsyncToolTest.callLater(handle)
+### AsyncToolTest.callLater(handle)
 Removed callback from internal queue
 
-**Params**
+**Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
 
-- handle `Object` - Handle returned from AsyncToolTest.callLater  
+| Param | Type | Description |
+| --- | --- | --- |
+| handle | <code>Object</code> | Handle returned from AsyncToolTest.callLater |
 
 <a name="AsyncToolTest.nextEvent"></a>
-##AsyncToolTest.nextEvent()
+### AsyncToolTest.nextEvent()
 Process next even in the internal queue
 
+**Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
 <a name="AsyncToolTest.hasEvents"></a>
-##AsyncToolTest.hasEvents()
+### AsyncToolTest.hasEvents()
 Check if there are any events scheduled
 
+**Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
 <a name="AsyncToolTest.getEvents"></a>
-##AsyncToolTest.getEvents()
+### AsyncToolTest.getEvents()
 Get internal even queue
 
+**Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
 <a name="AsyncToolTest.resetEvents"></a>
-##AsyncToolTest.resetEvents()
+### AsyncToolTest.resetEvents()
 Clear internal event queue
 
+**Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
 <a name="AsyncToolTest.run"></a>
-##AsyncToolTest.run()
+### AsyncToolTest.run()
 Execute all remaining events in the internal queue
 
+**Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
 <a name="FutoInErrors"></a>
-#class: FutoInErrors
-**Members**
-
-* [class: FutoInErrors](#FutoInErrors)
-  * [new FutoInErrors()](#new_FutoInErrors)
-  * [const: FutoInErrors.ConnectError](#FutoInErrors.ConnectError)
-  * [const: FutoInErrors.CommError](#FutoInErrors.CommError)
-  * [const: FutoInErrors.UnknownInterface](#FutoInErrors.UnknownInterface)
-  * [const: FutoInErrors.NotSupportedVersion](#FutoInErrors.NotSupportedVersion)
-  * [const: FutoInErrors.NotImplemented](#FutoInErrors.NotImplemented)
-  * [const: FutoInErrors.Unauthorized](#FutoInErrors.Unauthorized)
-  * [const: FutoInErrors.InternalError](#FutoInErrors.InternalError)
-  * [const: FutoInErrors.InvokerError](#FutoInErrors.InvokerError)
-  * [const: FutoInErrors.InvalidRequest](#FutoInErrors.InvalidRequest)
-  * [const: FutoInErrors.DefenseRejected](#FutoInErrors.DefenseRejected)
-  * [const: FutoInErrors.PleaseReauth](#FutoInErrors.PleaseReauth)
-  * [const: FutoInErrors.SecurityError](#FutoInErrors.SecurityError)
-  * [const: FutoInErrors.Timeout](#FutoInErrors.Timeout)
-
-<a name="new_FutoInErrors"></a>
-##new FutoInErrors()
+## FutoInErrors
 List of standard FutoIn Core errors. It may get extended in runtime.
 
+**Kind**: global class  
+
+* [FutoInErrors](#FutoInErrors)
+    * [.ConnectError](#FutoInErrors.ConnectError)
+    * [.CommError](#FutoInErrors.CommError)
+    * [.UnknownInterface](#FutoInErrors.UnknownInterface)
+    * [.NotSupportedVersion](#FutoInErrors.NotSupportedVersion)
+    * [.NotImplemented](#FutoInErrors.NotImplemented)
+    * [.Unauthorized](#FutoInErrors.Unauthorized)
+    * [.InternalError](#FutoInErrors.InternalError)
+    * [.InvokerError](#FutoInErrors.InvokerError)
+    * [.InvalidRequest](#FutoInErrors.InvalidRequest)
+    * [.DefenseRejected](#FutoInErrors.DefenseRejected)
+    * [.PleaseReauth](#FutoInErrors.PleaseReauth)
+    * [.SecurityError](#FutoInErrors.SecurityError)
+    * [.Timeout](#FutoInErrors.Timeout)
+
 <a name="FutoInErrors.ConnectError"></a>
-##const: FutoInErrors.ConnectError
+### FutoInErrors.ConnectError
 Connection error before request is sent.
 Must be generated on Invoker side
 
-**Default**: `ConnectError`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>ConnectError</code>  
 <a name="FutoInErrors.CommError"></a>
-##const: FutoInErrors.CommError
+### FutoInErrors.CommError
 Communication error at any stage after request is sent
 and before response is received.
 Must be generated on Invoker side
 
-**Default**: `CommError`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>CommError</code>  
 <a name="FutoInErrors.UnknownInterface"></a>
-##const: FutoInErrors.UnknownInterface
+### FutoInErrors.UnknownInterface
 Unknown interface requested.
 Must be generated only on Executor side
 
-**Default**: `UnknownInterface`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>UnknownInterface</code>  
 <a name="FutoInErrors.NotSupportedVersion"></a>
-##const: FutoInErrors.NotSupportedVersion
+### FutoInErrors.NotSupportedVersion
 Not supported interface version.
 Must be generated only on Executor side
 
-**Default**: `NotSupportedVersion`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>NotSupportedVersion</code>  
 <a name="FutoInErrors.NotImplemented"></a>
-##const: FutoInErrors.NotImplemented
+### FutoInErrors.NotImplemented
 In case interface function is not implemented on Executor side
 Must be generated on Executor side
 
-**Default**: `NotImplemented`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>NotImplemented</code>  
 <a name="FutoInErrors.Unauthorized"></a>
-##const: FutoInErrors.Unauthorized
+### FutoInErrors.Unauthorized
 Security policy on Executor side does not allow to
 access interface or specific function.
 Must be generated only on Executor side
 
-**Default**: `Unauthorized`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>Unauthorized</code>  
 <a name="FutoInErrors.InternalError"></a>
-##const: FutoInErrors.InternalError
+### FutoInErrors.InternalError
 Unexpected internal error on Executor side, including internal CommError.
 Must be generated only on Executor side
 
-**Default**: `InternalError`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>InternalError</code>  
 <a name="FutoInErrors.InvokerError"></a>
-##const: FutoInErrors.InvokerError
+### FutoInErrors.InvokerError
 Unexpected internal error on Invoker side, not related to CommError.
 Must be generated only on Invoker side
 
-**Default**: `InvokerError`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>InvokerError</code>  
 <a name="FutoInErrors.InvalidRequest"></a>
-##const: FutoInErrors.InvalidRequest
+### FutoInErrors.InvalidRequest
 Invalid data is passed as FutoIn request.
 Must be generated only on Executor side
 
-**Default**: `InvalidRequest`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>InvalidRequest</code>  
 <a name="FutoInErrors.DefenseRejected"></a>
-##const: FutoInErrors.DefenseRejected
+### FutoInErrors.DefenseRejected
 Defense system has triggered rejection
 Must be generated on Executor side, but also possible to be triggered on Invoker
 
-**Default**: `DefenseRejected`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>DefenseRejected</code>  
 <a name="FutoInErrors.PleaseReauth"></a>
-##const: FutoInErrors.PleaseReauth
+### FutoInErrors.PleaseReauth
 Executor requests re-authorization
 Must be generated only on Executor side
 
-**Default**: `PleaseReauth`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>PleaseReauth</code>  
 <a name="FutoInErrors.SecurityError"></a>
-##const: FutoInErrors.SecurityError
+### FutoInErrors.SecurityError
 'sec' request section has invalid data or not SecureChannel
 Must be generated only on Executor side
 
-**Default**: `SecurityError`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>SecurityError</code>  
 <a name="FutoInErrors.Timeout"></a>
-##const: FutoInErrors.Timeout
+### FutoInErrors.Timeout
 Timeout occurred in any stage
 Must be used only internally and should never travel in request message
 
-**Default**: `Timeout`  
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>Timeout</code>  
+<a name="$as"></a>
+## $as
+**window.$as** - browser-only reference to futoin-asyncsteps module
+
+**Kind**: global variable  
+<a name="$as"></a>
+## $as
+**window.FutoIn.$as** - browser-only reference to futoin-asyncsteps module
+
+**Kind**: global variable  
+<a name="FutoInError"></a>
+## FutoInError
+**window.FutoInError** - browser-only reference to futoin-asyncsteps.FutoInError
+
+**Kind**: global variable  
+<a name="AsyncSteps"></a>
+## AsyncSteps
+**window.futoin.AsyncSteps** - browser-only reference to futoin-asyncsteps.AsyncSteps
+
+**Kind**: global variable  
+
+* [AsyncSteps](#AsyncSteps)
+    * [new AsyncSteps([state])](#new_AsyncSteps_new)
+    * [.state](#AsyncSteps+state) ⇒ <code>object</code>
+    * [.success([...arg])](#AsyncSteps+success)
+    * ~~[.successStep()](#AsyncSteps+successStep)~~
+    * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout)
+    * [.setCancel(oncancel)](#AsyncSteps+setCancel)
+    * [.loop(func, [label])](#AsyncSteps+loop)
+    * [.repeat(count, func, [label])](#AsyncSteps+repeat)
+    * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach)
+    * [.break([label])](#AsyncSteps+break)
+    * [.continue([label])](#AsyncSteps+continue)
+    * [.add(func, [onerror])](#AsyncSteps+add) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
+    * [.parallel([onerror])](#AsyncSteps+parallel) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
+    * [.error(name, [error_info])](#AsyncSteps+error)
+    * [.copyFrom(other)](#AsyncSteps+copyFrom)
+    * [.cancel()](#AsyncSteps+cancel)
+    * [.execute()](#AsyncSteps+execute)
+
+<a name="new_AsyncSteps_new"></a>
+### new AsyncSteps([state])
+Root AsyncStep implementation
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [state] | <code>Object</code> | For internal use. State variable sharing |
+
+<a name="AsyncSteps+state"></a>
+### asyncSteps.state ⇒ <code>object</code>
+Get AsyncSteps state object.
+
+*Note: There is a JS-specific improvement: as.state === as.state()*
+
+The are the following pre-defined state variables:
+
+* **error_info** - error description, if provided to *as.error()*
+* **last_exception** - the last exception caught
+
+**Kind**: instance property of <code>[AsyncSteps](#AsyncSteps)</code>  
+<a name="AsyncSteps+success"></a>
+### asyncSteps.success([...arg])
+Successfully complete current step execution, optionally passing result variables to the next step.
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [...arg] | <code>\*</code> | unlimited number of result variables with no type constraint |
+
+<a name="AsyncSteps+successStep"></a>
+### ~~asyncSteps.successStep()~~
+***Deprecated***
+
+Deprecated with FTN12 v1.5
+If sub-steps have been added then add efficient dummy step which behavior of as.success();
+Otherwise, simply call *as.success();*
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+<a name="AsyncSteps+setTimeout"></a>
+### asyncSteps.setTimeout(timeout_ms)
+Set timeout for external event completion with async *as.success()* or *as.error()* call.
+If step is not finished until timeout is reached then Timeout error is raised.
+
+*Note: Can be used only within **ExecFunc** body.*
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| timeout_ms | <code>number</code> | Timeout in ms |
+
+<a name="AsyncSteps+setCancel"></a>
+### asyncSteps.setCancel(oncancel)
+Set cancellation handler to properly handle timeouts and external cancellation.
+
+*Note: Can be used only within **ExecFunc** body.*
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| oncancel | <code>CancelFunc</code> | cleanup/cancel logic of external processing |
+
+<a name="AsyncSteps+loop"></a>
+### asyncSteps.loop(func, [label])
+Execute loop until *as.break()* or *as.error()* is called
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| func | <code>[LoopFunc](#LoopFunc)</code> | loop body |
+| [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
+
+<a name="AsyncSteps+repeat"></a>
+### asyncSteps.repeat(count, func, [label])
+Call *func(as, i)* for *count* times
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| count | <code>integer</code> | how many times to call the *func* |
+| func | <code>[RepeatFunc](#RepeatFunc)</code> | loop body |
+| [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
+
+<a name="AsyncSteps+forEach"></a>
+### asyncSteps.forEach(map_or_list, func, [label])
+For each *map* or *list* element call *func( as, key, value )*
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| map_or_list | <code>integer</code> | map or list to iterate over |
+| func | <code>[ForEachFunc](#ForEachFunc)</code> | loop body |
+| [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
+
+<a name="AsyncSteps+break"></a>
+### asyncSteps.break([label])
+Break execution of current loop, throws exception
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is exited |
+
+<a name="AsyncSteps+continue"></a>
+### asyncSteps.continue([label])
+Continue loop execution from the next iteration, throws exception
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is found |
+
+<a name="AsyncSteps+add"></a>
+### asyncSteps.add(func, [onerror]) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
+Add sub-step. Can be called multiple times.
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| func | <code>ExecFunc</code> | function defining non-blocking step execution |
+| [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
+
+<a name="AsyncSteps+parallel"></a>
+### asyncSteps.parallel([onerror]) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
+Creates a step internally and returns specialized AsyncSteps interfaces all steps
+of which are executed in quasi-parallel.
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
+
+<a name="AsyncSteps+error"></a>
+### asyncSteps.error(name, [error_info])
+Set error and throw to abort execution.
+
+*NOTE: If called outside of AsyncSteps stack (e.g. by external event), make sure you catch the exception*
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+**Throws**:
+
+- <code>Error</code> 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | error message, expected to be identifier "InternalError" |
+| [error_info] | <code>string</code> | optional descriptive message assigned to as.state.error_info |
+
+<a name="AsyncSteps+copyFrom"></a>
+### asyncSteps.copyFrom(other)
+Copy steps and not yet defined state variables from "model" AsyncSteps instance
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| other | <code>[AsyncSteps](#AsyncSteps)</code> | model instance, which must get be executed |
+
+<a name="AsyncSteps+cancel"></a>
+### asyncSteps.cancel()
+Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+<a name="AsyncSteps+execute"></a>
+### asyncSteps.execute()
+Start execution of AsyncSteps using AsyncTool
+
+It must not be called more than once until cancel/complete (instance can be re-used)
+
+**Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 <a name="installAsyncToolTest"></a>
-#installAsyncToolTest([install])
+## installAsyncToolTest([install])
 Use for unit testing to fine control step execution.
 It installs AsyncToolTest in place of AsyncTool
 
-**Params**
+**Kind**: global function  
 
-- \[install=true\] `boolean` - true - install AsyncToolTest, false - AsyncTool as scheduler  
-
-<a name="$as"></a>
-#$as
-**window.$as** - browser-only reference to futoin-asyncsteps module
-
-<a name="$as"></a>
-#$as
-**window.FutoIn.$as** - browser-only reference to futoin-asyncsteps module
-
-<a name="FutoInError"></a>
-#FutoInError
-**window.FutoInError** - browser-only reference to futoin-asyncsteps.FutoInError
-
-<a name="AsyncSteps"></a>
-#AsyncSteps
-**window.futoin.AsyncSteps** - browser-only reference to futoin-asyncsteps.AsyncSteps
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [install] | <code>boolean</code> | <code>true</code> | true - install AsyncToolTest, false - AsyncTool as scheduler |
 
 <a name="LoopFunc"></a>
-#callback: LoopFunc
+## LoopFunc : <code>function</code>
 It is just a subset of *ExecFunc*
 
-**Params**
+**Kind**: global typedef  
+**See**: ExecFunc  
 
-- as <code>[AsyncSteps](#AsyncSteps)</code> - the only valid reference to AsyncSteps with required level of protection  
+| Param | Type | Description |
+| --- | --- | --- |
+| as | <code>[AsyncSteps](#AsyncSteps)</code> | the only valid reference to AsyncSteps with required level of protection |
 
-**Type**: `function`  
 <a name="RepeatFunc"></a>
-#callback: RepeatFunc
+## RepeatFunc : <code>function</code>
 It is just a subset of *ExecFunc*
 
-**Params**
+**Kind**: global typedef  
+**See**: ExecFunc  
 
-- as <code>[AsyncSteps](#AsyncSteps)</code> - the only valid reference to AsyncSteps with required level of protection  
-- i `integer` - current iteration starting from 0  
+| Param | Type | Description |
+| --- | --- | --- |
+| as | <code>[AsyncSteps](#AsyncSteps)</code> | the only valid reference to AsyncSteps with required level of protection |
+| i | <code>integer</code> | current iteration starting from 0 |
 
-**Type**: `function`  
 <a name="ForEachFunc"></a>
-#callback: ForEachFunc
+## ForEachFunc : <code>function</code>
 It is just a subset of *ExecFunc*
 
-**Params**
+**Kind**: global typedef  
+**See**: ExecFunc  
 
-- as <code>[AsyncSteps](#AsyncSteps)</code> - the only valid reference to AsyncSteps with required level of protection  
-- i `integer` - current iteration starting from 0  
-
-**Type**: `function`  
-<a name="ExecFunc"></a>
-#callback: ExecFunc
-*execute_callback* as defined in **FTN12: FutoIn AsyncSteps** specification. Function must have
-non-blocking body calling:  *as.success()* or *as.error()* or *as.add()/as.parallel()*.
-
-**Params**
-
-- as <code>[AsyncSteps](#AsyncSteps)</code> - the only valid reference to AsyncSteps with required level of protection  
-- \[...val\] `*` - any result values passed to the previous as.success() call  
-
-**Type**: `function`  
-<a name="ErrorFunc"></a>
-#callback: ErrorFunc
-*error_callback* as defined in **FTN12: FutoIn AsyncSteps** specification.
-Function can:
-
-* do nothing
-* override error message with *as.error( new_error )*
-* continue execution with *as.success()*
-
-**Params**
-
-- as <code>[AsyncSteps](#AsyncSteps)</code> - the only valid reference to AsyncSteps with required level of protection  
-- err `string` - error message  
-
-**Type**: `function`  
-<a name="CancelFunc"></a>
-#callback: CancelFunc
-*cancel_callback* as defined in **FTN12: FutoIn AsyncSteps** specification.
-
-**Params**
-
-- as <code>[AsyncSteps](#AsyncSteps)</code> - the only valid reference to AsyncSteps with required level of protection  
-
-**Type**: `function`  
+| Param | Type | Description |
+| --- | --- | --- |
+| as | <code>[AsyncSteps](#AsyncSteps)</code> | the only valid reference to AsyncSteps with required level of protection |
+| i | <code>integer</code> | current iteration starting from 0 |
 
 
 

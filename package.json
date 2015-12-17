@@ -39,15 +39,16 @@
     "grunt": "*",
     "grunt-contrib-connect": "*",
     "grunt-contrib-uglify": "*",
+    "grunt-jsdoc-to-markdown": "*",
     "grunt-mocha-phantomjs": "*",
     "grunt-npm-helper": "*",
     "grunt-npm2bower-sync": "*",
     "grunt-pure-cjs": "*",
     "grunt-release": "*",
     "grunt-text-replace": "*",
-    "grunt-jsdoc-to-markdown": "*",
     "istanbul": "*",
     "jscs": "*",
+    "jscs-jsdoc": "^1.3.1",
     "jsdoc": "~3.2",
     "jsdoc-to-markdown": "^0.5.9",
     "jshint": "*",
@@ -55,5 +56,8 @@
     "mocha": "*",
     "mocha-phantomjs": "*",
     "performance-now": "*"
+  },
+  "dependencies": {
+    "performance-now": "^0.2.0"
   }
 }

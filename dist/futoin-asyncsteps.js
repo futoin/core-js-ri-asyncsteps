@@ -171,7 +171,7 @@
                         } else {
                             async_steps.AsyncTool.callLater(function () {
                                 try {
-                                    outer_as.error(err);
+                                    outer_as.error(err, outer_as.state.error_info);
                                 } catch (ex) {
                                 }
                             });

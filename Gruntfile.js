@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 module.exports = function (grunt) {
 
     grunt.initConfig({
@@ -87,7 +89,7 @@ module.exports = function (grunt) {
                 src: "lib/*.js",
                 dest: "README.md",
                 options: {
-                    template: 'misc/README.hbs',
+                    template: fs.readFileSync('misc/README.hbs','utf8'),
                     private: false
                 }
             }
