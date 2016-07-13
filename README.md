@@ -724,20 +724,17 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 <dl>
 <dt><a href="#AsyncSteps">AsyncSteps</a></dt>
 <dd></dd>
+</dl>
+
+## Members
+
+<dl>
 <dt><a href="#AsyncTool">AsyncTool</a></dt>
 <dd><p>Neutral interface to event scheduler</p>
 </dd>
 <dt><a href="#AsyncToolTest">AsyncToolTest</a></dt>
 <dd><p>Special event scheduler for testing to be installed with installAsyncToolTest()</p>
 </dd>
-<dt><a href="#FutoInErrors">FutoInErrors</a></dt>
-<dd><p>List of standard FutoIn Core errors. It may get extended in runtime.</p>
-</dd>
-</dl>
-
-## Members
-
-<dl>
 <dt><a href="#$as">$as</a></dt>
 <dd><p><strong>window.$as</strong> - browser-only reference to futoin-asyncsteps module</p>
 </dd>
@@ -749,6 +746,9 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 </dd>
 <dt><a href="#AsyncSteps">AsyncSteps</a></dt>
 <dd><p><strong>window.futoin.AsyncSteps</strong> - browser-only reference to futoin-asyncsteps.AsyncSteps</p>
+</dd>
+<dt><a href="#FutoInErrors">FutoInErrors</a></dt>
+<dd><p>List of standard FutoIn Core errors. It may get extended in runtime.</p>
 </dd>
 </dl>
 
@@ -776,8 +776,10 @@ It installs AsyncToolTest in place of AsyncTool</p>
 </dl>
 
 <a name="module_futoin-asyncsteps"></a>
+
 ## futoin-asyncsteps
 <a name="AsyncSteps"></a>
+
 ## AsyncSteps
 **Kind**: global class  
 
@@ -801,6 +803,7 @@ It installs AsyncToolTest in place of AsyncTool</p>
     * [.execute()](#AsyncSteps+execute)
 
 <a name="new_AsyncSteps_new"></a>
+
 ### new AsyncSteps([state])
 Root AsyncStep implementation
 
@@ -810,6 +813,7 @@ Root AsyncStep implementation
 | [state] | <code>Object</code> | For internal use. State variable sharing |
 
 <a name="AsyncSteps+state"></a>
+
 ### asyncSteps.state ⇒ <code>object</code>
 Get AsyncSteps state object.
 
@@ -822,6 +826,7 @@ The are the following pre-defined state variables:
 
 **Kind**: instance property of <code>[AsyncSteps](#AsyncSteps)</code>  
 <a name="AsyncSteps+success"></a>
+
 ### asyncSteps.success([...arg])
 Successfully complete current step execution, optionally passing result variables to the next step.
 
@@ -832,6 +837,7 @@ Successfully complete current step execution, optionally passing result variable
 | [...arg] | <code>\*</code> | unlimited number of result variables with no type constraint |
 
 <a name="AsyncSteps+successStep"></a>
+
 ### ~~asyncSteps.successStep()~~
 ***Deprecated***
 
@@ -841,6 +847,7 @@ Otherwise, simply call *as.success();*
 
 **Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 <a name="AsyncSteps+setTimeout"></a>
+
 ### asyncSteps.setTimeout(timeout_ms)
 Set timeout for external event completion with async *as.success()* or *as.error()* call.
 If step is not finished until timeout is reached then Timeout error is raised.
@@ -854,6 +861,7 @@ If step is not finished until timeout is reached then Timeout error is raised.
 | timeout_ms | <code>number</code> | Timeout in ms |
 
 <a name="AsyncSteps+setCancel"></a>
+
 ### asyncSteps.setCancel(oncancel)
 Set cancellation handler to properly handle timeouts and external cancellation.
 
@@ -866,6 +874,7 @@ Set cancellation handler to properly handle timeouts and external cancellation.
 | oncancel | <code>CancelFunc</code> | cleanup/cancel logic of external processing |
 
 <a name="AsyncSteps+loop"></a>
+
 ### asyncSteps.loop(func, [label])
 Execute loop until *as.break()* or *as.error()* is called
 
@@ -877,6 +886,7 @@ Execute loop until *as.break()* or *as.error()* is called
 | [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
 
 <a name="AsyncSteps+repeat"></a>
+
 ### asyncSteps.repeat(count, func, [label])
 Call *func(as, i)* for *count* times
 
@@ -889,6 +899,7 @@ Call *func(as, i)* for *count* times
 | [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
 
 <a name="AsyncSteps+forEach"></a>
+
 ### asyncSteps.forEach(map_or_list, func, [label])
 For each *map* or *list* element call *func( as, key, value )*
 
@@ -901,6 +912,7 @@ For each *map* or *list* element call *func( as, key, value )*
 | [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
 
 <a name="AsyncSteps+break"></a>
+
 ### asyncSteps.break([label])
 Break execution of current loop, throws exception
 
@@ -911,6 +923,7 @@ Break execution of current loop, throws exception
 | [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is exited |
 
 <a name="AsyncSteps+continue"></a>
+
 ### asyncSteps.continue([label])
 Continue loop execution from the next iteration, throws exception
 
@@ -921,6 +934,7 @@ Continue loop execution from the next iteration, throws exception
 | [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is found |
 
 <a name="AsyncSteps+add"></a>
+
 ### asyncSteps.add(func, [onerror]) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
 Add sub-step. Can be called multiple times.
 
@@ -932,6 +946,7 @@ Add sub-step. Can be called multiple times.
 | [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
 
 <a name="AsyncSteps+parallel"></a>
+
 ### asyncSteps.parallel([onerror]) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
 Creates a step internally and returns specialized AsyncSteps interfaces all steps
 of which are executed in quasi-parallel.
@@ -943,6 +958,7 @@ of which are executed in quasi-parallel.
 | [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
 
 <a name="AsyncSteps+error"></a>
+
 ### asyncSteps.error(name, [error_info])
 Set error and throw to abort execution.
 
@@ -960,6 +976,7 @@ Set error and throw to abort execution.
 | [error_info] | <code>string</code> | optional descriptive message assigned to as.state.error_info |
 
 <a name="AsyncSteps+copyFrom"></a>
+
 ### asyncSteps.copyFrom(other)
 Copy steps and not yet defined state variables from "model" AsyncSteps instance
 
@@ -970,11 +987,13 @@ Copy steps and not yet defined state variables from "model" AsyncSteps instance
 | other | <code>[AsyncSteps](#AsyncSteps)</code> | model instance, which must get be executed |
 
 <a name="AsyncSteps+cancel"></a>
+
 ### asyncSteps.cancel()
 Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
 
 **Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 <a name="AsyncSteps+execute"></a>
+
 ### asyncSteps.execute()
 Start execution of AsyncSteps using AsyncTool
 
@@ -982,16 +1001,18 @@ It must not be called more than once until cancel/complete (instance can be re-u
 
 **Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 <a name="AsyncTool"></a>
+
 ## AsyncTool
 Neutral interface to event scheduler
 
-**Kind**: global class  
+**Kind**: global variable  
 
 * [AsyncTool](#AsyncTool)
     * [.callLater(func, [timeout_ms])](#AsyncTool.callLater) ⇒ <code>Object</code>
     * [.cancelCall(handle)](#AsyncTool.cancelCall)
 
 <a name="AsyncTool.callLater"></a>
+
 ### AsyncTool.callLater(func, [timeout_ms]) ⇒ <code>Object</code>
 Wrapper for setTimeout()/setImmediate()
 
@@ -1004,6 +1025,7 @@ Wrapper for setTimeout()/setImmediate()
 | [timeout_ms] | <code>number</code> | <code>0</code> | optional timeout in ms |
 
 <a name="AsyncTool.cancelCall"></a>
+
 ### AsyncTool.cancelCall(handle)
 Wrapper for clearTimeout()/clearImmediate()
 
@@ -1014,10 +1036,11 @@ Wrapper for clearTimeout()/clearImmediate()
 | handle | <code>Object</code> | Handle returned from AsyncTool.callLater |
 
 <a name="AsyncToolTest"></a>
+
 ## AsyncToolTest
 Special event scheduler for testing to be installed with installAsyncToolTest()
 
-**Kind**: global class  
+**Kind**: global variable  
 
 * [AsyncToolTest](#AsyncToolTest)
     * [.callLater(func, [timeout_ms])](#AsyncToolTest.callLater) ⇒ <code>Object</code>
@@ -1029,6 +1052,7 @@ Special event scheduler for testing to be installed with installAsyncToolTest()
     * [.run()](#AsyncToolTest.run)
 
 <a name="AsyncToolTest.callLater"></a>
+
 ### AsyncToolTest.callLater(func, [timeout_ms]) ⇒ <code>Object</code>
 Adds callback to internal queue
 
@@ -1041,6 +1065,7 @@ Adds callback to internal queue
 | [timeout_ms] | <code>number</code> | <code>0</code> | optional timeout in ms |
 
 <a name="AsyncToolTest.callLater"></a>
+
 ### AsyncToolTest.callLater(handle)
 Removed callback from internal queue
 
@@ -1051,160 +1076,55 @@ Removed callback from internal queue
 | handle | <code>Object</code> | Handle returned from AsyncToolTest.callLater |
 
 <a name="AsyncToolTest.nextEvent"></a>
+
 ### AsyncToolTest.nextEvent()
 Process next even in the internal queue
 
 **Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
 <a name="AsyncToolTest.hasEvents"></a>
+
 ### AsyncToolTest.hasEvents()
 Check if there are any events scheduled
 
 **Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
 <a name="AsyncToolTest.getEvents"></a>
+
 ### AsyncToolTest.getEvents()
 Get internal even queue
 
 **Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
 <a name="AsyncToolTest.resetEvents"></a>
+
 ### AsyncToolTest.resetEvents()
 Clear internal event queue
 
 **Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
 <a name="AsyncToolTest.run"></a>
+
 ### AsyncToolTest.run()
 Execute all remaining events in the internal queue
 
 **Kind**: static method of <code>[AsyncToolTest](#AsyncToolTest)</code>  
-<a name="FutoInErrors"></a>
-## FutoInErrors
-List of standard FutoIn Core errors. It may get extended in runtime.
-
-**Kind**: global class  
-
-* [FutoInErrors](#FutoInErrors)
-    * [.ConnectError](#FutoInErrors.ConnectError)
-    * [.CommError](#FutoInErrors.CommError)
-    * [.UnknownInterface](#FutoInErrors.UnknownInterface)
-    * [.NotSupportedVersion](#FutoInErrors.NotSupportedVersion)
-    * [.NotImplemented](#FutoInErrors.NotImplemented)
-    * [.Unauthorized](#FutoInErrors.Unauthorized)
-    * [.InternalError](#FutoInErrors.InternalError)
-    * [.InvokerError](#FutoInErrors.InvokerError)
-    * [.InvalidRequest](#FutoInErrors.InvalidRequest)
-    * [.DefenseRejected](#FutoInErrors.DefenseRejected)
-    * [.PleaseReauth](#FutoInErrors.PleaseReauth)
-    * [.SecurityError](#FutoInErrors.SecurityError)
-    * [.Timeout](#FutoInErrors.Timeout)
-
-<a name="FutoInErrors.ConnectError"></a>
-### FutoInErrors.ConnectError
-Connection error before request is sent.
-Must be generated on Invoker side
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>ConnectError</code>  
-<a name="FutoInErrors.CommError"></a>
-### FutoInErrors.CommError
-Communication error at any stage after request is sent
-and before response is received.
-Must be generated on Invoker side
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>CommError</code>  
-<a name="FutoInErrors.UnknownInterface"></a>
-### FutoInErrors.UnknownInterface
-Unknown interface requested.
-Must be generated only on Executor side
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>UnknownInterface</code>  
-<a name="FutoInErrors.NotSupportedVersion"></a>
-### FutoInErrors.NotSupportedVersion
-Not supported interface version.
-Must be generated only on Executor side
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>NotSupportedVersion</code>  
-<a name="FutoInErrors.NotImplemented"></a>
-### FutoInErrors.NotImplemented
-In case interface function is not implemented on Executor side
-Must be generated on Executor side
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>NotImplemented</code>  
-<a name="FutoInErrors.Unauthorized"></a>
-### FutoInErrors.Unauthorized
-Security policy on Executor side does not allow to
-access interface or specific function.
-Must be generated only on Executor side
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>Unauthorized</code>  
-<a name="FutoInErrors.InternalError"></a>
-### FutoInErrors.InternalError
-Unexpected internal error on Executor side, including internal CommError.
-Must be generated only on Executor side
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>InternalError</code>  
-<a name="FutoInErrors.InvokerError"></a>
-### FutoInErrors.InvokerError
-Unexpected internal error on Invoker side, not related to CommError.
-Must be generated only on Invoker side
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>InvokerError</code>  
-<a name="FutoInErrors.InvalidRequest"></a>
-### FutoInErrors.InvalidRequest
-Invalid data is passed as FutoIn request.
-Must be generated only on Executor side
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>InvalidRequest</code>  
-<a name="FutoInErrors.DefenseRejected"></a>
-### FutoInErrors.DefenseRejected
-Defense system has triggered rejection
-Must be generated on Executor side, but also possible to be triggered on Invoker
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>DefenseRejected</code>  
-<a name="FutoInErrors.PleaseReauth"></a>
-### FutoInErrors.PleaseReauth
-Executor requests re-authorization
-Must be generated only on Executor side
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>PleaseReauth</code>  
-<a name="FutoInErrors.SecurityError"></a>
-### FutoInErrors.SecurityError
-'sec' request section has invalid data or not SecureChannel
-Must be generated only on Executor side
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>SecurityError</code>  
-<a name="FutoInErrors.Timeout"></a>
-### FutoInErrors.Timeout
-Timeout occurred in any stage
-Must be used only internally and should never travel in request message
-
-**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
-**Default**: <code>Timeout</code>  
 <a name="$as"></a>
+
 ## $as
 **window.$as** - browser-only reference to futoin-asyncsteps module
 
 **Kind**: global variable  
 <a name="$as"></a>
+
 ## $as
 **window.FutoIn.$as** - browser-only reference to futoin-asyncsteps module
 
 **Kind**: global variable  
 <a name="FutoInError"></a>
+
 ## FutoInError
 **window.FutoInError** - browser-only reference to futoin-asyncsteps.FutoInError
 
 **Kind**: global variable  
 <a name="AsyncSteps"></a>
+
 ## AsyncSteps
 **window.futoin.AsyncSteps** - browser-only reference to futoin-asyncsteps.AsyncSteps
 
@@ -1230,6 +1150,7 @@ Must be used only internally and should never travel in request message
     * [.execute()](#AsyncSteps+execute)
 
 <a name="new_AsyncSteps_new"></a>
+
 ### new AsyncSteps([state])
 Root AsyncStep implementation
 
@@ -1239,6 +1160,7 @@ Root AsyncStep implementation
 | [state] | <code>Object</code> | For internal use. State variable sharing |
 
 <a name="AsyncSteps+state"></a>
+
 ### asyncSteps.state ⇒ <code>object</code>
 Get AsyncSteps state object.
 
@@ -1251,6 +1173,7 @@ The are the following pre-defined state variables:
 
 **Kind**: instance property of <code>[AsyncSteps](#AsyncSteps)</code>  
 <a name="AsyncSteps+success"></a>
+
 ### asyncSteps.success([...arg])
 Successfully complete current step execution, optionally passing result variables to the next step.
 
@@ -1261,6 +1184,7 @@ Successfully complete current step execution, optionally passing result variable
 | [...arg] | <code>\*</code> | unlimited number of result variables with no type constraint |
 
 <a name="AsyncSteps+successStep"></a>
+
 ### ~~asyncSteps.successStep()~~
 ***Deprecated***
 
@@ -1270,6 +1194,7 @@ Otherwise, simply call *as.success();*
 
 **Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 <a name="AsyncSteps+setTimeout"></a>
+
 ### asyncSteps.setTimeout(timeout_ms)
 Set timeout for external event completion with async *as.success()* or *as.error()* call.
 If step is not finished until timeout is reached then Timeout error is raised.
@@ -1283,6 +1208,7 @@ If step is not finished until timeout is reached then Timeout error is raised.
 | timeout_ms | <code>number</code> | Timeout in ms |
 
 <a name="AsyncSteps+setCancel"></a>
+
 ### asyncSteps.setCancel(oncancel)
 Set cancellation handler to properly handle timeouts and external cancellation.
 
@@ -1295,6 +1221,7 @@ Set cancellation handler to properly handle timeouts and external cancellation.
 | oncancel | <code>CancelFunc</code> | cleanup/cancel logic of external processing |
 
 <a name="AsyncSteps+loop"></a>
+
 ### asyncSteps.loop(func, [label])
 Execute loop until *as.break()* or *as.error()* is called
 
@@ -1306,6 +1233,7 @@ Execute loop until *as.break()* or *as.error()* is called
 | [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
 
 <a name="AsyncSteps+repeat"></a>
+
 ### asyncSteps.repeat(count, func, [label])
 Call *func(as, i)* for *count* times
 
@@ -1318,6 +1246,7 @@ Call *func(as, i)* for *count* times
 | [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
 
 <a name="AsyncSteps+forEach"></a>
+
 ### asyncSteps.forEach(map_or_list, func, [label])
 For each *map* or *list* element call *func( as, key, value )*
 
@@ -1330,6 +1259,7 @@ For each *map* or *list* element call *func( as, key, value )*
 | [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
 
 <a name="AsyncSteps+break"></a>
+
 ### asyncSteps.break([label])
 Break execution of current loop, throws exception
 
@@ -1340,6 +1270,7 @@ Break execution of current loop, throws exception
 | [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is exited |
 
 <a name="AsyncSteps+continue"></a>
+
 ### asyncSteps.continue([label])
 Continue loop execution from the next iteration, throws exception
 
@@ -1350,6 +1281,7 @@ Continue loop execution from the next iteration, throws exception
 | [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is found |
 
 <a name="AsyncSteps+add"></a>
+
 ### asyncSteps.add(func, [onerror]) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
 Add sub-step. Can be called multiple times.
 
@@ -1361,6 +1293,7 @@ Add sub-step. Can be called multiple times.
 | [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
 
 <a name="AsyncSteps+parallel"></a>
+
 ### asyncSteps.parallel([onerror]) ⇒ <code>[AsyncSteps](#AsyncSteps)</code>
 Creates a step internally and returns specialized AsyncSteps interfaces all steps
 of which are executed in quasi-parallel.
@@ -1372,6 +1305,7 @@ of which are executed in quasi-parallel.
 | [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
 
 <a name="AsyncSteps+error"></a>
+
 ### asyncSteps.error(name, [error_info])
 Set error and throw to abort execution.
 
@@ -1389,6 +1323,7 @@ Set error and throw to abort execution.
 | [error_info] | <code>string</code> | optional descriptive message assigned to as.state.error_info |
 
 <a name="AsyncSteps+copyFrom"></a>
+
 ### asyncSteps.copyFrom(other)
 Copy steps and not yet defined state variables from "model" AsyncSteps instance
 
@@ -1399,18 +1334,149 @@ Copy steps and not yet defined state variables from "model" AsyncSteps instance
 | other | <code>[AsyncSteps](#AsyncSteps)</code> | model instance, which must get be executed |
 
 <a name="AsyncSteps+cancel"></a>
+
 ### asyncSteps.cancel()
 Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
 
 **Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
 <a name="AsyncSteps+execute"></a>
+
 ### asyncSteps.execute()
 Start execution of AsyncSteps using AsyncTool
 
 It must not be called more than once until cancel/complete (instance can be re-used)
 
 **Kind**: instance method of <code>[AsyncSteps](#AsyncSteps)</code>  
+<a name="FutoInErrors"></a>
+
+## FutoInErrors
+List of standard FutoIn Core errors. It may get extended in runtime.
+
+**Kind**: global variable  
+
+* [FutoInErrors](#FutoInErrors)
+    * [.ConnectError](#FutoInErrors.ConnectError)
+    * [.CommError](#FutoInErrors.CommError)
+    * [.UnknownInterface](#FutoInErrors.UnknownInterface)
+    * [.NotSupportedVersion](#FutoInErrors.NotSupportedVersion)
+    * [.NotImplemented](#FutoInErrors.NotImplemented)
+    * [.Unauthorized](#FutoInErrors.Unauthorized)
+    * [.InternalError](#FutoInErrors.InternalError)
+    * [.InvokerError](#FutoInErrors.InvokerError)
+    * [.InvalidRequest](#FutoInErrors.InvalidRequest)
+    * [.DefenseRejected](#FutoInErrors.DefenseRejected)
+    * [.PleaseReauth](#FutoInErrors.PleaseReauth)
+    * [.SecurityError](#FutoInErrors.SecurityError)
+    * [.Timeout](#FutoInErrors.Timeout)
+
+<a name="FutoInErrors.ConnectError"></a>
+
+### FutoInErrors.ConnectError
+Connection error before request is sent.
+Must be generated on Invoker side
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>ConnectError</code>  
+<a name="FutoInErrors.CommError"></a>
+
+### FutoInErrors.CommError
+Communication error at any stage after request is sent
+and before response is received.
+Must be generated on Invoker side
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>CommError</code>  
+<a name="FutoInErrors.UnknownInterface"></a>
+
+### FutoInErrors.UnknownInterface
+Unknown interface requested.
+Must be generated only on Executor side
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>UnknownInterface</code>  
+<a name="FutoInErrors.NotSupportedVersion"></a>
+
+### FutoInErrors.NotSupportedVersion
+Not supported interface version.
+Must be generated only on Executor side
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>NotSupportedVersion</code>  
+<a name="FutoInErrors.NotImplemented"></a>
+
+### FutoInErrors.NotImplemented
+In case interface function is not implemented on Executor side
+Must be generated on Executor side
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>NotImplemented</code>  
+<a name="FutoInErrors.Unauthorized"></a>
+
+### FutoInErrors.Unauthorized
+Security policy on Executor side does not allow to
+access interface or specific function.
+Must be generated only on Executor side
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>Unauthorized</code>  
+<a name="FutoInErrors.InternalError"></a>
+
+### FutoInErrors.InternalError
+Unexpected internal error on Executor side, including internal CommError.
+Must be generated only on Executor side
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>InternalError</code>  
+<a name="FutoInErrors.InvokerError"></a>
+
+### FutoInErrors.InvokerError
+Unexpected internal error on Invoker side, not related to CommError.
+Must be generated only on Invoker side
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>InvokerError</code>  
+<a name="FutoInErrors.InvalidRequest"></a>
+
+### FutoInErrors.InvalidRequest
+Invalid data is passed as FutoIn request.
+Must be generated only on Executor side
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>InvalidRequest</code>  
+<a name="FutoInErrors.DefenseRejected"></a>
+
+### FutoInErrors.DefenseRejected
+Defense system has triggered rejection
+Must be generated on Executor side, but also possible to be triggered on Invoker
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>DefenseRejected</code>  
+<a name="FutoInErrors.PleaseReauth"></a>
+
+### FutoInErrors.PleaseReauth
+Executor requests re-authorization
+Must be generated only on Executor side
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>PleaseReauth</code>  
+<a name="FutoInErrors.SecurityError"></a>
+
+### FutoInErrors.SecurityError
+'sec' request section has invalid data or not SecureChannel
+Must be generated only on Executor side
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>SecurityError</code>  
+<a name="FutoInErrors.Timeout"></a>
+
+### FutoInErrors.Timeout
+Timeout occurred in any stage
+Must be used only internally and should never travel in request message
+
+**Kind**: static constant of <code>[FutoInErrors](#FutoInErrors)</code>  
+**Default**: <code>Timeout</code>  
 <a name="installAsyncToolTest"></a>
+
 ## installAsyncToolTest([install])
 Use for unit testing to fine control step execution.
 It installs AsyncToolTest in place of AsyncTool
@@ -1422,6 +1488,7 @@ It installs AsyncToolTest in place of AsyncTool
 | [install] | <code>boolean</code> | <code>true</code> | true - install AsyncToolTest, false - AsyncTool as scheduler |
 
 <a name="LoopFunc"></a>
+
 ## LoopFunc : <code>function</code>
 It is just a subset of *ExecFunc*
 
@@ -1433,6 +1500,7 @@ It is just a subset of *ExecFunc*
 | as | <code>[AsyncSteps](#AsyncSteps)</code> | the only valid reference to AsyncSteps with required level of protection |
 
 <a name="RepeatFunc"></a>
+
 ## RepeatFunc : <code>function</code>
 It is just a subset of *ExecFunc*
 
@@ -1445,6 +1513,7 @@ It is just a subset of *ExecFunc*
 | i | <code>integer</code> | current iteration starting from 0 |
 
 <a name="ForEachFunc"></a>
+
 ## ForEachFunc : <code>function</code>
 It is just a subset of *ExecFunc*
 
