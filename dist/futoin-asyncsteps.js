@@ -680,14 +680,14 @@
         },
         function (module, exports) {
             (function () {
-                var getNanoSeconds, hrtime, loadTime;
+                var getNanoSeconds, hrtime, loadTime, moduleLoadTime, nodeLoadTime, upTime;
                 if (typeof performance !== 'undefined' && performance !== null && performance.now) {
                     module.exports = function () {
                         return performance.now();
                     };
                 } else if (typeof process !== 'undefined' && process !== null && process.hrtime) {
                     module.exports = function () {
-                        return (getNanoSeconds() - loadTime) / 1000000;
+                        return (getNanoSeconds() - nodeLoadTime) / 1000000;
                     };
                     hrtime = process.hrtime;
                     getNanoSeconds = function () {
@@ -695,7 +695,9 @@
                         hr = hrtime();
                         return hr[0] * 1000000000 + hr[1];
                     };
-                    loadTime = getNanoSeconds();
+                    moduleLoadTime = getNanoSeconds();
+                    upTime = process.uptime() * 1000000000;
+                    nodeLoadTime = moduleLoadTime - upTime;
                 } else if (Date.now) {
                     module.exports = function () {
                         return Date.now() - loadTime;

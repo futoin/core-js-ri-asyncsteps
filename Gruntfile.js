@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 
 module.exports = function (grunt) {
@@ -5,6 +7,26 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON( 'package.json' ),
         bower: grunt.file.readJSON( 'bower.json' ),
+                     
+        jshint: {
+            options: {
+                jshintrc : true,
+            },
+            all: ['Gruntfile.js', 'lib/**/*.js'],
+        },
+        jscs: {
+            options : {
+                config: ".jscsrc",
+                fix: true,
+            },
+            all: ['Gruntfile.js', 'lib/**/*.js'],
+        },
+        mocha_istanbul: {
+            coverage: {
+                src: ['test'],
+            }
+        },
+        istanbul_check_coverage: {},
                      
         pure_cjs: {
             dist: {
@@ -55,35 +77,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        npm: {
-            test: {
-                args: ["test"]
-            }
-        },
-        release: {
-            options: {
-                additionalFiles: [
-                    'bower.json'
-                ],
-                commitFiles: [
-                    'package.json',
-                    'bower.json'
-                ],
-                tagName: "v<%= version %>",
-                commitMessage: 'Updated for release v<%= version %>',
-                tagMessage: 'Release v<%= version %>',
-                npm: false
-            }
-        },
-        sync: {
-            all: {
-                options: {
-                    sync: ['name', 'version','description','license','keywords','homepage','repository'],
-                    from: 'package.json',
-                    to: 'bower.json'
-                }
-            }
-        },
         jsdoc2md: {
             README: {
                 src: "lib/*.js",
@@ -106,23 +99,26 @@ module.exports = function (grunt) {
         }
     });
     
+    grunt.loadNpmTasks( 'grunt-contrib-jshint' );
+    grunt.loadNpmTasks( 'grunt-jscs' );
     grunt.loadNpmTasks( 'grunt-pure-cjs' );
     grunt.loadNpmTasks( 'grunt-contrib-uglify' );
     grunt.loadNpmTasks( 'grunt-contrib-connect' );
     grunt.loadNpmTasks( 'grunt-mocha-phantomjs' );
-    grunt.loadNpmTasks( 'grunt-npm-helper' );
-    grunt.loadNpmTasks( 'grunt-release' );
-    grunt.loadNpmTasks( 'grunt-npm2bower-sync' );
-    grunt.loadNpmTasks( 'grunt-jsdoc-to-markdown' );
-    grunt.loadNpmTasks( 'grunt-text-replace' );
+    grunt.loadNpmTasks( 'grunt-mocha-istanbul' );
+    
+    grunt.registerTask( 'check', [ 'jshint', 'jscs' ] );
 
     grunt.registerTask( 'build-browser', ['pure_cjs','uglify'] );
     grunt.registerTask( 'test-browser', ['connect','mocha_phantomjs'] );
     
-    grunt.registerTask( 'node', [ 'npm:test' ] );
-    grunt.registerTask( 'browser', ['build-browser','test-browser'] );
+    grunt.registerTask( 'node', [ 'check', 'mocha_istanbul', 'mocha_istanbul:coverage' ] );
+    grunt.registerTask( 'browser', ['check', 'build-browser','test-browser'] );
+    grunt.registerTask( 'test', [ 'node', 'browser' ] );
     
+    grunt.loadNpmTasks( 'grunt-jsdoc-to-markdown' );
+    grunt.loadNpmTasks( 'grunt-text-replace' );
     grunt.registerTask( 'doc', [ 'jsdoc2md', 'replace:README' ] );
 
-    grunt.registerTask( 'default', ['sync','node','browser','doc'] );
+    grunt.registerTask( 'default', ['test','doc'] );
 };
