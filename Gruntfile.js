@@ -12,14 +12,14 @@ module.exports = function (grunt) {
             options: {
                 jshintrc : true,
             },
-            all: ['Gruntfile.js', 'lib/**/*.js'],
+            all: ['*.js', 'lib/**/*.js'],
         },
         jscs: {
             options : {
                 config: ".jscsrc",
                 fix: true,
             },
-            all: ['Gruntfile.js', 'lib/**/*.js'],
+            all: ['*.js', 'lib/**/*.js'],
         },
         mocha_istanbul: {
             coverage: {
@@ -79,12 +79,11 @@ module.exports = function (grunt) {
         },
         jsdoc2md: {
             README: {
-                src: "lib/*.js",
+                src: "lib/**/*.js",
                 dest: "README.md",
                 options: {
                     template: fs.readFileSync('misc/README.hbs','utf8'),
-                    private: false
-                }
+}
             }
         },
         replace: {
@@ -118,7 +117,7 @@ module.exports = function (grunt) {
     
     grunt.loadNpmTasks( 'grunt-jsdoc-to-markdown' );
     grunt.loadNpmTasks( 'grunt-text-replace' );
-    grunt.registerTask( 'doc', [ 'jsdoc2md', 'replace:README' ] );
+    grunt.registerTask( 'doc', [ 'jsdoc2md:README', 'replace:README' ] );
 
     grunt.registerTask( 'default', ['test','doc'] );
 };
