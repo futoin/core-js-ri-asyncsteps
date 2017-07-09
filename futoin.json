@@ -6,6 +6,6 @@
     "release": "futoin.cid.misc.releasetool"
   },
   "actions": {
-    "check": "@cid tool exec grunt -- test"
+    "test": "@cid tool exec grunt -- test"
   }
 }
