@@ -117,6 +117,7 @@
         "lib/browser.js",
         "dist/**",
         "node_modules/**",
+        "bower_components/**",
         "test/**",
         "coverage/**",
         "out/**",
