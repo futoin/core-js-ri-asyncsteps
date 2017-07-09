@@ -31,19 +31,19 @@
     "email": "support@futoin.org"
   },
   "devDependencies": {
-    "chai": "*",
-    "grunt": "*",
-    "mocha": "*",
-    "istanbul": "*",
-    "grunt-contrib-connect": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-jscs": "*",
-    "grunt-jsdoc-to-markdown": "*",
-    "grunt-mocha-phantomjs": "*",
-    "grunt-pure-cjs": "*",
-    "grunt-text-replace": "*",
-    "grunt-mocha-istanbul": "*"
+    "chai": "^4.0.2",
+    "grunt": "^1.0.1",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^3.0.1",
+    "grunt-jscs": "^3.0.1",
+    "grunt-jsdoc-to-markdown": "^3.0.0",
+    "grunt-mocha-istanbul": "^5.0.2",
+    "grunt-mocha-phantomjs": "^4.0.0",
+    "grunt-pure-cjs": "^1.4.0",
+    "grunt-text-replace": "^0.4.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.4.2"
   },
   "dependencies": {
     "performance-now": "^2.1.0"

@@ -111,13 +111,13 @@ module.exports = function (grunt) {
     grunt.registerTask( 'build-browser', ['pure_cjs','uglify'] );
     grunt.registerTask( 'test-browser', ['connect','mocha_phantomjs'] );
     
-    grunt.registerTask( 'node', [ 'check', 'mocha_istanbul', 'mocha_istanbul:coverage' ] );
-    grunt.registerTask( 'browser', ['check', 'build-browser','test-browser'] );
-    grunt.registerTask( 'test', [ 'node', 'browser' ] );
+    grunt.registerTask( 'node', [ 'mocha_istanbul', 'mocha_istanbul:coverage' ] );
+    grunt.registerTask( 'browser', ['build-browser','test-browser'] );
+    grunt.registerTask( 'test', [ 'check', 'node', 'browser' ] );
     
     grunt.loadNpmTasks( 'grunt-jsdoc-to-markdown' );
     grunt.loadNpmTasks( 'grunt-text-replace' );
     grunt.registerTask( 'doc', [ 'jsdoc2md:README', 'replace:README' ] );
 
-    grunt.registerTask( 'default', ['test','doc'] );
+    grunt.registerTask( 'default', ['check'] );
 };
