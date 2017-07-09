@@ -1,4 +1,4 @@
 
-=== (next) ===
+=== 1.5.7 (2017-07-09) ===
 CHANGED: to use FutoIn CID tool for development
 - Revised development tools
