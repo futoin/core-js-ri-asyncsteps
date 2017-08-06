@@ -1,5 +1,4 @@
-node_modules
-coverage
-out
-dist/unittest*
-bower_components
+node_modules/
+coverage/
+out/
+dist/

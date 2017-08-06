@@ -19,7 +19,7 @@
     "exceptions",
     "loops",
     "browser",
-    "amd"
+    "webpack"
   ],
   "author": {
     "name": "Andrey Galkin",
@@ -31,21 +31,24 @@
     "email": "support@futoin.org"
   },
   "devDependencies": {
-    "chai": "^4.0.2",
+    "chai": "^4.1.1",
+    "eslint": "^4.4.0",
     "grunt": "^1.0.1",
     "grunt-contrib-connect": "^1.0.2",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-uglify": "^3.0.1",
-    "grunt-jscs": "^3.0.1",
+    "grunt-eslint": "^20.0.0",
     "grunt-jsdoc-to-markdown": "^3.0.0",
     "grunt-mocha-istanbul": "^5.0.2",
     "grunt-mocha-phantomjs": "^4.0.0",
-    "grunt-pure-cjs": "^1.4.0",
     "grunt-text-replace": "^0.4.0",
+    "grunt-webpack": "^3.0.2",
     "istanbul": "^0.4.5",
-    "mocha": "^3.4.2"
+    "mocha": "^3.5.0",
+    "webpack": "^3.4.1"
   },
   "dependencies": {
     "performance-now": "^2.1.0"
-  }
+  },
+  "eslintIgnore": [
+    "test/**"
+  ]
 }

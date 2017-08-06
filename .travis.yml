@@ -2,9 +2,6 @@ language: node_js
 node_js:
 - '8'
 - '6'
-- '4'
-matrix:
-  allow_failures:
-    - node_js: '4'
+
 before_install: sudo pip install futoin-cid
 script: nodeVer=$TRAVIS_NODE_VERSION cid run test

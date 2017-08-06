@@ -58,20 +58,6 @@ and/or package.json:
 }
 ```
 
-# Installation for Browser
-
-```sh
-$ bower install futoin-asyncsteps --save
-```
-
-Note: there are the following globals available:
-
-* $as - global reference to futoin-asyncsteps module
-* futoin - global namespace-like object for name clashing cases
-* futoin.$as - another reference tp futoin-asyncsteps module
-* FutoInError - global reference to standard FutoIn error codes object
-* futoin.AsyncSteps - global reference to futoin-asyncsteps.AsyncSteps class
-
 # Examples
 
 ## Simple steps
@@ -788,19 +774,19 @@ It installs AsyncToolTest in place of AsyncTool</p>
     * [.state](#AsyncSteps+state) ⇒ <code>object</code>
     * [.success([...arg])](#AsyncSteps+success)
     * ~~[.successStep()](#AsyncSteps+successStep)~~
-    * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout)
-    * [.setCancel(oncancel)](#AsyncSteps+setCancel)
-    * [.loop(func, [label])](#AsyncSteps+loop)
-    * [.repeat(count, func, [label])](#AsyncSteps+repeat)
-    * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach)
+    * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.setCancel(oncancel)](#AsyncSteps+setCancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.loop(func, [label])](#AsyncSteps+loop) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.repeat(count, func, [label])](#AsyncSteps+repeat) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.break([label])](#AsyncSteps+break)
     * [.continue([label])](#AsyncSteps+continue)
     * [.add(func, [onerror])](#AsyncSteps+add) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.parallel([onerror])](#AsyncSteps+parallel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.error(name, [error_info])](#AsyncSteps+error)
-    * [.copyFrom(other)](#AsyncSteps+copyFrom)
-    * [.cancel()](#AsyncSteps+cancel)
-    * [.execute()](#AsyncSteps+execute)
+    * [.copyFrom(other)](#AsyncSteps+copyFrom) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.cancel()](#AsyncSteps+cancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.execute()](#AsyncSteps+execute) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 
 <a name="new_AsyncSteps_new"></a>
 
@@ -848,13 +834,14 @@ Otherwise, simply call *as.success();*
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
 <a name="AsyncSteps+setTimeout"></a>
 
-### asyncSteps.setTimeout(timeout_ms)
+### asyncSteps.setTimeout(timeout_ms) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Set timeout for external event completion with async *as.success()* or *as.error()* call.
 If step is not finished until timeout is reached then Timeout error is raised.
 
 *Note: Can be used only within **ExecFunc** body.*
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -862,12 +849,13 @@ If step is not finished until timeout is reached then Timeout error is raised.
 
 <a name="AsyncSteps+setCancel"></a>
 
-### asyncSteps.setCancel(oncancel)
+### asyncSteps.setCancel(oncancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Set cancellation handler to properly handle timeouts and external cancellation.
 
 *Note: Can be used only within **ExecFunc** body.*
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -875,10 +863,11 @@ Set cancellation handler to properly handle timeouts and external cancellation.
 
 <a name="AsyncSteps+loop"></a>
 
-### asyncSteps.loop(func, [label])
+### asyncSteps.loop(func, [label]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Execute loop until *as.break()* or *as.error()* is called
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -887,10 +876,11 @@ Execute loop until *as.break()* or *as.error()* is called
 
 <a name="AsyncSteps+repeat"></a>
 
-### asyncSteps.repeat(count, func, [label])
+### asyncSteps.repeat(count, func, [label]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Call *func(as, i)* for *count* times
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -900,10 +890,11 @@ Call *func(as, i)* for *count* times
 
 <a name="AsyncSteps+forEach"></a>
 
-### asyncSteps.forEach(map_or_list, func, [label])
+### asyncSteps.forEach(map_or_list, func, [label]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 For each *map* or *list* element call *func( as, key, value )*
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -939,6 +930,7 @@ Continue loop execution from the next iteration, throws exception
 Add sub-step. Can be called multiple times.
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -952,6 +944,7 @@ Creates a step internally and returns specialized AsyncSteps interfaces all step
 of which are executed in quasi-parallel.
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - interface for parallel step adding  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -977,10 +970,11 @@ Set error and throw to abort execution.
 
 <a name="AsyncSteps+copyFrom"></a>
 
-### asyncSteps.copyFrom(other)
+### asyncSteps.copyFrom(other) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Copy steps and not yet defined state variables from "model" AsyncSteps instance
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -988,18 +982,20 @@ Copy steps and not yet defined state variables from "model" AsyncSteps instance
 
 <a name="AsyncSteps+cancel"></a>
 
-### asyncSteps.cancel()
+### asyncSteps.cancel() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 <a name="AsyncSteps+execute"></a>
 
-### asyncSteps.execute()
+### asyncSteps.execute() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Start execution of AsyncSteps using AsyncTool
 
 It must not be called more than once until cancel/complete (instance can be re-used)
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 <a name="AsyncToolTest"></a>
 
 ## AsyncToolTest
@@ -1011,8 +1007,8 @@ Special event scheduler for testing to be installed with installAsyncToolTest()
     * [.callLater(func, [timeout_ms])](#AsyncToolTest.callLater) ⇒ <code>Object</code>
     * [.callLater(handle)](#AsyncToolTest.callLater)
     * [.nextEvent()](#AsyncToolTest.nextEvent)
-    * [.hasEvents()](#AsyncToolTest.hasEvents)
-    * [.getEvents()](#AsyncToolTest.getEvents)
+    * [.hasEvents()](#AsyncToolTest.hasEvents) ⇒ <code>boolean</code>
+    * [.getEvents()](#AsyncToolTest.getEvents) ⇒ <code>array</code>
     * [.resetEvents()](#AsyncToolTest.resetEvents)
     * [.run()](#AsyncToolTest.run)
 
@@ -1022,7 +1018,7 @@ Special event scheduler for testing to be installed with installAsyncToolTest()
 Adds callback to internal queue
 
 **Kind**: static method of [<code>AsyncToolTest</code>](#AsyncToolTest)  
-**Returns**: <code>Object</code> - - timer handle  
+**Returns**: <code>Object</code> - timer handle  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -1048,16 +1044,18 @@ Process next even in the internal queue
 **Kind**: static method of [<code>AsyncToolTest</code>](#AsyncToolTest)  
 <a name="AsyncToolTest.hasEvents"></a>
 
-### AsyncToolTest.hasEvents()
+### AsyncToolTest.hasEvents() ⇒ <code>boolean</code>
 Check if there are any events scheduled
 
 **Kind**: static method of [<code>AsyncToolTest</code>](#AsyncToolTest)  
+**Returns**: <code>boolean</code> - true, if pending events  
 <a name="AsyncToolTest.getEvents"></a>
 
-### AsyncToolTest.getEvents()
+### AsyncToolTest.getEvents() ⇒ <code>array</code>
 Get internal even queue
 
 **Kind**: static method of [<code>AsyncToolTest</code>](#AsyncToolTest)  
+**Returns**: <code>array</code> - event queue  
 <a name="AsyncToolTest.resetEvents"></a>
 
 ### AsyncToolTest.resetEvents()
@@ -1135,19 +1133,19 @@ Wrapper for clearTimeout()/clearImmediate()
     * [.state](#AsyncSteps+state) ⇒ <code>object</code>
     * [.success([...arg])](#AsyncSteps+success)
     * ~~[.successStep()](#AsyncSteps+successStep)~~
-    * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout)
-    * [.setCancel(oncancel)](#AsyncSteps+setCancel)
-    * [.loop(func, [label])](#AsyncSteps+loop)
-    * [.repeat(count, func, [label])](#AsyncSteps+repeat)
-    * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach)
+    * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.setCancel(oncancel)](#AsyncSteps+setCancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.loop(func, [label])](#AsyncSteps+loop) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.repeat(count, func, [label])](#AsyncSteps+repeat) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.break([label])](#AsyncSteps+break)
     * [.continue([label])](#AsyncSteps+continue)
     * [.add(func, [onerror])](#AsyncSteps+add) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.parallel([onerror])](#AsyncSteps+parallel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.error(name, [error_info])](#AsyncSteps+error)
-    * [.copyFrom(other)](#AsyncSteps+copyFrom)
-    * [.cancel()](#AsyncSteps+cancel)
-    * [.execute()](#AsyncSteps+execute)
+    * [.copyFrom(other)](#AsyncSteps+copyFrom) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.cancel()](#AsyncSteps+cancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.execute()](#AsyncSteps+execute) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 
 <a name="new_AsyncSteps_new"></a>
 
@@ -1195,13 +1193,14 @@ Otherwise, simply call *as.success();*
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
 <a name="AsyncSteps+setTimeout"></a>
 
-### asyncSteps.setTimeout(timeout_ms)
+### asyncSteps.setTimeout(timeout_ms) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Set timeout for external event completion with async *as.success()* or *as.error()* call.
 If step is not finished until timeout is reached then Timeout error is raised.
 
 *Note: Can be used only within **ExecFunc** body.*
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1209,12 +1208,13 @@ If step is not finished until timeout is reached then Timeout error is raised.
 
 <a name="AsyncSteps+setCancel"></a>
 
-### asyncSteps.setCancel(oncancel)
+### asyncSteps.setCancel(oncancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Set cancellation handler to properly handle timeouts and external cancellation.
 
 *Note: Can be used only within **ExecFunc** body.*
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1222,10 +1222,11 @@ Set cancellation handler to properly handle timeouts and external cancellation.
 
 <a name="AsyncSteps+loop"></a>
 
-### asyncSteps.loop(func, [label])
+### asyncSteps.loop(func, [label]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Execute loop until *as.break()* or *as.error()* is called
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1234,10 +1235,11 @@ Execute loop until *as.break()* or *as.error()* is called
 
 <a name="AsyncSteps+repeat"></a>
 
-### asyncSteps.repeat(count, func, [label])
+### asyncSteps.repeat(count, func, [label]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Call *func(as, i)* for *count* times
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1247,10 +1249,11 @@ Call *func(as, i)* for *count* times
 
 <a name="AsyncSteps+forEach"></a>
 
-### asyncSteps.forEach(map_or_list, func, [label])
+### asyncSteps.forEach(map_or_list, func, [label]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 For each *map* or *list* element call *func( as, key, value )*
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1286,6 +1289,7 @@ Continue loop execution from the next iteration, throws exception
 Add sub-step. Can be called multiple times.
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1299,6 +1303,7 @@ Creates a step internally and returns specialized AsyncSteps interfaces all step
 of which are executed in quasi-parallel.
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - interface for parallel step adding  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1324,10 +1329,11 @@ Set error and throw to abort execution.
 
 <a name="AsyncSteps+copyFrom"></a>
 
-### asyncSteps.copyFrom(other)
+### asyncSteps.copyFrom(other) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Copy steps and not yet defined state variables from "model" AsyncSteps instance
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1335,18 +1341,20 @@ Copy steps and not yet defined state variables from "model" AsyncSteps instance
 
 <a name="AsyncSteps+cancel"></a>
 
-### asyncSteps.cancel()
+### asyncSteps.cancel() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 <a name="AsyncSteps+execute"></a>
 
-### asyncSteps.execute()
+### asyncSteps.execute() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Start execution of AsyncSteps using AsyncTool
 
 It must not be called more than once until cancel/complete (instance can be re-used)
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 <a name="FutoInErrors"></a>
 
 ## FutoInErrors
