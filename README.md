@@ -58,6 +58,18 @@ and/or package.json:
 }
 ```
 
+# Browser installation
+
+The module can be used with `webpack` or any other CommonJS packer.
+
+Note: there are the following globals available:
+
+* $as - global reference to futoin-asyncsteps module
+* futoin - global namespace-like object for name clashing cases
+* futoin.$as - another reference to futoin-asyncsteps module
+* FutoInError - global reference to standard FutoIn error codes object
+* futoin.AsyncSteps - global reference to futoin-asyncsteps.AsyncSteps class
+
 # Examples
 
 ## Simple steps
