@@ -1,4 +1,7 @@
 
+=== (next) ===
+FIXED: browser entry point in package.json
+
 === 1.6.1 (2017-08-06) ===
 FIXED: not populated module.exports in repeated browser require()
 FIXED: returned browser globals documentation
