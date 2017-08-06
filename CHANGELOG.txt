@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.6.2 (2017-08-06) ===
 FIXED: browser entry point in package.json
 
 === 1.6.1 (2017-08-06) ===
