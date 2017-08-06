@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.6.0 (2017-08-06) ===
 BREAKING: completely dropped bower support
 CHANGED: to use eslint & webpack for testing
 NEW: webpack-ready
