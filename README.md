@@ -1543,7 +1543,8 @@ It is just a subset of *ExecFunc*
 | Param | Type | Description |
 | --- | --- | --- |
 | as | [<code>AsyncSteps</code>](#AsyncSteps) | the only valid reference to AsyncSteps with required level of protection |
-| i | <code>integer</code> | current iteration starting from 0 |
+| key | <code>integer</code> \| <code>string</code> | key ID or name |
+| value | <code>\*</code> | value associated with key |
 
 
 

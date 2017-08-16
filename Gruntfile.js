@@ -55,7 +55,7 @@ module.exports = function( grunt )
     grunt.registerTask( 'build-browser', [ 'webpack' ] );
     grunt.registerTask( 'test-browser', [ 'connect', 'mocha_phantomjs' ] );
 
-    grunt.registerTask( 'node', [ 'mocha_istanbul', 'mocha_istanbul:coverage' ] );
+    grunt.registerTask( 'node', [ 'mocha_istanbul' ] );
     grunt.registerTask( 'browser', [ 'build-browser', 'test-browser' ] );
     grunt.registerTask( 'test', [ 'check', 'node', 'browser', 'doc' ] );
 

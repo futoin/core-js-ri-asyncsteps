@@ -1,4 +1,7 @@
 
+=== (next) ===
+FIXED: doc for as.forEach() callback
+
 === 1.6.2 (2017-08-06) ===
 FIXED: browser entry point in package.json
 
