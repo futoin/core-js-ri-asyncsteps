@@ -25,12 +25,20 @@ module.exports = {
         "no-template-curly-in-string": ["error"],
         "curly": ["error", "multi-line"],
         "no-multi-spaces": ["error"],
-        "array-bracket-newline": ["error", { "multiline": true }],
+        "array-bracket-newline": ["error", { "multiline": true, "minItems": 3 }],
         "array-bracket-spacing": ["error", "always"],
-        "array-element-newline": ["error", { "multiline": true }],
+        "array-element-newline": ["error", { "multiline": true, "minItems": 3 }],
         "block-spacing": ["error"],
         "brace-style": ["error", "allman"],
         "no-trailing-spaces": "error",
+        "no-unused-vars": [
+            "error",
+            {
+                "vars" : "all",
+                "args" : "all",
+                "argsIgnorePattern" : "^(as|err|_.*)$"
+            }
+        ],
         "no-useless-concat": "error",
         "no-useless-return": "error",
         "no-useless-escape": "error",
