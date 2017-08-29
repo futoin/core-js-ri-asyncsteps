@@ -1,4 +1,7 @@
 
+=== (next) ===
+NEW: FTN12 v1.8 support
+
 === 1.6.3 (2017-08-24) ===
 FIXED: doc for as.forEach() callback
 FIXED: workaround for outdated yarn @ Travis

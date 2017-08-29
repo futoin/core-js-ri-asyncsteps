@@ -11,7 +11,7 @@
 Reference implementation of:
  
     FTN12: FutoIn Async API
-    Version: 1.6
+    Version: 1.8
     
 Spec: [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)
 
@@ -796,6 +796,7 @@ It installs AsyncToolTest in place of AsyncTool</p>
     * [.continue([label])](#AsyncSteps+continue)
     * [.add(func, [onerror])](#AsyncSteps+add) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.parallel([onerror])](#AsyncSteps+parallel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.sync(object, func, [onerror])](#AsyncSteps+sync) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.error(name, [error_info])](#AsyncSteps+error)
     * [.copyFrom(other)](#AsyncSteps+copyFrom) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.cancel()](#AsyncSteps+cancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -967,6 +968,20 @@ of which are executed in quasi-parallel.
 
 | Param | Type | Description |
 | --- | --- | --- |
+| [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
+
+<a name="AsyncSteps+sync"></a>
+
+### asyncSteps.sync(object, func, [onerror]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Add sub-step with synchronization against supplied object.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object | <code>ISync</code> | Mutex, Throttle or other type of synchronization implementation. |
+| func | <code>ExecFunc</code> | function defining non-blocking step execution |
 | [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
 
 <a name="AsyncSteps+error"></a>
@@ -1162,6 +1177,7 @@ Wrapper for clearTimeout()/clearImmediate()
     * [.continue([label])](#AsyncSteps+continue)
     * [.add(func, [onerror])](#AsyncSteps+add) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.parallel([onerror])](#AsyncSteps+parallel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.sync(object, func, [onerror])](#AsyncSteps+sync) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.error(name, [error_info])](#AsyncSteps+error)
     * [.copyFrom(other)](#AsyncSteps+copyFrom) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.cancel()](#AsyncSteps+cancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -1333,6 +1349,20 @@ of which are executed in quasi-parallel.
 
 | Param | Type | Description |
 | --- | --- | --- |
+| [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
+
+<a name="AsyncSteps+sync"></a>
+
+### asyncSteps.sync(object, func, [onerror]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Add sub-step with synchronization against supplied object.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object | <code>ISync</code> | Mutex, Throttle or other type of synchronization implementation. |
+| func | <code>ExecFunc</code> | function defining non-blocking step execution |
 | [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
 
 <a name="AsyncSteps+error"></a>

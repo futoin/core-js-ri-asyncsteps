@@ -1554,34 +1554,76 @@ describe( 'AsyncSteps', function(){
         assertNoEvents();
     });
     
-    it('should support .waitExternal()', function( done ){
-        var as = this.as;
-        
-        as.add(
-            function(as) {
-                as.waitExternal();
-                as.state.cb = function(){
-                    try {
-                        as.error('OK');
-                    } catch (e) {}
-                };
-            },
-            function(as, err) {
-                if (err === 'OK') {
-                    done();
-                } else {
-                    done(as.state.last_exception);
+    describe('#waitExternal', function() {
+        it('should disable implicit #success()', function( done ){
+            var as = this.as;
+            
+            as.add(
+                function(as) {
+                    as.waitExternal();
+                    as.state.cb = function(){
+                        try {
+                            as.error('OK');
+                        } catch (e) {}
+                    };
+                },
+                function(as, err) {
+                    if (err === 'OK') {
+                        done();
+                    } else {
+                        done(as.state.last_exception);
+                    }
                 }
-            }
-        )
-        as.add( function(as) { done('Fail'); });
-        as.execute();
-        async_steps.AsyncTool.run();
-        assertNoEvents();
-        
-        as.state.cb();
-        async_steps.AsyncTool.run();
-        assertNoEvents();
+            )
+            as.add( function(as) { done('Fail'); });
+            as.execute();
+            async_steps.AsyncTool.run();
+            assertNoEvents();
+            
+            as.state.cb();
+            async_steps.AsyncTool.run();
+            assertNoEvents();
+        });
+    });
+    
+    describe('#sync', function() {
+        it('should use sync object', function( done ){
+            var as = this.as;
+            var mutex = {
+                sync: function(as, func, onerror) {
+                    as.add(func, onerror);
+                }
+            };
+            
+            as.sync(
+                mutex,
+                function(as) {
+                    as.sync(
+                        mutex,
+                        function(as) {
+                            as.error('Wrong');
+                        },
+                        function(as, err) {
+                            if (err === 'Wrong') {
+                                as.error('OK');
+                            }
+                        }
+                    )
+                    
+                    as.add( function(as) { done('Fail'); });;
+                },
+                function(as, err) {
+                    if (err === 'OK') {
+                        done();
+                    } else {
+                        done(as.state.last_exception);
+                    }
+                }
+            );
+            as.execute();
+            async_steps.AsyncTool.run();
+            assertNoEvents();
+        });
     });
 });
 
