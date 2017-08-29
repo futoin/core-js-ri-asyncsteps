@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.7.0 (2017-08-29) ===
 NEW: FTN12 v1.8 support
  - .waitExternal() API
  - .sync() API
