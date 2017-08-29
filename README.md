@@ -757,6 +757,9 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 <dt><a href="#Mutex">Mutex</a></dt>
 <dd><p>Mutual exclusion mechanism for AsyncSteps</p>
 </dd>
+<dt><a href="#Throttle">Throttle</a></dt>
+<dd><p>Throttling for AsyncSteps</p>
+</dd>
 <dt><a href="#AsyncSteps">AsyncSteps</a></dt>
 <dd></dd>
 </dl>
@@ -791,6 +794,8 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 
 <dl>
 <dt><a href="#futoin_errors">futoin_errors</a></dt>
+<dd></dd>
+<dt><a href="#ISync">ISync</a></dt>
 <dd></dd>
 <dt><a href="#ISync">ISync</a></dt>
 <dd></dd>
@@ -837,6 +842,23 @@ C-tor
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [max] | <code>integer</code> | <code>1</code> | maximum number of simultaneous critical section entries |
+
+<a name="Throttle"></a>
+
+## Throttle
+Throttling for AsyncSteps
+
+**Kind**: global class  
+<a name="new_Throttle_new"></a>
+
+### new Throttle([max], [period_ms])
+C-tor
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [max] | <code>integer</code> | <code>1</code> | maximum number of simultaneous critical section entries |
+| [period_ms] | <code>intger</code> | <code>1000</code> | time period in milliseconds |
 
 <a name="AsyncSteps"></a>
 
@@ -1604,6 +1626,11 @@ Must be used only internally and should never travel in request message
 <a name="futoin_errors"></a>
 
 ## futoin_errors
+**Kind**: global constant  
+**Author**: Andrey Galkin <andrey@futoin.eu>  
+<a name="ISync"></a>
+
+## ISync
 **Kind**: global constant  
 **Author**: Andrey Galkin <andrey@futoin.eu>  
 <a name="ISync"></a>

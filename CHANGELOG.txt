@@ -4,6 +4,7 @@ NEW: FTN12 v1.8 support
  - .waitExternal() API
  - .sync() API
  - compliant Mutex class
+ - compliant Throttle class
 
 === 1.6.3 (2017-08-24) ===
 FIXED: doc for as.forEach() callback
