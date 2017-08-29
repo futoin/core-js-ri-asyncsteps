@@ -14,6 +14,7 @@ Reference implementation of:
     Version: 1.8
     
 Spec: [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)
+
 Author: [Andrey Galkin](mailto:andrey@futoin.org)
 
 [Web Site](http://futoin.org/)
@@ -45,6 +46,8 @@ and state variables using AsyncSteps#copyFrom() to a newly created AsyncSteps ob
 
 There is also a family of async loop functions for unconditional iteration, iteration over data or
 iteration with count limit.
+
+Since FTN12 v1.8, Mutex and Throttle synchronization primitive have been provided.
 
 # Installation for Node.js
 
