@@ -1,6 +1,7 @@
 'use strict';
 
 /**
+ * @file
  * @author Andrey Galkin <andrey@futoin.eu>
  */
 

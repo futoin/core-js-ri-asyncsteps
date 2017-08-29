@@ -370,6 +370,27 @@ for ( let i = 0; i < 3; ++i )
 // Max concurrency 2: 1
 ```
 
+## Throttle example
+
+```javascript
+const thrtl = new Throttle(10, 100);
+const as = $as();
+const p = as.parallel();
+let passed = 0;
+
+for ( let i = 0; i < 100; ++i ) {
+    p.add((as) => {
+        as.sync(thrtl, (as) => { passed += 1 });
+    });
+}
+
+as.execute();
+
+setTimeout(() => {
+    expect(passed).to.equal(50);
+}, 450);
+```
+
 # Concept
 
 This interface was born as a secondary option for
@@ -754,6 +775,9 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 ## Classes
 
 <dl>
+<dt><a href="#ISync">ISync</a></dt>
+<dd><p>Base interface for synchronization primitives</p>
+</dd>
 <dt><a href="#Mutex">Mutex</a></dt>
 <dd><p>Mutual exclusion mechanism for AsyncSteps</p>
 </dd>
@@ -790,17 +814,6 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 </dd>
 </dl>
 
-## Constants
-
-<dl>
-<dt><a href="#futoin_errors">futoin_errors</a></dt>
-<dd></dd>
-<dt><a href="#ISync">ISync</a></dt>
-<dd></dd>
-<dt><a href="#ISync">ISync</a></dt>
-<dd></dd>
-</dl>
-
 ## Functions
 
 <dl>
@@ -827,6 +840,12 @@ It installs AsyncToolTest in place of AsyncTool</p>
 <a name="module_futoin-asyncsteps"></a>
 
 ## futoin-asyncsteps
+<a name="ISync"></a>
+
+## ISync
+Base interface for synchronization primitives
+
+**Kind**: global class  
 <a name="Mutex"></a>
 
 ## Mutex
@@ -1623,21 +1642,6 @@ Must be used only internally and should never travel in request message
 
 **Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
 **Default**: <code>Timeout</code>  
-<a name="futoin_errors"></a>
-
-## futoin_errors
-**Kind**: global constant  
-**Author**: Andrey Galkin <andrey@futoin.eu>  
-<a name="ISync"></a>
-
-## ISync
-**Kind**: global constant  
-**Author**: Andrey Galkin <andrey@futoin.eu>  
-<a name="ISync"></a>
-
-## ISync
-**Kind**: global constant  
-**Author**: Andrey Galkin <andrey@futoin.eu>  
 <a name="installAsyncToolTest"></a>
 
 ## installAsyncToolTest([install])
