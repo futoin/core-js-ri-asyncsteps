@@ -14,6 +14,7 @@ Reference implementation of:
     Version: 1.8
     
 Spec: [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)
+Author: [Andrey Galkin](mailto:andrey@futoin.org)
 
 [Web Site](http://futoin.org/)
 
