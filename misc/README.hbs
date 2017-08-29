@@ -336,6 +336,40 @@ Step1
 Step2
 ```
 
+## Mutex example
+
+```javascript
+'use strict';
+
+const $as = require('futoin-asyncsteps');
+// Note: Mutex requires ES6 and is not provided as member of $as
+const Mutex = require( 'futoin-asyncsteps/Mutex' );
+
+const mtx = new Mutex();
+let curr_concurrency = 0;
+
+for ( let i = 0; i < 3; ++i )
+{
+    $as()
+        .sync(mtx, (as) => {
+            // regular AsyncSteps in critical section
+            ++curr_concurrency;
+            
+            as.add((as) => {
+                as.success(curr_concurrency--);
+            });
+        })
+        .add((as, val) => {
+            console.log(`Max concurrency ${i}: ${val}`);
+        })
+        .execute();
+}
+
+// Max concurrency 0: 1
+// Max concurrency 1: 1
+// Max concurrency 2: 1
+```
+
 # Concept
 
 This interface was born as a secondary option for

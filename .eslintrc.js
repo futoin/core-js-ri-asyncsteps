@@ -82,7 +82,8 @@ module.exports = {
             env: {
                 es6: true
             },
-            files: [ "webpack*.js", 'Gruntfile.js' ]
+            files: [ "webpack*.js", 'Gruntfile.js',
+                     'ISync.js', 'Mutex.js', 'Throttle.js' ]
         },
     ]
 };

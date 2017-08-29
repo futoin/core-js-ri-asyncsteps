@@ -336,6 +336,40 @@ Step1
 Step2
 ```
 
+## Mutex example
+
+```javascript
+'use strict';
+
+const $as = require('futoin-asyncsteps');
+// Note: Mutex requires ES6 and is not provided as member of $as
+const Mutex = require( 'futoin-asyncsteps/Mutex' );
+
+const mtx = new Mutex();
+let curr_concurrency = 0;
+
+for ( let i = 0; i < 3; ++i )
+{
+    $as()
+        .sync(mtx, (as) => {
+            // regular AsyncSteps in critical section
+            ++curr_concurrency;
+            
+            as.add((as) => {
+                as.success(curr_concurrency--);
+            });
+        })
+        .add((as, val) => {
+            console.log(`Max concurrency ${i}: ${val}`);
+        })
+        .execute();
+}
+
+// Max concurrency 0: 1
+// Max concurrency 1: 1
+// Max concurrency 2: 1
+```
+
 # Concept
 
 This interface was born as a secondary option for
@@ -720,6 +754,9 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 ## Classes
 
 <dl>
+<dt><a href="#Mutex">Mutex</a></dt>
+<dd><p>Mutual exclusion mechanism for AsyncSteps</p>
+</dd>
 <dt><a href="#AsyncSteps">AsyncSteps</a></dt>
 <dd></dd>
 </dl>
@@ -750,6 +787,15 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 </dd>
 </dl>
 
+## Constants
+
+<dl>
+<dt><a href="#futoin_errors">futoin_errors</a></dt>
+<dd></dd>
+<dt><a href="#ISync">ISync</a></dt>
+<dd></dd>
+</dl>
+
 ## Functions
 
 <dl>
@@ -776,6 +822,22 @@ It installs AsyncToolTest in place of AsyncTool</p>
 <a name="module_futoin-asyncsteps"></a>
 
 ## futoin-asyncsteps
+<a name="Mutex"></a>
+
+## Mutex
+Mutual exclusion mechanism for AsyncSteps
+
+**Kind**: global class  
+<a name="new_Mutex_new"></a>
+
+### new Mutex([max])
+C-tor
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [max] | <code>integer</code> | <code>1</code> | maximum number of simultaneous critical section entries |
+
 <a name="AsyncSteps"></a>
 
 ## AsyncSteps
@@ -980,7 +1042,7 @@ Add sub-step with synchronization against supplied object.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| object | <code>ISync</code> | Mutex, Throttle or other type of synchronization implementation. |
+| object | [<code>ISync</code>](#ISync) | Mutex, Throttle or other type of synchronization implementation. |
 | func | <code>ExecFunc</code> | function defining non-blocking step execution |
 | [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
 
@@ -1361,7 +1423,7 @@ Add sub-step with synchronization against supplied object.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| object | <code>ISync</code> | Mutex, Throttle or other type of synchronization implementation. |
+| object | [<code>ISync</code>](#ISync) | Mutex, Throttle or other type of synchronization implementation. |
 | func | <code>ExecFunc</code> | function defining non-blocking step execution |
 | [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
 
@@ -1539,6 +1601,16 @@ Must be used only internally and should never travel in request message
 
 **Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
 **Default**: <code>Timeout</code>  
+<a name="futoin_errors"></a>
+
+## futoin_errors
+**Kind**: global constant  
+**Author**: Andrey Galkin <andrey@futoin.eu>  
+<a name="ISync"></a>
+
+## ISync
+**Kind**: global constant  
+**Author**: Andrey Galkin <andrey@futoin.eu>  
 <a name="installAsyncToolTest"></a>
 
 ## installAsyncToolTest([install])
