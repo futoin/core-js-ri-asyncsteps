@@ -788,6 +788,7 @@ It installs AsyncToolTest in place of AsyncTool</p>
     * ~~[.successStep()](#AsyncSteps+successStep)~~
     * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.setCancel(oncancel)](#AsyncSteps+setCancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.waitExternal()](#AsyncSteps+waitExternal) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.loop(func, [label])](#AsyncSteps+loop) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.repeat(count, func, [label])](#AsyncSteps+repeat) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -850,10 +851,9 @@ Otherwise, simply call *as.success();*
 Set timeout for external event completion with async *as.success()* or *as.error()* call.
 If step is not finished until timeout is reached then Timeout error is raised.
 
-*Note: Can be used only within **ExecFunc** body.*
-
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
 **Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+**Note**: Can be used only within **ExecFunc** body.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -864,15 +864,22 @@ If step is not finished until timeout is reached then Timeout error is raised.
 ### asyncSteps.setCancel(oncancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Set cancellation handler to properly handle timeouts and external cancellation.
 
-*Note: Can be used only within **ExecFunc** body.*
-
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
 **Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+**Note**: Can be used only within **ExecFunc** body.  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | oncancel | <code>CancelFunc</code> | cleanup/cancel logic of external processing |
 
+<a name="AsyncSteps+waitExternal"></a>
+
+### asyncSteps.waitExternal() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Mark currently executing step as waiting for external event.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+**Note**: Can be used only within **ExecFunc** body.  
 <a name="AsyncSteps+loop"></a>
 
 ### asyncSteps.loop(func, [label]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -1147,6 +1154,7 @@ Wrapper for clearTimeout()/clearImmediate()
     * ~~[.successStep()](#AsyncSteps+successStep)~~
     * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.setCancel(oncancel)](#AsyncSteps+setCancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.waitExternal()](#AsyncSteps+waitExternal) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.loop(func, [label])](#AsyncSteps+loop) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.repeat(count, func, [label])](#AsyncSteps+repeat) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -1209,10 +1217,9 @@ Otherwise, simply call *as.success();*
 Set timeout for external event completion with async *as.success()* or *as.error()* call.
 If step is not finished until timeout is reached then Timeout error is raised.
 
-*Note: Can be used only within **ExecFunc** body.*
-
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
 **Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+**Note**: Can be used only within **ExecFunc** body.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1223,15 +1230,22 @@ If step is not finished until timeout is reached then Timeout error is raised.
 ### asyncSteps.setCancel(oncancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Set cancellation handler to properly handle timeouts and external cancellation.
 
-*Note: Can be used only within **ExecFunc** body.*
-
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
 **Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+**Note**: Can be used only within **ExecFunc** body.  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | oncancel | <code>CancelFunc</code> | cleanup/cancel logic of external processing |
 
+<a name="AsyncSteps+waitExternal"></a>
+
+### asyncSteps.waitExternal() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Mark currently executing step as waiting for external event.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+**Note**: Can be used only within **ExecFunc** body.  
 <a name="AsyncSteps+loop"></a>
 
 ### asyncSteps.loop(func, [label]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)

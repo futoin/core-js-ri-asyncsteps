@@ -1553,6 +1553,36 @@ describe( 'AsyncSteps', function(){
         async_steps.AsyncTool.run();
         assertNoEvents();
     });
+    
+    it('should support .waitExternal()', function( done ){
+        var as = this.as;
+        
+        as.add(
+            function(as) {
+                as.waitExternal();
+                as.state.cb = function(){
+                    try {
+                        as.error('OK');
+                    } catch (e) {}
+                };
+            },
+            function(as, err) {
+                if (err === 'OK') {
+                    done();
+                } else {
+                    done(as.state.last_exception);
+                }
+            }
+        )
+        as.add( function(as) { done('Fail'); });
+        as.execute();
+        async_steps.AsyncTool.run();
+        assertNoEvents();
+        
+        as.state.cb();
+        async_steps.AsyncTool.run();
+        assertNoEvents();
+    });
 });
 
 if ( typeof $as !== 'undefined' )
