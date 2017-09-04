@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.7.1 (2017-09-04) ===
 FIXED: added workaround related to NPM: https://github.com/npm/npm/issues/16723
 
 === 1.7.0 (2017-08-29) ===
