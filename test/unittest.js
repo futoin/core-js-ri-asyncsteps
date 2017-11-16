@@ -1457,10 +1457,11 @@ describe( 'AsyncSteps', function(){
                 as.state().should.equal( as.state );
             });
             
-            it('should set error_info and last_exception', function(){
+            it('should set error_info, last_exception and async_stack', function(){
                 var as = this.as;
+                var step_func;
                 as.add(
-                    function( as )
+                    step_func = function( as )
                     {
                         as.error( 'FirstError', 'FirstInfo' );
                     },
@@ -1468,6 +1469,7 @@ describe( 'AsyncSteps', function(){
                     {
                         as.state.error_info.should.equal( 'FirstInfo' );
                         as.state.last_exception.message.should.equal( 'FirstError' );
+                        as.state.async_stack.pop().should.eql(step_func);
                         as.error( 'SecondError', 'SecondInfo' );
                     }
                 );

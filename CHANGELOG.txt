@@ -1,4 +1,7 @@
 
+=== (next) ===
+NEW: as.state.async_stack feature to aid debugging of async errors
+
 === 1.7.1 (2017-09-04) ===
 FIXED: added workaround related to NPM: https://github.com/npm/npm/issues/16723
 

@@ -11,7 +11,7 @@
 Reference implementation of:
  
     FTN12: FutoIn Async API
-    Version: 1.8
+    Version: 1.9
     
 Spec: [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)
 
@@ -681,6 +681,7 @@ Pre-defined state variables:
 
 * **error_info** - value of the second parameter passed to the last *as.error()* call
 * **last_exception** - the last exception caught, if feasible
+* **async_stack** - array of references step handler functions to avoid debugging of errors
 
 Error code is not always descriptive enough, especially, if it can be generated in multiple ways.
 As a convention special "error_info" state field should hold descriptive information of the last error.
