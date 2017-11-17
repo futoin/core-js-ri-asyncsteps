@@ -1,4 +1,7 @@
 
+=== (next) ===
+CHANGED: minor internal improvements
+
 === 1.8.0 (2017-11-16) ===
 NEW: as.state.async_stack feature to aid debugging of async errors
 
