@@ -86,6 +86,7 @@ var root_as = async_steps();
 root_as.add(
     function( as ){
         as.success( "MyValue" );
+        // as.success() is implicit, if not called
     }
 ).add(
     function( as, arg ){
@@ -101,6 +102,7 @@ root_as.add(
         if ( err === 'MyError' )
         {
             as.success( 'NotSoBad' );
+            // as.add() acts as implicit as.success()
         }
     }
 );

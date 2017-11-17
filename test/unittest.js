@@ -241,10 +241,51 @@ describe( 'AsyncSteps', function(){
                         as.success();
                     }
                 );
+                as.add(
+                    function( as ){
+                        as.state.order.push( '5' );
+                        as.add(
+                            function( as ){
+                                as.state.order.push( '5_1' );
+                                as.add(
+                                    function( as ){
+                                        as.state.order.push( '5_2' );
+                                        err.should.eql( "InternalError" );
+                                    },
+                                    function( as, err ){
+                                        as.state.order.push( '5_2e' );
+                                        as.add(
+                                            function( as ){
+                                                as.state.order.push( '5_3' );
+                                                err.should.eql( "InternalError" );
+                                            },
+                                            function( as, err ){
+                                                as.state.order.push( '5_3e' );
+                                            }
+                                        );
+                                    }
+                                );
+                            },
+                            function( as, err ){
+                                as.state.order.push( '5_1e' );
+                            }
+                        );
+                    },
+                    function( as, err ){
+                        as.state.order.push( '5e' );
+                        as.success();
+                    }
+                );
                 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.order.should.eql( [ '1', '1_1', '1_1e', '1_2', '1_2e', '1_3', '2', '3'/*, '3e'*/, '4', '4_1', '4_2'/*, '4e'*/ ] );
+                as.state.order.should.eql( [
+                    '1', '1_1', '1_1e', '1_2', '1_2e', '1_3',
+                    '2',
+                    '3'/*, '3e'*/,
+                    '4', '4_1', '4_2'/*, '4e'*/,
+                    '5', '5_1','5_2', '5_2e', '5_3', '5_3e', '5_1e', '5e',
+                ] );
             });
             
             it( 'should fail on add in execution', function(){
