@@ -85,5 +85,20 @@ module.exports = {
             files: [ "webpack*.js", 'Gruntfile.js',
                      'ISync.js', 'Mutex.js', 'Throttle.js' ]
         },
+        {
+            env : {
+                es6: true,
+                node: true,
+                commonjs: true,
+                mocha: true,
+                browser: true,
+            },
+            files: [ "test/**/*.js" ],
+            rules: {
+                "no-console" : ["off"],
+                "no-unused-vars": ["off"],
+                "require-jsdoc" : ["off"],
+            }
+        },
     ]
 };

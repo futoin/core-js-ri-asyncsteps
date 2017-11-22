@@ -8,8 +8,15 @@ module.exports = function( grunt )
         pkg: grunt.file.readJSON( 'package.json' ),
 
         eslint: {
-            options: { fix: true },
-            target: [ '*.js', 'lib/**/*.js' ],
+            options: {
+                fix: true,
+                ignore: false,
+            },
+            target: [
+                '*.js',
+                'lib/**/*.js',
+                'test/**/*.js',
+            ],
         },
         mocha_istanbul: { coverage: { src: [ 'test' ] } },
         istanbul_check_coverage: {},
