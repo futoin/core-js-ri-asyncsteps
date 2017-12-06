@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.10.0 (2017-12-06) ===
 BREAKING CHANGE: converted all code to E6
 NEW: webpack-based browser dist entry point
 NEW: FTN12 v1.10 support
