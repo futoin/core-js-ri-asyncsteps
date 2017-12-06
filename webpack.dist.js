@@ -7,7 +7,13 @@ module.exports = {
         'futoin-asyncsteps': './lib/browser.js',
     },
     output: {
-        filename: "[name].min.js",
+        library: {
+            root: "$as",
+            amd: "futoin-asyncsteps",
+            commonjs: "futoin-asyncsteps",
+        },
+        libraryTarget: "umd",
+        filename: "[name].js",
         path: __dirname + '/dist',
     },
     node : false,
