@@ -5,7 +5,15 @@
   "main": "lib/asyncsteps.js",
   "browser": "dist/futoin-asyncsteps.min.js",
   "files" : [
-    "dist/*.js"
+    "dist/",
+    "examples/",
+    "lib/",
+    "AsyncSteps.js",
+    "Errors.js",
+    "ISync.js",
+    "Limiter.js",
+    "Mutex.js",
+    "Throttle.js"
   ],
   "engines": {
     "node": ">=6"
