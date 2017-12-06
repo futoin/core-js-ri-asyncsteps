@@ -1,11 +1,13 @@
 'use strict';
 
+const UglifyJsPlugin = require( 'uglifyjs-webpack-plugin' );
+
 module.exports = {
     entry: {
-        unittest : './test/unittest.js',
+        'futoin-asyncsteps': './lib/browser.js',
     },
     output: {
-        filename: "[name].js",
+        filename: "[name].min.js",
         path: __dirname + '/dist',
     },
     node : false,
@@ -24,4 +26,9 @@ module.exports = {
             },
         ],
     },
+    plugins: [
+        new UglifyJsPlugin( {
+            sourceMap: true,
+        } ),
+    ],
 };

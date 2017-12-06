@@ -27,7 +27,8 @@ supporting exceptions. error handlers, timeouts, unlimited number of sub-steps,
 execution parallelism, loops and job state/context variables.
 
 The source itself is a Node.js module in CommonJS format, but it is friendly to `webpack`.
-Browser version also provides `$as` global variable.
+Browser version also provides `$as` global variable. Since v1.10, all code is ES6 and requires
+transpiler for browser's ES5 unless default pre-compiled entry point is used.
 
 It should be possible to use any other async framework from AsyncSteps by using
 setCancel() and/or setTimeout() methods which allow step completion without success() or
@@ -44,7 +45,9 @@ and state variables using AsyncSteps#copyFrom() to a newly created AsyncSteps ob
 There is also a family of async loop functions for unconditional iteration, iteration over data or
 iteration with count limit.
 
-Since FTN12 v1.8, Mutex and Throttle synchronization primitive have been provided.
+Since FTN12 v1.8, `Mutex` and `Throttle` synchronization primitive have been provided.
+
+Since FTN12 v1.10, `Limiter` synchronization primitive have been provided.
 
 # Installation for Node.js
 

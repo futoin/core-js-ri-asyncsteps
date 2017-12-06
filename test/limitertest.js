@@ -4,10 +4,8 @@ const $as = require( '../lib/asyncsteps.js' );
 const expect = require( 'chai' ).expect;
 const Limiter = require( '../Limiter' );
 
-describe( 'Limiter', function()
-{
-    it ( 'should have correct defaults', function()
-    {
+describe( 'Limiter', function() {
+    it ( 'should have correct defaults', function() {
         const lim = new Limiter();
 
         expect( lim._mutex._max ).to.equal( 1 );
@@ -18,8 +16,7 @@ describe( 'Limiter', function()
         expect( lim._throttle._max_queue ).to.equal( 0 );
     } );
 
-    it ( 'should have correct defaults', function()
-    {
+    it ( 'should have correct defaults', function() {
         const lim = new Limiter( {
             concurrent : 12,
             max_queue : 23,
@@ -36,8 +33,7 @@ describe( 'Limiter', function()
         expect( lim._throttle._max_queue ).to.equal( 45 );
     } );
 
-    it ( 'should handle limits', function( done )
-    {
+    it ( 'should handle limits', function( done ) {
         const lim = new Limiter( {
             concurrent : 20,
             max_queue : 77,
@@ -47,26 +43,20 @@ describe( 'Limiter', function()
         } );
 
         const as = $as();
-        const p = as.parallel( ( as, err ) =>
-        {
+        const p = as.parallel( ( as, err ) => {
             done( as.state.last_exception || err || 'Fail' );
         } );
         let passed = 0;
         let rejected = 0;
 
-        for ( let i = 0; i < 100; ++i )
-        {
-            p.add( ( as ) =>
-            {
+        for ( let i = 0; i < 100; ++i ) {
+            p.add( ( as ) => {
                 as.add(
-                    ( as ) => as.sync( lim, ( as ) =>
-                    {
+                    ( as ) => as.sync( lim, ( as ) => {
                         passed += 1;
                     } ),
-                    ( as, err ) =>
-                    {
-                        if ( err === 'DefenseRejected' )
-                        {
+                    ( as, err ) => {
+                        if ( err === 'DefenseRejected' ) {
                             rejected += 1;
                             as.success();
                         }
@@ -77,20 +67,17 @@ describe( 'Limiter', function()
 
         as.execute();
 
-        setTimeout( () =>
-        {
+        setTimeout( () => {
             expect( passed ).to.equal( 5 );
             expect( rejected ).to.equal( 83 );
         }, 50 );
 
-        setTimeout( () =>
-        {
+        setTimeout( () => {
             expect( passed ).to.equal( 10 );
             expect( rejected ).to.equal( 83 );
         }, 150 );
 
-        setTimeout( () =>
-        {
+        setTimeout( () => {
             expect( passed ).to.equal( 5 + 12 );
             expect( rejected ).to.equal( 83 );
             as.cancel();

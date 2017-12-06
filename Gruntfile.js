@@ -2,8 +2,7 @@
 
 var fs = require( 'fs' );
 
-module.exports = function( grunt )
-{
+module.exports = function( grunt ) {
     grunt.initConfig( {
         pkg: grunt.file.readJSON( 'package.json' ),
 
@@ -20,7 +19,10 @@ module.exports = function( grunt )
         },
         mocha_istanbul: { coverage: { src: [ 'test' ] } },
         istanbul_check_coverage: {},
-        webpack: { test: require( './webpack.test' ) },
+        webpack: {
+            dist: require( './webpack.dist' ),
+            test: require( './webpack.test' ),
+        },
         connect: {
             server: {
                 options: {
@@ -59,8 +61,8 @@ module.exports = function( grunt )
 
     grunt.registerTask( 'check', [ 'eslint' ] );
 
-    grunt.registerTask( 'build-browser', [ 'webpack' ] );
-    grunt.registerTask( 'test-browser', [ 'connect', 'mocha_phantomjs' ] );
+    grunt.registerTask( 'build-browser', [ 'webpack:dist' ] );
+    grunt.registerTask( 'test-browser', [ 'webpack:test', 'connect', 'mocha_phantomjs' ] );
 
     grunt.registerTask( 'node', [ 'mocha_istanbul' ] );
     grunt.registerTask( 'browser', [ 'build-browser', 'test-browser' ] );
@@ -75,5 +77,7 @@ module.exports = function( grunt )
     grunt.loadNpmTasks( 'grunt-text-replace' );
     grunt.registerTask( 'doc', [ 'jsdoc2md:README', 'replace:README' ] );
 
-    grunt.registerTask( 'default', [ 'check' ] );
+    grunt.registerTask( 'dist', [ 'build-browser' ] );
+
+    grunt.registerTask( 'default', [ 'check', 'dist' ] );
 };

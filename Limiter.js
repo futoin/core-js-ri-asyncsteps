@@ -28,8 +28,7 @@ const Throttle = require( './Throttle' );
 /**
  * Limiter - complex processing limit for AsyncSteps
  */
-class Limiter extends ISync
-{
+class Limiter extends ISync {
     /**
      * C-tor
      * @param {object} [options={}] - option map
@@ -39,8 +38,7 @@ class Limiter extends ISync
      * @param {integer} [options.period_ms=1000]  - period length
      * @param {integer} [options.burst=0]  - maximum queue for rate limiting
      */
-    constructor( options = {} )
-    {
+    constructor( options = {} ) {
         super();
 
         this._mutex = new Mutex(
@@ -54,10 +52,8 @@ class Limiter extends ISync
         );
     }
 
-    sync( as, step, onerror )
-    {
-        as.sync( this._mutex, ( as ) =>
-        {
+    sync( as, step, onerror ) {
+        as.sync( this._mutex, ( as ) => {
             as.sync( this._throttle, step, onerror );
         } );
     }

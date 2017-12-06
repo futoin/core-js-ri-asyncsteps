@@ -4,51 +4,39 @@ const $as = require( '../lib/asyncsteps.js' );
 const expect = require( 'chai' ).expect;
 const Throttle = require( '../Throttle' );
 
-describe( 'Throttle', function()
-{
-    it ( 'should handle re-entrancy & success params', function( done )
-    {
+describe( 'Throttle', function() {
+    it ( 'should handle re-entrancy & success params', function( done ) {
         const thrtl = new Throttle( 2, 10 );
 
-        for ( let i = 0; i < 2; ++i )
-        {
+        for ( let i = 0; i < 2; ++i ) {
             const as = $as();
 
             as.add( ( as ) => as.success( 'MyArgs' ) );
             as.sync(
                 thrtl,
-                ( as, arg ) =>
-                {
+                ( as, arg ) => {
                     expect( arg ).to.equal( 'MyArgs' );
 
                     as.sync(
                         thrtl,
                         ( as ) => as.error( 'Wrong' ),
-                        ( as, err ) =>
-                        {
-                            if ( err === 'Wrong' )
-                            {
+                        ( as, err ) => {
+                            if ( err === 'Wrong' ) {
                                 as.error( 'OK' );
                             }
                         }
                     );
                 },
-                ( as, err ) =>
-                {
+                ( as, err ) => {
                     as.success( err );
                 }
             );
-            as.add( ( as, err ) =>
-            {
-                if ( err === 'OK' )
-                {
-                    if ( i )
-                    {
+            as.add( ( as, err ) => {
+                if ( err === 'OK' ) {
+                    if ( i ) {
                         done();
                     }
-                }
-                else
-                {
+                } else {
                     done( 'Fail' );
                 }
             } );
@@ -56,41 +44,32 @@ describe( 'Throttle', function()
         }
     } );
 
-    it ( 'should correctly handle concurrency limit', function( done )
-    {
+    it ( 'should correctly handle concurrency limit', function( done ) {
         const limit = 3;
         const thrtl = new Throttle( limit, 5 );
         let curr = 0;
         let max = 0;
 
-        for ( let i = limit * 3; i >= 0; --i )
-        {
+        for ( let i = limit * 3; i >= 0; --i ) {
             const as = $as();
             as.sync(
                 thrtl,
-                ( as ) =>
-                {
+                ( as ) => {
                     curr += 1;
                     max = ( max < curr ) ? curr : max;
 
-                    as.add( ( as ) =>
-                    {
+                    as.add( ( as ) => {
                         curr -= 1;
                     } );
                 }
             );
 
-            if ( i === 0 )
-            {
-                as.add( ( as ) =>
-                {
-                    try
-                    {
+            if ( i === 0 ) {
+                as.add( ( as ) => {
+                    try {
                         expect( max ).to.equal( limit );
                         done();
-                    }
-                    catch ( e )
-                    {
+                    } catch ( e ) {
                         done( e );
                     }
                 } );
@@ -100,159 +79,121 @@ describe( 'Throttle', function()
         }
     } );
 
-    it ( 'should handle cancel', function( done )
-    {
+    it ( 'should handle cancel', function( done ) {
         const thrtl = new Throttle( 1, 20 );
         const as1 = $as();
 
         as1.add(
-            ( as ) =>
-            {
-                as.sync( thrtl, ( as ) =>
-                {
+            ( as ) => {
+                as.sync( thrtl, ( as ) => {
                     as.waitExternal();
                 } );
             },
-            ( as, err ) =>
-            {
+            ( as, err ) => {
                 done( as.state.last_exception || 'Fail' );
             }
         ).execute();
 
         $as().add(
-            ( as ) =>
-            {
+            ( as ) => {
                 as.setTimeout( 10 );
-                as.sync( thrtl, ( as ) =>
-                {
+                as.sync( thrtl, ( as ) => {
                     as.waitExternal();
                 } );
             },
-            ( as, err ) =>
-            {
-                if ( err === 'Timeout' )
-                {
+            ( as, err ) => {
+                if ( err === 'Timeout' ) {
                     as1.cancel();
-                }
-                else
-                {
+                } else {
                     done( as.state.last_exception || 'Fail' );
                 }
             }
         ).execute();
 
         $as().add(
-            ( as ) =>
-            {
-                as.sync( thrtl, ( as ) =>
-                {
+            ( as ) => {
+                as.sync( thrtl, ( as ) => {
                     done();
                 } );
             },
-            ( as, err ) =>
-            {
+            ( as, err ) => {
                 done( as.state.last_exception || 'Fail' );
             }
         ).execute();
     } );
 
-    it ( 'should handle errors', function( done )
-    {
+    it ( 'should handle errors', function( done ) {
         const thrtl = new Throttle( 1, 10 );
         const as1 = $as();
         let as1p;
 
         as1.add(
-            ( as ) =>
-            {
-                as.sync( thrtl, ( as ) =>
-                {
+            ( as ) => {
+                as.sync( thrtl, ( as ) => {
                     as.waitExternal();
                     as1p = as;
                 } );
             },
-            ( as, err ) =>
-            {
-                if ( err === 'OK' )
-                {
+            ( as, err ) => {
+                if ( err === 'OK' ) {
                     as.success();
-                }
-                else
-                {
+                } else {
                     done( as.state.last_exception || 'Fail' );
                 }
             }
         ).execute();
 
         $as().add(
-            ( as ) =>
-            {
-                as.loop( ( as ) =>
-                {
-                    if ( as1p )
-                    {
-                        try
-                        {
+            ( as ) => {
+                as.loop( ( as ) => {
+                    if ( as1p ) {
+                        try {
                             as1p.error( 'OK' );
-                        }
-                        catch ( e )
-                        {
+                        } catch ( e ) {
                             // ignore
                         }
 
                         as.break();
                     }
                 } );
-                as.sync( thrtl, ( as ) =>
-                {
+                as.sync( thrtl, ( as ) => {
                     done();
                 } );
             },
-            ( as, err ) =>
-            {
+            ( as, err ) => {
                 done( as.state.last_exception || 'Fail' );
             }
         ).execute();
     } );
 
-    it ( 'should handle parallel steps', function( done )
-    {
+    it ( 'should handle parallel steps', function( done ) {
         const thrtl = new Throttle( 1, 10 );
         let curr = 0;
         let max = 0;
         const as = $as();
         const p = as.parallel();
 
-        for ( let i = 3; i >= 0; --i )
-        {
-            p.add( ( as ) =>
-            {
+        for ( let i = 3; i >= 0; --i ) {
+            p.add( ( as ) => {
                 as.sync(
                     thrtl,
-                    ( as ) =>
-                    {
+                    ( as ) => {
                         curr += 1;
                         max = ( max < curr ) ? curr : max;
 
-                        as.add( ( as ) =>
-                        {
+                        as.add( ( as ) => {
                             curr -= 1;
                         } );
                     }
                 );
             } );
 
-            if ( i === 0 )
-            {
-                as.add( ( as ) =>
-                {
-                    try
-                    {
+            if ( i === 0 ) {
+                as.add( ( as ) => {
+                    try {
                         expect( max ).to.equal( 1 );
                         done();
-                    }
-                    catch ( e )
-                    {
+                    } catch ( e ) {
                         done( e );
                     }
                 } );
@@ -262,22 +203,17 @@ describe( 'Throttle', function()
         as.execute();
     } );
 
-    it ( 'should have correct average throughput', function( done )
-    {
+    it ( 'should have correct average throughput', function( done ) {
         const thrtl = new Throttle( 10, 100 );
         const as = $as();
-        const p = as.parallel( ( as, err ) =>
-        {
+        const p = as.parallel( ( as, err ) => {
             done( as.state.last_exception || err || 'Fail' );
         } );
         let passed = 0;
 
-        for ( let i = 0; i < 100; ++i )
-        {
-            p.add( ( as ) =>
-            {
-                as.sync( thrtl, ( as ) =>
-                {
+        for ( let i = 0; i < 100; ++i ) {
+            p.add( ( as ) => {
+                as.sync( thrtl, ( as ) => {
                     passed += 1;
                 } );
             } );
@@ -285,8 +221,7 @@ describe( 'Throttle', function()
 
         as.execute();
 
-        setTimeout( () =>
-        {
+        setTimeout( () => {
             expect( passed ).to.equal( 50 );
             as.cancel();
             done();
@@ -294,30 +229,23 @@ describe( 'Throttle', function()
     } );
 
 
-    it ( 'should handle queue limit', function( done )
-    {
+    it ( 'should handle queue limit', function( done ) {
         const thrtl = new Throttle( 10, 100, 33 );
         const as = $as();
-        const p = as.parallel( ( as, err ) =>
-        {
+        const p = as.parallel( ( as, err ) => {
             done( as.state.last_exception || err || 'Fail' );
         } );
         let passed = 0;
         let rejected = 0;
 
-        for ( let i = 0; i < 100; ++i )
-        {
-            p.add( ( as ) =>
-            {
+        for ( let i = 0; i < 100; ++i ) {
+            p.add( ( as ) => {
                 as.add(
-                    ( as ) => as.sync( thrtl, ( as ) =>
-                    {
+                    ( as ) => as.sync( thrtl, ( as ) => {
                         passed += 1;
                     } ),
-                    ( as, err ) =>
-                    {
-                        if ( err === 'DefenseRejected' )
-                        {
+                    ( as, err ) => {
+                        if ( err === 'DefenseRejected' ) {
                             rejected += 1;
                             as.success();
                         }
@@ -328,8 +256,7 @@ describe( 'Throttle', function()
 
         as.execute();
 
-        setTimeout( () =>
-        {
+        setTimeout( () => {
             expect( passed ).to.equal( 43 );
             expect( rejected ).to.equal( 57 );
             as.cancel();

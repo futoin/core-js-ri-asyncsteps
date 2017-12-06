@@ -1,6 +1,6 @@
 module.exports = {
     "env": {
-        "es6": false,
+        "es6": true,
         "node": true,
         commonjs: true,
     },
@@ -25,11 +25,11 @@ module.exports = {
         "no-template-curly-in-string": ["error"],
         "curly": ["error", "multi-line"],
         "no-multi-spaces": ["error"],
-        "array-bracket-newline": ["error", { "multiline": true, "minItems": 3 }],
+        //"array-bracket-newline": ["error", { "multiline": true, "minItems": 3 }],
         "array-bracket-spacing": ["error", "always"],
-        "array-element-newline": ["error", { "multiline": true, "minItems": 3 }],
+        //"array-element-newline": ["error", { "multiline": true, "minItems": 3 }],
         "block-spacing": ["error"],
-        "brace-style": ["error", "allman"],
+        "brace-style": ["error", "1tbs"],
         "no-trailing-spaces": "error",
         "no-unused-vars": [
             "error",
@@ -42,9 +42,9 @@ module.exports = {
         "no-useless-concat": "error",
         "no-useless-return": "error",
         "no-useless-escape": "error",
-        "object-curly-newline": ["error", { "multiline": true }],
+        // "object-curly-newline": ["error", { "multiline": true }],
         "object-curly-spacing": ["error", "always"],
-        "object-property-newline": "error",
+        //"object-property-newline": "error",
         "one-var": ["error", "never"],
         "padded-blocks": ["error", "never"],
         "padding-line-between-statements": [
@@ -68,7 +68,6 @@ module.exports = {
     overrides: [
         {
             env: {
-                es6: false,
                 browser: true,
             },
             files: [ "lib/browser*.js" ],
@@ -79,17 +78,7 @@ module.exports = {
             }
         },
         {
-            env: {
-                es6: true
-            },
-            files: [ "webpack*.js", 'Gruntfile.js',
-                     'ISync.js', 'Limiter.js', 'Mutex.js', 'Throttle.js' ]
-        },
-        {
             env : {
-                es6: true,
-                node: true,
-                commonjs: true,
                 mocha: true,
                 browser: true,
             },

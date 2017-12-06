@@ -21,17 +21,15 @@
  * limitations under the License.
  */
 
-const futoin_errors = require( './lib/futoin_errors' );
+const Errors = require( './Errors' );
 
 /**
  * Base interface for synchronization primitives
  * @class
  */
-class ISync
-{
-    sync( as, _func, _onerror )
-    {
-        as.error( futoin_errors.NotImplemented, '#sync() API' );
+class ISync {
+    sync( as, _func, _onerror ) {
+        as.error( Errors.NotImplemented, '#sync() API' );
     }
 }
 

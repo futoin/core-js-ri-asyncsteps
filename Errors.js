@@ -22,11 +22,10 @@
  */
 
 /**
- * List of standard FutoIn Core errors. It may get extended in runtime.
+ * List of standard FutoIn Core errors. It may static get extended in runtime.
  * @var FutoInErrors
  */
-exports = module.exports =
-{
+class Errors {
     /**
      * Connection error before request is sent.
      * Must be generated on Invoker side
@@ -34,7 +33,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    ConnectError : "ConnectError",
+    static get ConnectError() {
+        return "ConnectError";
+    }
 
     /**
      * Communication error at any stage after request is sent
@@ -44,7 +45,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    CommError : "CommError",
+    static get CommError() {
+        return "CommError";
+    }
 
     /**
      * Unknown interface requested.
@@ -53,7 +56,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    UnknownInterface : "UnknownInterface",
+    static get UnknownInterface() {
+        return "UnknownInterface";
+    }
 
     /**
      * Not supported interface version.
@@ -62,7 +67,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    NotSupportedVersion : "NotSupportedVersion",
+    static get NotSupportedVersion() {
+        return "NotSupportedVersion";
+    }
 
     /**
      * In case interface function is not implemented on Executor side
@@ -71,7 +78,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    NotImplemented : "NotImplemented",
+    static get NotImplemented() {
+        return "NotImplemented";
+    }
 
     /**
      * Security policy on Executor side does not allow to
@@ -81,7 +90,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    Unauthorized : "Unauthorized",
+    static get Unauthorized() {
+        return "Unauthorized";
+    }
 
     /**
      * Unexpected internal error on Executor side, including internal CommError.
@@ -90,7 +101,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    InternalError : "InternalError",
+    static get InternalError() {
+        return "InternalError";
+    }
 
     /**
      * Unexpected internal error on Invoker side, not related to CommError.
@@ -99,7 +112,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    InvokerError : "InvokerError",
+    static get InvokerError() {
+        return "InvokerError";
+    }
 
     /**
      * Invalid data is passed as FutoIn request.
@@ -108,7 +123,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    InvalidRequest : "InvalidRequest",
+    static get InvalidRequest() {
+        return "InvalidRequest";
+    }
 
     /**
      * Defense system has triggered rejection
@@ -117,7 +134,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    DefenseRejected : "DefenseRejected",
+    static get DefenseRejected() {
+        return "DefenseRejected";
+    }
 
     /**
      * Executor requests re-authorization
@@ -126,7 +145,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    PleaseReauth : "PleaseReauth",
+    static get PleaseReauth() {
+        return "PleaseReauth";
+    }
 
     /**
      * 'sec' request section has invalid data or not SecureChannel
@@ -135,7 +156,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    SecurityError : "SecurityError",
+    static get SecurityError() {
+        return "SecurityError";
+    }
 
     /**
      * Timeout occurred in any stage
@@ -144,7 +167,9 @@ exports = module.exports =
      * @default
      * @memberof FutoInErrors
      */
-    Timeout : "Timeout",
+    static get Timeout() {
+        return "Timeout";
+    }
 
     /**
      * Loop Break called
@@ -154,7 +179,9 @@ exports = module.exports =
      * @private
      * @memberof FutoInErrors
      */
-    LoopBreak : "LoopBreak",
+    static get LoopBreak() {
+        return "LoopBreak";
+    }
 
     /**
      * Loop Continue called
@@ -164,5 +191,9 @@ exports = module.exports =
      * @private
      * @memberof FutoInErrors
      */
-    LoopCont : "LoopCont",
-};
+    static get LoopCont() {
+        return "LoopCont";
+    }
+}
+
+module.exports = Errors;

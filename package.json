@@ -3,7 +3,13 @@
   "version": "1.9.1",
   "description": "FutoIn AsyncSteps - Reference Implementation. Adds classical linear program flow structure to async programming supporting exceptions. error handlers, timeouts, unlimited number of sub-steps, execution parallelism, loops and job state/context variables.",
   "main": "lib/asyncsteps.js",
-  "browser": "lib/browser.js",
+  "browser": "dist/futoin-asyncsteps.min.js",
+  "files" : [
+    "dist/*.js"
+  ],
+  "engines": {
+    "node": ">=6"
+  },
   "scripts": {
     "test": "grunt test"
   },
@@ -34,6 +40,10 @@
     "email": "support@futoin.org"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "eslint": "^4.12.1",
     "grunt": "^1.0.1",

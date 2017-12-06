@@ -1,5 +1,7 @@
 
 === (next) ===
+BREAKING CHANGE: converted all code to E6
+NEW: webpack-based browser dist entry point
 NEW: FTN12 v1.10 support
 NEW: Thottle/Queue length limits
 NEW: Limiter primitive

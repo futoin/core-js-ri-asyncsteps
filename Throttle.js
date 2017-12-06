@@ -22,21 +22,19 @@
  */
 
 const ISync = require( './ISync' );
-const Errors = require( './lib/futoin_errors' );
+const Errors = require( './Errors' );
 
 /**
  * Throttling for AsyncSteps
  */
-class Throttle extends ISync
-{
+class Throttle extends ISync {
     /**
      * C-tor
      * @param {integer} [max=1] - maximum number of simultaneous critical section entries
      * @param {intger} [period_ms=1000] - time period in milliseconds
      * @param {integer} [max_queue=null] - limit queue length, if set
      */
-    constructor( max, period_ms=1e3, max_queue = null )
-    {
+    constructor( max, period_ms=1e3, max_queue = null ) {
         super();
 
         this._max = max;
@@ -47,44 +45,35 @@ class Throttle extends ISync
         this._max_queue = max_queue;
     }
 
-    _lock( as )
-    {
+    _lock( as ) {
         this._ensureTimer();
 
-        if ( this._current >= this._max )
-        {
+        if ( this._current >= this._max ) {
             const queue = this._queue;
             const max_queue = this._max_queue;
 
-            if ( ( max_queue !== null ) && ( queue.length >= max_queue ) )
-            {
+            if ( ( max_queue !== null ) && ( queue.length >= max_queue ) ) {
                 as.error( Errors.DefenseRejected, 'Throttle queue limit' );
             }
 
             queue.push( as );
-        }
-        else
-        {
+        } else {
             this._current += 1;
             as.success();
         }
     }
 
-    _ensureTimer()
-    {
-        if ( !this._timer )
-        {
+    _ensureTimer() {
+        if ( !this._timer ) {
             this._timer = setInterval( () => this._resetPeriod(), this._period_ms );
         }
     }
 
-    _resetPeriod()
-    {
+    _resetPeriod() {
         this._current = 0;
         const queue = this._queue;
 
-        if ( !queue.length )
-        {
+        if ( !queue.length ) {
             clearInterval( this._timer );
             return;
         }
@@ -92,12 +81,10 @@ class Throttle extends ISync
         const max = this._max;
         let current = 0;
 
-        while ( queue.length && ( current < max ) )
-        {
+        while ( queue.length && ( current < max ) ) {
             let other_as = queue.shift();
 
-            if ( other_as.state )
-            {
+            if ( other_as.state ) {
                 ++current;
                 other_as.success();
             }
@@ -106,30 +93,24 @@ class Throttle extends ISync
         this._current = current;
     }
 
-    _cancel( as )
-    {
+    _cancel( as ) {
         const idx = this._queue.indexOf( as );
 
-        if ( idx >= 0 )
-        {
+        if ( idx >= 0 ) {
             this._queue.splice( idx, 1 );
         }
     }
 
-    sync( as, step, onerror )
-    {
+    sync( as, step, onerror ) {
         let incoming_args;
 
-        as.add( ( as, ...success_args ) =>
-        {
+        as.add( ( as, ...success_args ) => {
             incoming_args = success_args;
             as.setCancel( ( as ) => this._cancel( as ) );
             this._lock( as );
         } );
-        as.add( ( as ) =>
-        {
-            if ( incoming_args.length )
-            {
+        as.add( ( as ) => {
+            if ( incoming_args.length ) {
                 as.add( ( as ) => as.success( ...incoming_args ) );
             }
 
