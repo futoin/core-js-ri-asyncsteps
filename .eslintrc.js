@@ -83,7 +83,7 @@ module.exports = {
                 es6: true
             },
             files: [ "webpack*.js", 'Gruntfile.js',
-                     'ISync.js', 'Mutex.js', 'Throttle.js' ]
+                     'ISync.js', 'Limiter.js', 'Mutex.js', 'Throttle.js' ]
         },
         {
             env : {

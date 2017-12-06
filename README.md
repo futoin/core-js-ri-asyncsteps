@@ -782,6 +782,9 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 <dt><a href="#ISync">ISync</a></dt>
 <dd><p>Base interface for synchronization primitives</p>
 </dd>
+<dt><a href="#Limiter">Limiter</a></dt>
+<dd><p>Limiter - complex processing limit for AsyncSteps</p>
+</dd>
 <dt><a href="#Mutex">Mutex</a></dt>
 <dd><p>Mutual exclusion mechanism for AsyncSteps</p>
 </dd>
@@ -850,6 +853,27 @@ It installs AsyncToolTest in place of AsyncTool</p>
 Base interface for synchronization primitives
 
 **Kind**: global class  
+<a name="Limiter"></a>
+
+## Limiter
+Limiter - complex processing limit for AsyncSteps
+
+**Kind**: global class  
+<a name="new_Limiter_new"></a>
+
+### new Limiter([options])
+C-tor
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [options] | <code>object</code> | <code>{}</code> | option map |
+| [options.concurrent] | <code>integer</code> | <code>1</code> | maximum concurrent flows |
+| [options.max_queue] | <code>integer</code> | <code>0</code> | maximum queued |
+| [options.rate] | <code>integer</code> | <code>1</code> | maximum entries in period |
+| [options.period_ms] | <code>integer</code> | <code>1000</code> | period length |
+| [options.burst] | <code>integer</code> | <code>0</code> | maximum queue for rate limiting |
+
 <a name="Mutex"></a>
 
 ## Mutex

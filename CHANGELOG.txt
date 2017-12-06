@@ -2,6 +2,7 @@
 === (next) ===
 NEW: FTN12 v1.10 support
 NEW: Thottle/Queue length limits
+NEW: Limiter primitive
 
 === 1.9.1 (2017-11-25) ===
 FIXED: license disclaimers
