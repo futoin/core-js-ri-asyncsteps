@@ -11,7 +11,7 @@
 Reference implementation of:
  
     FTN12: FutoIn Async API
-    Version: 1.9
+    Version: 1.10
     
 Spec: [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)
 
@@ -26,11 +26,8 @@ Adds classical linear program flow structure to async programming
 supporting exceptions. error handlers, timeouts, unlimited number of sub-steps,
 execution parallelism, loops and job state/context variables.
 
-The source itself is a Node.js module in CommonJS format.
-
-Starting from v1.3 a [dist/futoin-asyncsteps.js](dist/futoin-asyncsteps.js) version is provided
-repacked with [pure-sjc](https://github.com/RReverser/pure-cjs). It has been tested with
-[PhantomJS](http://phantomjs.org/). It should support plain inclusion and AMD.
+The source itself is a Node.js module in CommonJS format, but it is friendly to `webpack`.
+Browser version also provides `$as` global variable.
 
 It should be possible to use any other async framework from AsyncSteps by using
 setCancel() and/or setTimeout() methods which allow step completion without success() or

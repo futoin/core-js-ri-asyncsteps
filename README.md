@@ -11,7 +11,7 @@
 Reference implementation of:
  
     FTN12: FutoIn Async API
-    Version: 1.9
+    Version: 1.10
     
 Spec: [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)
 
@@ -26,11 +26,8 @@ Adds classical linear program flow structure to async programming
 supporting exceptions. error handlers, timeouts, unlimited number of sub-steps,
 execution parallelism, loops and job state/context variables.
 
-The source itself is a Node.js module in CommonJS format.
-
-Starting from v1.3 a [dist/futoin-asyncsteps.js](dist/futoin-asyncsteps.js) version is provided
-repacked with [pure-sjc](https://github.com/RReverser/pure-cjs). It has been tested with
-[PhantomJS](http://phantomjs.org/). It should support plain inclusion and AMD.
+The source itself is a Node.js module in CommonJS format, but it is friendly to `webpack`.
+Browser version also provides `$as` global variable.
 
 It should be possible to use any other async framework from AsyncSteps by using
 setCancel() and/or setTimeout() methods which allow step completion without success() or
@@ -861,13 +858,14 @@ Mutual exclusion mechanism for AsyncSteps
 **Kind**: global class  
 <a name="new_Mutex_new"></a>
 
-### new Mutex([max])
+### new Mutex([max], [max_queue])
 C-tor
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [max] | <code>integer</code> | <code>1</code> | maximum number of simultaneous critical section entries |
+| [max_queue] | <code>integer</code> | <code></code> | limit queue length, if set |
 
 <a name="Throttle"></a>
 
@@ -877,7 +875,7 @@ Throttling for AsyncSteps
 **Kind**: global class  
 <a name="new_Throttle_new"></a>
 
-### new Throttle([max], [period_ms])
+### new Throttle([max], [period_ms], [max_queue])
 C-tor
 
 
@@ -885,6 +883,7 @@ C-tor
 | --- | --- | --- | --- |
 | [max] | <code>integer</code> | <code>1</code> | maximum number of simultaneous critical section entries |
 | [period_ms] | <code>intger</code> | <code>1000</code> | time period in milliseconds |
+| [max_queue] | <code>integer</code> | <code></code> | limit queue length, if set |
 
 <a name="AsyncSteps"></a>
 
