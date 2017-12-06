@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.10.1 (2017-12-06) ===
 FIXED: dist files to be in UMD format
 
 === 1.10.0 (2017-12-06) ===
