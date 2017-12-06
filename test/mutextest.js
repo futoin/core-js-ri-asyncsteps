@@ -261,4 +261,69 @@ describe( 'Mutex', function()
 
         as.execute();
     } );
+
+    it ( 'should handle queue limit', function( done )
+    {
+        const mtx = new Mutex( 2, 5 );
+        let curr = 0;
+        let max = 0;
+        let total = 0;
+        let rejected = 0;
+        const as = $as();
+        const p = as.parallel();
+
+        for ( let i = 10; i > 0; --i )
+        {
+            p.add( ( as ) =>
+            {
+                as.add(
+                    ( as ) => as.sync(
+                        mtx,
+                        ( as ) =>
+                        {
+                            curr += 1;
+                            total += 1;
+                            max = ( max < curr ) ? curr : max;
+
+                            as.add( ( as ) =>
+                            {
+                                as.setCancel( () =>
+                                {} );
+                                setTimeout( () => as.success(), 100 );
+                            } );
+                            as.add( ( as ) =>
+                            {
+                                curr -= 1;
+                            } );
+                        }
+                    ),
+                    ( as, err ) =>
+                    {
+                        if ( err === 'DefenseRejected' )
+                        {
+                            rejected += 1;
+                            as.success();
+                        }
+                    }
+                );
+            } );
+        }
+
+        as.add( ( as ) =>
+        {
+            try
+            {
+                expect( max ).to.equal( 2 );
+                expect( total ).to.equal( 7 );
+                expect( rejected ).to.equal( 3 );
+                done();
+            }
+            catch ( e )
+            {
+                done( e );
+            }
+        } );
+
+        as.execute();
+    } );
 } );

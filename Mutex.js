@@ -22,6 +22,7 @@
  */
 
 const ISync = require( './ISync' );
+const Errors = require( './lib/futoin_errors' );
 
 /**
  * Mutual exclusion mechanism for AsyncSteps
@@ -31,8 +32,9 @@ class Mutex extends ISync
     /**
      * C-tor
      * @param {integer} [max=1] - maximum number of simultaneous critical section entries
+     * @param {integer} [max_queue=null] - limit queue length, if set
      */
-    constructor( max = 1 )
+    constructor( max = 1, max_queue = null )
     {
         super();
 
@@ -40,6 +42,7 @@ class Mutex extends ISync
         this._locked = 0;
         this._owners = new WeakMap();
         this._queue = [];
+        this._max_queue = max_queue;
     }
 
     _lock( as )
@@ -55,7 +58,15 @@ class Mutex extends ISync
         }
         else if ( this._locked >= this._max )
         {
-            this._queue.push( as );
+            const queue = this._queue;
+            const max_queue = this._max_queue;
+
+            if ( ( max_queue !== null ) && ( queue.length >= max_queue ) )
+            {
+                as.error( Errors.DefenseRejected, 'Mutex queue limit' );
+            }
+
+            queue.push( as );
         }
         else
         {
@@ -104,12 +115,10 @@ class Mutex extends ISync
         {
             const idx = this._queue.indexOf( as );
 
-            if ( idx < 0 )
+            if ( idx >= 0 )
             {
-                as.error( 'InternalError', 'Must be in Mutex queue' );
+                this._queue.splice( idx, 1 );
             }
-
-            this._queue.splice( idx, 1 );
         }
     }
 

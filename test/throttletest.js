@@ -292,4 +292,48 @@ describe( 'Throttle', function()
             done();
         }, 450 );
     } );
+
+
+    it ( 'should handle queue limit', function( done )
+    {
+        const thrtl = new Throttle( 10, 100, 33 );
+        const as = $as();
+        const p = as.parallel( ( as, err ) =>
+        {
+            done( as.state.last_exception || err || 'Fail' );
+        } );
+        let passed = 0;
+        let rejected = 0;
+
+        for ( let i = 0; i < 100; ++i )
+        {
+            p.add( ( as ) =>
+            {
+                as.add(
+                    ( as ) => as.sync( thrtl, ( as ) =>
+                    {
+                        passed += 1;
+                    } ),
+                    ( as, err ) =>
+                    {
+                        if ( err === 'DefenseRejected' )
+                        {
+                            rejected += 1;
+                            as.success();
+                        }
+                    }
+                );
+            } );
+        }
+
+        as.execute();
+
+        setTimeout( () =>
+        {
+            expect( passed ).to.equal( 43 );
+            expect( rejected ).to.equal( 57 );
+            as.cancel();
+            done();
+        }, 450 );
+    } );
 } );

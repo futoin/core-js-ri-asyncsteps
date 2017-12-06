@@ -22,6 +22,7 @@
  */
 
 const ISync = require( './ISync' );
+const Errors = require( './lib/futoin_errors' );
 
 /**
  * Throttling for AsyncSteps
@@ -32,8 +33,9 @@ class Throttle extends ISync
      * C-tor
      * @param {integer} [max=1] - maximum number of simultaneous critical section entries
      * @param {intger} [period_ms=1000] - time period in milliseconds
+     * @param {integer} [max_queue=null] - limit queue length, if set
      */
-    constructor( max, period_ms=1e3 )
+    constructor( max, period_ms=1e3, max_queue = null )
     {
         super();
 
@@ -42,6 +44,7 @@ class Throttle extends ISync
         this._queue = [];
         this._timer = null;
         this._period_ms = period_ms;
+        this._max_queue = max_queue;
     }
 
     _lock( as )
@@ -50,7 +53,15 @@ class Throttle extends ISync
 
         if ( this._current >= this._max )
         {
-            this._queue.push( as );
+            const queue = this._queue;
+            const max_queue = this._max_queue;
+
+            if ( ( max_queue !== null ) && ( queue.length >= max_queue ) )
+            {
+                as.error( Errors.DefenseRejected, 'Throttle queue limit' );
+            }
+
+            queue.push( as );
         }
         else
         {
@@ -99,12 +110,10 @@ class Throttle extends ISync
     {
         const idx = this._queue.indexOf( as );
 
-        if ( idx < 0 )
+        if ( idx >= 0 )
         {
-            as.error( 'InternalError', 'Must be in Throttle queue' );
+            this._queue.splice( idx, 1 );
         }
-
-        this._queue.splice( idx, 1 );
     }
 
     sync( as, step, onerror )
