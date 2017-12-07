@@ -84,4 +84,49 @@ describe( 'Limiter', function() {
             done();
         }, 350 );
     } );
+
+    it ( 'should handle re-entrancy & success params', function( done ) {
+        const lim = new Limiter( {
+            concurrent : 1,
+            max_queue : 77,
+            rate : 5,
+            period_ms : 100,
+            burst : 12,
+        } );
+
+        for ( let i = 0; i < 2; ++i ) {
+            const as = $as();
+
+            as.add( ( as ) => as.success( 'MyArgs' ) );
+            as.sync(
+                lim,
+                ( as, arg ) => {
+                    expect( arg ).to.equal( 'MyArgs' );
+
+                    as.sync(
+                        lim,
+                        ( as ) => as.error( 'Wrong' ),
+                        ( as, err ) => {
+                            if ( err === 'Wrong' ) {
+                                as.error( 'OK' );
+                            }
+                        }
+                    );
+                },
+                ( as, err ) => {
+                    as.success( err );
+                }
+            );
+            as.add( ( as, err ) => {
+                if ( err === 'OK' ) {
+                    if ( i ) {
+                        done();
+                    }
+                } else {
+                    done( 'Fail' );
+                }
+            } );
+            as.execute();
+        }
+    } );
 } );

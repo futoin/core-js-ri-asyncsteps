@@ -1,9 +1,13 @@
 
+=== (next) ===
+FIXED: `Limiter` to pass arguments
+FIXED: improved `Mutex` and `Thottle` argument passing with internal hack
+
 === 1.10.1 (2017-12-06) ===
 FIXED: dist files to be in UMD format
 
 === 1.10.0 (2017-12-06) ===
-BREAKING CHANGE: converted all code to E6
+BREAKING CHANGE: converted all code to ES6
 NEW: webpack-based browser dist entry point
 NEW: FTN12 v1.10 support
 NEW: Thottle/Queue length limits
