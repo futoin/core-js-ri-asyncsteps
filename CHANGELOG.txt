@@ -1,4 +1,7 @@
 
+=== (next) ===
+BREAKING CHANGE: browser entry points to non-processed ES6 file
+
 === 1.10.2 (2017-12-07) ===
 FIXED: `Limiter` to pass arguments
 FIXED: improved `Mutex` and `Thottle` argument passing with internal hack

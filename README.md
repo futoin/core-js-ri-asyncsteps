@@ -64,9 +64,10 @@ and/or package.json:
 
 # Browser installation
 
-The module can be used with `webpack` or any other CommonJS packer.
+The module can be used with `webpack` or any other CommonJS packer. However, please
+ensure to use ES6->ES5 transpilation for older browsers.
 
-Note: there are the following globals available:
+The following globals are available:
 
 * $as - global reference to futoin-asyncsteps module
 * futoin - global namespace-like object for name clashing cases
