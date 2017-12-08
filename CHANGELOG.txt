@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.10.3 (2017-12-08) ===
 BREAKING CHANGE: browser entry points to non-processed ES6 file
 
 === 1.10.2 (2017-12-07) ===
