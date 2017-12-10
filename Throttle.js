@@ -73,8 +73,9 @@ class Throttle extends ISync {
         this._current = 0;
         const queue = this._queue;
 
-        if ( !queue.length ) {
+        if ( !queue.length && !this._current ) {
             clearInterval( this._timer );
+            this._timer = null;
             return;
         }
 

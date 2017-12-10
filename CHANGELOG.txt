@@ -1,4 +1,7 @@
 
+=== (next) ===
+CRITICAL FIX: for Throttle gets stalled after idling
+
 === 1.10.3 (2017-12-08) ===
 BREAKING CHANGE: browser entry points to non-processed ES6 file
 

@@ -263,4 +263,83 @@ describe( 'Throttle', function() {
             done();
         }, 450 );
     } );
+
+
+    it ( 'should must stop and resume reset timer', function( done ) {
+        const thrtl = new Throttle( 2, 50, 10 );
+
+        $as().add( ( outer_as ) => {
+            const as = $as();
+            const p = as.parallel( ( as, err ) => {
+                done( as.state.last_exception || err || 'Fail' );
+            } );
+            let passed = 0;
+            let rejected = 0;
+
+            for ( let i = 0; i < 3; ++i ) {
+                p.add( ( as ) => {
+                    as.add(
+                        ( as ) => as.sync( thrtl, ( as ) => {
+                            passed += 1;
+                        } ),
+                        ( as, err ) => {
+                            if ( err === 'DefenseRejected' ) {
+                                rejected += 1;
+                                as.success();
+                            }
+                        }
+                    );
+                } );
+            }
+
+            as.execute();
+
+            outer_as.setCancel( ( as ) => {} );
+            setTimeout( () => {
+                expect( passed ).to.equal( 3 );
+                expect( rejected ).to.equal( 0 );
+                as.cancel();
+                outer_as.success();
+            }, 75 );
+        } ).add( ( outer_as ) => {
+            outer_as.setCancel( ( as ) => {} );
+            setTimeout( () => {
+                expect( thrtl._timer ).to.be.null;
+                outer_as.success();
+            }, 100 );
+        } ).add( ( outer_as ) => {
+            const as = $as();
+            const p = as.parallel( ( as, err ) => {
+                done( as.state.last_exception || err || 'Fail' );
+            } );
+            let passed = 0;
+            let rejected = 0;
+
+            for ( let i = 0; i < 3; ++i ) {
+                p.add( ( as ) => {
+                    as.add(
+                        ( as ) => as.sync( thrtl, ( as ) => {
+                            passed += 1;
+                        } ),
+                        ( as, err ) => {
+                            if ( err === 'DefenseRejected' ) {
+                                rejected += 1;
+                                as.success();
+                            }
+                        }
+                    );
+                } );
+            }
+
+            as.execute();
+
+            outer_as.setCancel( ( as ) => {} );
+            setTimeout( () => {
+                expect( passed ).to.equal( 3 );
+                expect( rejected ).to.equal( 0 );
+                as.cancel();
+                outer_as.success();
+            }, 75 );
+        } ).add( ( as ) => done() ).execute();
+    } );
 } );
