@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.10.8 (2017-12-17) ===
 FIXED: futoin-asyncsteps-lite not to include synchronizaiton primitives
 
 === 1.10.7 (2017-12-17) ===
