@@ -1161,7 +1161,6 @@ Wrapper for clearTimeout()/clearImmediate()
 
 * [AsyncSteps](#AsyncSteps)
     * [.state](#AsyncSteps+state) ⇒ <code>object</code>
-    * [.state](#AsyncSteps+state) ⇒ <code>object</code>
     * [.add(func, [onerror])](#AsyncSteps+add) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.parallel([onerror])](#AsyncSteps+parallel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.sync(object, func, [onerror])](#AsyncSteps+sync) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -1180,20 +1179,6 @@ Wrapper for clearTimeout()/clearImmediate()
     * [.break([label])](#AsyncSteps+break)
     * [.continue([label])](#AsyncSteps+continue)
 
-<a name="AsyncSteps+state"></a>
-
-### asyncSteps.state ⇒ <code>object</code>
-Get AsyncSteps state object.
-
-*Note: There is a JS-specific improvement: as.state === as.state()*
-
-The are the following pre-defined state variables:
-
-* **error_info** - error description, if provided to *as.error()*
-* **last_exception** - the last exception caught
-* **async_stack** - array of references to executed step handlers in current stack
-
-**Kind**: instance property of [<code>AsyncSteps</code>](#AsyncSteps)  
 <a name="AsyncSteps+state"></a>
 
 ### asyncSteps.state ⇒ <code>object</code>
@@ -1440,7 +1425,6 @@ Continue loop execution from the next iteration, throws exception
 
 * [AsyncSteps](#AsyncSteps)
     * [.state](#AsyncSteps+state) ⇒ <code>object</code>
-    * [.state](#AsyncSteps+state) ⇒ <code>object</code>
     * [.add(func, [onerror])](#AsyncSteps+add) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.parallel([onerror])](#AsyncSteps+parallel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.sync(object, func, [onerror])](#AsyncSteps+sync) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -1459,20 +1443,6 @@ Continue loop execution from the next iteration, throws exception
     * [.break([label])](#AsyncSteps+break)
     * [.continue([label])](#AsyncSteps+continue)
 
-<a name="AsyncSteps+state"></a>
-
-### asyncSteps.state ⇒ <code>object</code>
-Get AsyncSteps state object.
-
-*Note: There is a JS-specific improvement: as.state === as.state()*
-
-The are the following pre-defined state variables:
-
-* **error_info** - error description, if provided to *as.error()*
-* **last_exception** - the last exception caught
-* **async_stack** - array of references to executed step handlers in current stack
-
-**Kind**: instance property of [<code>AsyncSteps</code>](#AsyncSteps)  
 <a name="AsyncSteps+state"></a>
 
 ### asyncSteps.state ⇒ <code>object</code>
