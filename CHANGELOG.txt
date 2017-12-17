@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.10.7 (2017-12-17) ===
 CHANGED: to include full AsyncSteps in browser by default (dropped -full, added -lite dist)
 FIXED: Object.assign ES5 transformation in dist
 
