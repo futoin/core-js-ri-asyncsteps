@@ -74,7 +74,7 @@ to sites without build process.
 
 *Warning: older browsers require WeakMap polyfill for synchronization primitives.*
 
-The following globals are available:
+*The following globals are available*:
 
 * $as - global reference to futoin-asyncsteps module
 * futoin - global namespace-like object for name clashing cases
@@ -821,15 +821,6 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 <dt><a href="#AsyncSteps">AsyncSteps</a></dt>
 <dd><p><strong>window.futoin.AsyncSteps</strong> - browser-only reference to futoin-asyncsteps.AsyncSteps</p>
 </dd>
-<dt><a href="#Mutex">Mutex</a></dt>
-<dd><p><strong>window.futoin.Mutex</strong> - browser-only reference to futoin-asyncsteps.Mutex</p>
-</dd>
-<dt><a href="#Throttle">Throttle</a></dt>
-<dd><p><strong>window.futoin.Throttle</strong> - browser-only reference to futoin-asyncsteps.Throttle</p>
-</dd>
-<dt><a href="#Limiter">Limiter</a></dt>
-<dd><p><strong>window.futoin.Limiter</strong> - browser-only reference to futoin-asyncsteps.Limiter</p>
-</dd>
 <dt><a href="#$as">$as</a></dt>
 <dd><p><strong>window.$as</strong> - browser-only reference to futoin-asyncsteps module</p>
 </dd>
@@ -1421,62 +1412,6 @@ Continue loop execution from the next iteration, throws exception
 | Param | Type | Description |
 | --- | --- | --- |
 | [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is found |
-
-<a name="Mutex"></a>
-
-## Mutex
-**window.futoin.Mutex** - browser-only reference to futoin-asyncsteps.Mutex
-
-**Kind**: global variable  
-<a name="new_Mutex_new"></a>
-
-### new Mutex([max], [max_queue])
-C-tor
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [max] | <code>integer</code> | <code>1</code> | maximum number of simultaneous critical section entries |
-| [max_queue] | <code>integer</code> | <code></code> | limit queue length, if set |
-
-<a name="Throttle"></a>
-
-## Throttle
-**window.futoin.Throttle** - browser-only reference to futoin-asyncsteps.Throttle
-
-**Kind**: global variable  
-<a name="new_Throttle_new"></a>
-
-### new Throttle([max], [period_ms], [max_queue])
-C-tor
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [max] | <code>integer</code> | <code>1</code> | maximum number of simultaneous critical section entries |
-| [period_ms] | <code>intger</code> | <code>1000</code> | time period in milliseconds |
-| [max_queue] | <code>integer</code> | <code></code> | limit queue length, if set |
-
-<a name="Limiter"></a>
-
-## Limiter
-**window.futoin.Limiter** - browser-only reference to futoin-asyncsteps.Limiter
-
-**Kind**: global variable  
-<a name="new_Limiter_new"></a>
-
-### new Limiter([options])
-C-tor
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [options] | <code>object</code> | <code>{}</code> | option map |
-| [options.concurrent] | <code>integer</code> | <code>1</code> | maximum concurrent flows |
-| [options.max_queue] | <code>integer</code> | <code>0</code> | maximum queued |
-| [options.rate] | <code>integer</code> | <code>1</code> | maximum entries in period |
-| [options.period_ms] | <code>integer</code> | <code>1000</code> | period length |
-| [options.burst] | <code>integer</code> | <code>0</code> | maximum queue for rate limiting |
 
 <a name="$as"></a>
 

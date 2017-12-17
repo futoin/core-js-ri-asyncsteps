@@ -5,7 +5,7 @@ const UglifyJsPlugin = require( 'uglifyjs-webpack-plugin' );
 module.exports = {
     entry: {
         'futoin-asyncsteps': './es5/lib/browser.js',
-        'futoin-asyncsteps-full': './es5/lib/browser-full.js',
+        'futoin-asyncsteps-lite': './es5/lib/browser-lite.js',
     },
     output: {
         library: {

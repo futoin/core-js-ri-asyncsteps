@@ -1,4 +1,8 @@
 
+=== (next) ===
+CHANGED: to include full AsyncSteps in browser by default (dropped -full, added -lite dist)
+FIXED: Object.assign ES5 transformation in dist
+
 === 1.10.6 (2017-12-17) ===
 FIXED: restored dist/ folder in release build
 NEW: dist/futoin-asyncsteps-full.js which also includes synchronization primitives

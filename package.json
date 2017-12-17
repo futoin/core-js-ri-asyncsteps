@@ -5,6 +5,7 @@
   "main": "lib/asyncsteps.js",
   "browser": "es5/lib/browser.js",
   "files": [
+    "dist/",
     "es5/",
     "es5/lib/",
     "es5/*.js",

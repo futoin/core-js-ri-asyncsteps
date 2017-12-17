@@ -27,6 +27,7 @@ module.exports = function( grunt ) {
             options: {
                 sourceMap: true,
                 presets: [ 'env' ],
+                plugins: [ "transform-object-assign" ],
             },
             es5: {
                 expand: true,
