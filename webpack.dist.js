@@ -1,10 +1,11 @@
 'use strict';
 
 const UglifyJsPlugin = require( 'uglifyjs-webpack-plugin' );
+const package_json = require( './package' );
 
 module.exports = {
     entry: {
-        'futoin-asyncsteps': './es5/lib/browser.js',
+        'futoin-asyncsteps': `./${package_json.browser}`,
         'futoin-asyncsteps-lite': './es5/lib/browser-lite.js',
     },
     output: {
