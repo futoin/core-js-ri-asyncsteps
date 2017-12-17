@@ -28,7 +28,8 @@ execution parallelism, loops and job state/context variables.
 
 The source itself is a Node.js module in CommonJS format, but it is friendly to `webpack`.
 Browser version also provides `$as` global variable. Since v1.10, all code is ES6 and requires
-transpiler for browser's ES5 unless default pre-compiled entry point is used.
+transpiler for browser's ES5 unless default pre-compiled entry point is used. ES5 standalone
+modules are available under es5/ path.
 
 It should be possible to use any other async framework from AsyncSteps by using
 setCancel() and/or setTimeout() methods which allow step completion without success() or
@@ -55,17 +56,23 @@ Command line:
 ```sh
 $ npm install futoin-asyncsteps --save
 ```
-and/or package.json:
+or
+```sh
+$ yarn add futoin-asyncsteps
 ```
-"dependencies" : {
-    "futoin-asyncsteps" : "^1"
-}
-```
+
+*Hint: checkout [FutoIn CID](https://github.com/futoin/cid-tool) for all tools setup.*
 
 # Browser installation
 
-The module can be used with `webpack` or any other CommonJS packer. However, please
-ensure to use ES6->ES5 transpilation for older browsers.
+Pre-built ES5 CJS modules are available under `es5/` are available. These modules
+can be used with `webpack` without transpiler - default "browser" entry point
+points to ES5 version.
+
+Webpack dists are also available under dist/ folder, but their usage should be limited
+to sites without build process.
+
+*Warning: older browsers require WeakMap polyfill for synchronization primitives.*
 
 The following globals are available:
 
@@ -80,65 +87,56 @@ The following globals are available:
 ## Simple steps
 
 ```javascript
-var async_steps = require('futoin-asyncsteps');
+const $as = require('futoin-asyncsteps');
 
-var root_as = async_steps();
+const root_as = $as();
 
-root_as.add(
-    function( as ){
-        as.success( "MyValue" );
-        // as.success() is implicit, if not called
-    }
-).add(
-    function( as, arg ){
-        if ( arg === 'MyValue' )
-        {
-            as.add( function( as ){
+root_as.add( ( as ) => {
+    as.success( "MyValue" );
+    // as.success() is implicit, if not called
+} ).add(
+    ( as, arg ) => {
+        if ( arg === 'MyValue' ) {
+            as.add( ( as ) => {
                 as.error( 'MyError', 'Something bad has happened' );
             });
         }
     },
-    function( as, err )
-    {
-        if ( err === 'MyError' )
-        {
+    ( as, err ) => {
+        if ( err === 'MyError' ) {
             as.success( 'NotSoBad' );
             // as.add() acts as implicit as.success()
         }
     }
 );
 
-root_as.add(
-    function( as, arg )
-    {
-        if ( arg === 'NotSoBad' )
-        {
-            console.log( 'MyError was ignored: ' + as.state.error_info );
-        }
-        
-        as.state.p1arg = 'abc';
-        as.state.p2arg = 'xyz';
-        
-        var p = as.parallel();
-        
-        p.add( function( as ){
-            console.log( 'Parallel Step 1' );
-            
-            as.add( function( as ){
-                console.log( 'Parallel Step 1.1' );
-                as.state.p1 = as.state.p1arg + '1';
-            } );
-        } )
-        .add( function( as ){
-            console.log( 'Parallel Step 2' );
-            
-            as.add( function( as ){
-                console.log( 'Parallel Step 2.1' );
-                as.state.p2 = as.state.p2arg + '2';
-            } );
-        } );
+root_as.add( ( as, arg ) => {
+    if ( arg === 'NotSoBad' ) {
+        console.log( 'MyError was ignored: ' + as.state.error_info );
     }
-).add( function( as ){
+    
+    as.state.p1arg = 'abc';
+    as.state.p2arg = 'xyz';
+    
+    const p = as.parallel();
+    
+    p.add( ( as ) => {
+        console.log( 'Parallel Step 1' );
+        
+        as.add( ( as ) => {
+            console.log( 'Parallel Step 1.1' );
+            as.state.p1 = as.state.p1arg + '1';
+        } );
+    } );
+    p.add( ( as ) =>{
+        console.log( 'Parallel Step 2' );
+        
+        as.add( ( as ) => {
+            console.log( 'Parallel Step 2.1' );
+            as.state.p2 = as.state.p2arg + '2';
+        } );
+    } );
+} ).add( ( as ) => {
     console.log( 'Parallel 1 result: ' + as.state.p1 );
     console.log( 'Parallel 2 result: ' + as.state.p2 );
 } );
@@ -823,6 +821,27 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 <dt><a href="#AsyncSteps">AsyncSteps</a></dt>
 <dd><p><strong>window.futoin.AsyncSteps</strong> - browser-only reference to futoin-asyncsteps.AsyncSteps</p>
 </dd>
+<dt><a href="#Mutex">Mutex</a></dt>
+<dd><p><strong>window.futoin.Mutex</strong> - browser-only reference to futoin-asyncsteps.Mutex</p>
+</dd>
+<dt><a href="#Throttle">Throttle</a></dt>
+<dd><p><strong>window.futoin.Throttle</strong> - browser-only reference to futoin-asyncsteps.Throttle</p>
+</dd>
+<dt><a href="#Limiter">Limiter</a></dt>
+<dd><p><strong>window.futoin.Limiter</strong> - browser-only reference to futoin-asyncsteps.Limiter</p>
+</dd>
+<dt><a href="#$as">$as</a></dt>
+<dd><p><strong>window.$as</strong> - browser-only reference to futoin-asyncsteps module</p>
+</dd>
+<dt><a href="#$as">$as</a></dt>
+<dd><p><strong>window.FutoIn.$as</strong> - browser-only reference to futoin-asyncsteps module</p>
+</dd>
+<dt><a href="#FutoInError">FutoInError</a></dt>
+<dd><p><strong>window.FutoInError</strong> - browser-only reference to futoin-asyncsteps.FutoInError</p>
+</dd>
+<dt><a href="#AsyncSteps">AsyncSteps</a></dt>
+<dd><p><strong>window.futoin.AsyncSteps</strong> - browser-only reference to futoin-asyncsteps.AsyncSteps</p>
+</dd>
 </dl>
 
 ## Functions
@@ -1123,6 +1142,341 @@ Wrapper for clearTimeout()/clearImmediate()
 | Param | Type | Description |
 | --- | --- | --- |
 | handle | <code>Object</code> | Handle returned from AsyncTool.callLater |
+
+<a name="$as"></a>
+
+## $as
+**window.$as** - browser-only reference to futoin-asyncsteps module
+
+**Kind**: global variable  
+<a name="$as"></a>
+
+## $as
+**window.FutoIn.$as** - browser-only reference to futoin-asyncsteps module
+
+**Kind**: global variable  
+<a name="FutoInError"></a>
+
+## FutoInError
+**window.FutoInError** - browser-only reference to futoin-asyncsteps.FutoInError
+
+**Kind**: global variable  
+<a name="AsyncSteps"></a>
+
+## AsyncSteps
+**window.futoin.AsyncSteps** - browser-only reference to futoin-asyncsteps.AsyncSteps
+
+**Kind**: global variable  
+
+* [AsyncSteps](#AsyncSteps)
+    * [.state](#AsyncSteps+state) ⇒ <code>object</code>
+    * [.state](#AsyncSteps+state) ⇒ <code>object</code>
+    * [.add(func, [onerror])](#AsyncSteps+add) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.parallel([onerror])](#AsyncSteps+parallel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.sync(object, func, [onerror])](#AsyncSteps+sync) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.error(name, [error_info])](#AsyncSteps+error)
+    * [.copyFrom(other)](#AsyncSteps+copyFrom) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.cancel()](#AsyncSteps+cancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.execute()](#AsyncSteps+execute) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.loop(func, [label])](#AsyncSteps+loop) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.repeat(count, func, [label])](#AsyncSteps+repeat) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.success([..._arg])](#AsyncSteps+success)
+    * ~~[.successStep()](#AsyncSteps+successStep)~~
+    * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.setCancel(oncancel)](#AsyncSteps+setCancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.waitExternal()](#AsyncSteps+waitExternal) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.break([label])](#AsyncSteps+break)
+    * [.continue([label])](#AsyncSteps+continue)
+
+<a name="AsyncSteps+state"></a>
+
+### asyncSteps.state ⇒ <code>object</code>
+Get AsyncSteps state object.
+
+*Note: There is a JS-specific improvement: as.state === as.state()*
+
+The are the following pre-defined state variables:
+
+* **error_info** - error description, if provided to *as.error()*
+* **last_exception** - the last exception caught
+* **async_stack** - array of references to executed step handlers in current stack
+
+**Kind**: instance property of [<code>AsyncSteps</code>](#AsyncSteps)  
+<a name="AsyncSteps+state"></a>
+
+### asyncSteps.state ⇒ <code>object</code>
+Get AsyncSteps state object.
+
+*Note: There is a JS-specific improvement: as.state === as.state()*
+
+The are the following pre-defined state variables:
+
+* **error_info** - error description, if provided to *as.error()*
+* **last_exception** - the last exception caught
+* **async_stack** - array of references to executed step handlers in current stack
+
+**Kind**: instance property of [<code>AsyncSteps</code>](#AsyncSteps)  
+<a name="AsyncSteps+add"></a>
+
+### asyncSteps.add(func, [onerror]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Add sub-step. Can be called multiple times.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| func | <code>ExecFunc</code> | function defining non-blocking step execution |
+| [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
+
+<a name="AsyncSteps+parallel"></a>
+
+### asyncSteps.parallel([onerror]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Creates a step internally and returns specialized AsyncSteps interfaces all steps
+of which are executed in quasi-parallel.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - interface for parallel step adding  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
+
+<a name="AsyncSteps+sync"></a>
+
+### asyncSteps.sync(object, func, [onerror]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Add sub-step with synchronization against supplied object.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| object | [<code>ISync</code>](#ISync) | Mutex, Throttle or other type of synchronization implementation. |
+| func | <code>ExecFunc</code> | function defining non-blocking step execution |
+| [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
+
+<a name="AsyncSteps+error"></a>
+
+### asyncSteps.error(name, [error_info])
+Set error and throw to abort execution.
+
+*NOTE: If called outside of AsyncSteps stack (e.g. by external event), make sure you catch the exception*
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Throws**:
+
+- <code>Error</code> 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | error message, expected to be identifier "InternalError" |
+| [error_info] | <code>string</code> | optional descriptive message assigned to as.state.error_info |
+
+<a name="AsyncSteps+copyFrom"></a>
+
+### asyncSteps.copyFrom(other) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Copy steps and not yet defined state variables from "model" AsyncSteps instance
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| other | [<code>AsyncSteps</code>](#AsyncSteps) | model instance, which must get be executed |
+
+<a name="AsyncSteps+cancel"></a>
+
+### asyncSteps.cancel() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+<a name="AsyncSteps+execute"></a>
+
+### asyncSteps.execute() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Start execution of AsyncSteps using AsyncTool
+
+It must not be called more than once until cancel/complete (instance can be re-used)
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+<a name="AsyncSteps+loop"></a>
+
+### asyncSteps.loop(func, [label]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Execute loop until *as.break()* or *as.error()* is called
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| func | <code>LoopFunc</code> | loop body |
+| [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
+
+<a name="AsyncSteps+repeat"></a>
+
+### asyncSteps.repeat(count, func, [label]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Call *func(as, i)* for *count* times
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| count | <code>integer</code> | how many times to call the *func* |
+| func | <code>RepeatFunc</code> | loop body |
+| [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
+
+<a name="AsyncSteps+forEach"></a>
+
+### asyncSteps.forEach(map_or_list, func, [label]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+For each *map* or *list* element call *func( as, key, value )*
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| map_or_list | <code>integer</code> | map or list to iterate over |
+| func | <code>ForEachFunc</code> | loop body |
+| [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
+
+<a name="AsyncSteps+success"></a>
+
+### asyncSteps.success([..._arg])
+Successfully complete current step execution, optionally passing result variables to the next step.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [..._arg] | <code>\*</code> | unlimited number of result variables with no type constraint |
+
+<a name="AsyncSteps+successStep"></a>
+
+### ~~asyncSteps.successStep()~~
+***Deprecated***
+
+Deprecated with FTN12 v1.5
+If sub-steps have been added then add efficient dummy step which behavior of as.success();
+Otherwise, simply call *as.success();*
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+<a name="AsyncSteps+setTimeout"></a>
+
+### asyncSteps.setTimeout(timeout_ms) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Set timeout for external event completion with async *as.success()* or *as.error()* call.
+If step is not finished until timeout is reached then Timeout error is raised.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+**Note**: Can be used only within **ExecFunc** body.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| timeout_ms | <code>number</code> | Timeout in ms |
+
+<a name="AsyncSteps+setCancel"></a>
+
+### asyncSteps.setCancel(oncancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Set cancellation handler to properly handle timeouts and external cancellation.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+**Note**: Can be used only within **ExecFunc** body.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| oncancel | <code>CancelFunc</code> | cleanup/cancel logic of external processing |
+
+<a name="AsyncSteps+waitExternal"></a>
+
+### asyncSteps.waitExternal() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Mark currently executing step as waiting for external event.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
+**Note**: Can be used only within **ExecFunc** body.  
+<a name="AsyncSteps+break"></a>
+
+### asyncSteps.break([label])
+Break execution of current loop, throws exception
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is exited |
+
+<a name="AsyncSteps+continue"></a>
+
+### asyncSteps.continue([label])
+Continue loop execution from the next iteration, throws exception
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is found |
+
+<a name="Mutex"></a>
+
+## Mutex
+**window.futoin.Mutex** - browser-only reference to futoin-asyncsteps.Mutex
+
+**Kind**: global variable  
+<a name="new_Mutex_new"></a>
+
+### new Mutex([max], [max_queue])
+C-tor
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [max] | <code>integer</code> | <code>1</code> | maximum number of simultaneous critical section entries |
+| [max_queue] | <code>integer</code> | <code></code> | limit queue length, if set |
+
+<a name="Throttle"></a>
+
+## Throttle
+**window.futoin.Throttle** - browser-only reference to futoin-asyncsteps.Throttle
+
+**Kind**: global variable  
+<a name="new_Throttle_new"></a>
+
+### new Throttle([max], [period_ms], [max_queue])
+C-tor
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [max] | <code>integer</code> | <code>1</code> | maximum number of simultaneous critical section entries |
+| [period_ms] | <code>intger</code> | <code>1000</code> | time period in milliseconds |
+| [max_queue] | <code>integer</code> | <code></code> | limit queue length, if set |
+
+<a name="Limiter"></a>
+
+## Limiter
+**window.futoin.Limiter** - browser-only reference to futoin-asyncsteps.Limiter
+
+**Kind**: global variable  
+<a name="new_Limiter_new"></a>
+
+### new Limiter([options])
+C-tor
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [options] | <code>object</code> | <code>{}</code> | option map |
+| [options.concurrent] | <code>integer</code> | <code>1</code> | maximum concurrent flows |
+| [options.max_queue] | <code>integer</code> | <code>0</code> | maximum queued |
+| [options.rate] | <code>integer</code> | <code>1</code> | maximum entries in period |
+| [options.period_ms] | <code>integer</code> | <code>1000</code> | period length |
+| [options.burst] | <code>integer</code> | <code>0</code> | maximum queue for rate limiting |
 
 <a name="$as"></a>
 

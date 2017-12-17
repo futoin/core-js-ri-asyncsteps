@@ -20,6 +20,7 @@ module.exports = function( grunt ) {
         mocha_istanbul: { coverage: { src: [ 'test' ] } },
         istanbul_check_coverage: {},
         webpack: {
+            dist: require( './webpack.dist' ),
             test: require( './webpack.test' ),
         },
         babel: {
@@ -81,7 +82,7 @@ module.exports = function( grunt ) {
 
     grunt.registerTask( 'check', [ 'eslint' ] );
 
-    grunt.registerTask( 'build-browser', [ 'babel' ] );
+    grunt.registerTask( 'build-browser', [ 'babel', 'webpack:dist' ] );
     grunt.registerTask( 'test-browser', [ 'webpack:test', 'connect', 'mocha_phantomjs' ] );
 
     grunt.registerTask( 'node', [ 'mocha_istanbul' ] );

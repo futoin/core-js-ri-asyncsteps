@@ -28,7 +28,8 @@ execution parallelism, loops and job state/context variables.
 
 The source itself is a Node.js module in CommonJS format, but it is friendly to `webpack`.
 Browser version also provides `$as` global variable. Since v1.10, all code is ES6 and requires
-transpiler for browser's ES5 unless default pre-compiled entry point is used.
+transpiler for browser's ES5 unless default pre-compiled entry point is used. ES5 standalone
+modules are available under es5/ path.
 
 It should be possible to use any other async framework from AsyncSteps by using
 setCancel() and/or setTimeout() methods which allow step completion without success() or
@@ -55,17 +56,23 @@ Command line:
 ```sh
 $ npm install futoin-asyncsteps --save
 ```
-and/or package.json:
+or
+```sh
+$ yarn add futoin-asyncsteps
 ```
-"dependencies" : {
-    "futoin-asyncsteps" : "^1"
-}
-```
+
+*Hint: checkout [FutoIn CID](https://github.com/futoin/cid-tool) for all tools setup.*
 
 # Browser installation
 
-The module can be used with `webpack` or any other CommonJS packer. However, please
-ensure to use ES6->ES5 transpilation for older browsers.
+Pre-built ES5 CJS modules are available under `es5/` are available. These modules
+can be used with `webpack` without transpiler - default "browser" entry point
+points to ES5 version.
+
+Webpack dists are also available under dist/ folder, but their usage should be limited
+to sites without build process.
+
+*Warning: older browsers require WeakMap polyfill for synchronization primitives.*
 
 The following globals are available:
 
@@ -80,65 +87,56 @@ The following globals are available:
 ## Simple steps
 
 ```javascript
-var async_steps = require('futoin-asyncsteps');
+const $as = require('futoin-asyncsteps');
 
-var root_as = async_steps();
+const root_as = $as();
 
-root_as.add(
-    function( as ){
-        as.success( "MyValue" );
-        // as.success() is implicit, if not called
-    }
-).add(
-    function( as, arg ){
-        if ( arg === 'MyValue' )
-        {
-            as.add( function( as ){
+root_as.add( ( as ) => {
+    as.success( "MyValue" );
+    // as.success() is implicit, if not called
+} ).add(
+    ( as, arg ) => {
+        if ( arg === 'MyValue' ) {
+            as.add( ( as ) => {
                 as.error( 'MyError', 'Something bad has happened' );
             });
         }
     },
-    function( as, err )
-    {
-        if ( err === 'MyError' )
-        {
+    ( as, err ) => {
+        if ( err === 'MyError' ) {
             as.success( 'NotSoBad' );
             // as.add() acts as implicit as.success()
         }
     }
 );
 
-root_as.add(
-    function( as, arg )
-    {
-        if ( arg === 'NotSoBad' )
-        {
-            console.log( 'MyError was ignored: ' + as.state.error_info );
-        }
-        
-        as.state.p1arg = 'abc';
-        as.state.p2arg = 'xyz';
-        
-        var p = as.parallel();
-        
-        p.add( function( as ){
-            console.log( 'Parallel Step 1' );
-            
-            as.add( function( as ){
-                console.log( 'Parallel Step 1.1' );
-                as.state.p1 = as.state.p1arg + '1';
-            } );
-        } )
-        .add( function( as ){
-            console.log( 'Parallel Step 2' );
-            
-            as.add( function( as ){
-                console.log( 'Parallel Step 2.1' );
-                as.state.p2 = as.state.p2arg + '2';
-            } );
-        } );
+root_as.add( ( as, arg ) => {
+    if ( arg === 'NotSoBad' ) {
+        console.log( 'MyError was ignored: ' + as.state.error_info );
     }
-).add( function( as ){
+    
+    as.state.p1arg = 'abc';
+    as.state.p2arg = 'xyz';
+    
+    const p = as.parallel();
+    
+    p.add( ( as ) => {
+        console.log( 'Parallel Step 1' );
+        
+        as.add( ( as ) => {
+            console.log( 'Parallel Step 1.1' );
+            as.state.p1 = as.state.p1arg + '1';
+        } );
+    } );
+    p.add( ( as ) =>{
+        console.log( 'Parallel Step 2' );
+        
+        as.add( ( as ) => {
+            console.log( 'Parallel Step 2.1' );
+            as.state.p2 = as.state.p2arg + '2';
+        } );
+    } );
+} ).add( ( as ) => {
     console.log( 'Parallel 1 result: ' + as.state.p1 );
     console.log( 'Parallel 2 result: ' + as.state.p2 );
 } );
