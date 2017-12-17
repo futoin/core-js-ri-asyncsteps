@@ -2,7 +2,7 @@
 
 module.exports = {
     entry: {
-        unittest : './test/unittest.js',
+        unittest : './es5/test/unittest.js',
     },
     output: {
         filename: "[name].js",

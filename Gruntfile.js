@@ -20,8 +20,27 @@ module.exports = function( grunt ) {
         mocha_istanbul: { coverage: { src: [ 'test' ] } },
         istanbul_check_coverage: {},
         webpack: {
-            dist: require( './webpack.dist' ),
             test: require( './webpack.test' ),
+        },
+        babel: {
+            options: {
+                sourceMap: true,
+                presets: [ 'env' ],
+            },
+            es5: {
+                expand: true,
+                src: [
+                    "lib/*.js",
+                    "test/*.js",
+                    "AsyncSteps.js",
+                    "Errors.js",
+                    "ISync.js",
+                    "Limiter.js",
+                    "Mutex.js",
+                    "Throttle.js",
+                ],
+                dest: 'es5/',
+            },
         },
         connect: {
             server: {
@@ -54,6 +73,7 @@ module.exports = function( grunt ) {
     } );
 
     grunt.loadNpmTasks( 'grunt-eslint' );
+    grunt.loadNpmTasks( 'grunt-babel' );
     grunt.loadNpmTasks( 'grunt-webpack' );
     grunt.loadNpmTasks( 'grunt-contrib-connect' );
     grunt.loadNpmTasks( 'grunt-mocha-phantomjs' );
@@ -61,7 +81,7 @@ module.exports = function( grunt ) {
 
     grunt.registerTask( 'check', [ 'eslint' ] );
 
-    grunt.registerTask( 'build-browser', [ 'webpack:dist' ] );
+    grunt.registerTask( 'build-browser', [ 'babel' ] );
     grunt.registerTask( 'test-browser', [ 'webpack:test', 'connect', 'mocha_phantomjs' ] );
 
     grunt.registerTask( 'node', [ 'mocha_istanbul' ] );

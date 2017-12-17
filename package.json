@@ -3,9 +3,11 @@
   "version": "1.10.4",
   "description": "FutoIn AsyncSteps - Reference Implementation. Adds classical linear program flow structure to async programming supporting exceptions. error handlers, timeouts, unlimited number of sub-steps, execution parallelism, loops and job state/context variables.",
   "main": "lib/asyncsteps.js",
-  "browser": "lib/browser.js",
+  "browser": "es5/lib/browser.js",
   "files": [
-    "dist/",
+    "es5/",
+    "es5/lib/",
+    "es5/*.js",
     "examples/",
     "lib/",
     "AsyncSteps.js",
@@ -67,6 +69,7 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
+    "grunt-babel": "^7.0.0",
     "performance-now": "^2.1.0"
   },
   "eslintIgnore": [

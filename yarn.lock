@@ -1995,6 +1995,10 @@ growl@1.10.3:
   version "1.10.3"
   resolved "https://registry.yarnpkg.com/growl/-/growl-1.10.3.tgz#1926ba90cf3edfe2adb4927f5880bc22c66c790f"
 
+grunt-babel@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/grunt-babel/-/grunt-babel-7.0.0.tgz#13c90c01f154dec214e0eeb5d66ac7c70cedf2d3"
+
 grunt-cli@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/grunt-cli/-/grunt-cli-1.2.0.tgz#562b119ebb069ddb464ace2845501be97b35b6a8"
