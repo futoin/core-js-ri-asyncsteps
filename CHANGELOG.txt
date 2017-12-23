@@ -1,4 +1,7 @@
 
+=== (next) ===
+NEW: .assertAS() helper
+
 === 1.10.8 (2017-12-17) ===
 FIXED: futoin-asyncsteps-lite not to include synchronizaiton primitives
 

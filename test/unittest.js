@@ -1732,6 +1732,36 @@ describe( 'AsyncSteps', function() {
     } );
 } );
 
+describe( '.assertAS', function( done ) {
+    it( "should pass with valid objects", function() {
+        const as = async_steps();
+
+        async_steps.assertAS( as );
+        async_steps.assertAS( as.parallel() );
+        as.add( ( as ) => {
+            async_steps.assertAS( as );
+            async_steps.assertAS( as.parallel() );
+        } );
+        as.add( ( as ) => done() );
+
+        as.execute();
+    } );
+
+    it( "should detect errors", function( done ) {
+        for ( let v of [ undefined, null, 1, 'a', {}, [], function() {} ] ) {
+            try {
+                async_steps.assertAS( v );
+                done( 'Fail' );
+                return;
+            } catch ( e ) {
+                e.message.should.equal( `Not an instance of AsyncSteps: ${v}` );
+            }
+        }
+
+        done();
+    } );
+} );
+
 if ( typeof window !== 'undefined' && window.$as ) {
     describe(
         'FutoIn.AsyncSteps', function() {

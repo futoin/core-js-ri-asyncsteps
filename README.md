@@ -842,6 +842,9 @@ The concept is described in FutoIn specification: [FTN12: FutoIn Async API v1.x]
 <dd><p>Use for unit testing to fine control step execution.
 It installs AsyncToolTest in place of AsyncTool</p>
 </dd>
+<dt><a href="#assertAS">assertAS(as)</a></dt>
+<dd><p>Ensure parameter is instance of AsyncSteps interfaces</p>
+</dd>
 </dl>
 
 <a name="module_futoin-asyncsteps"></a>
@@ -1673,6 +1676,17 @@ It installs AsyncToolTest in place of AsyncTool
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [install] | <code>boolean</code> | <code>true</code> | true - install AsyncToolTest, false - AsyncTool as scheduler |
+
+<a name="assertAS"></a>
+
+## assertAS(as)
+Ensure parameter is instance of AsyncSteps interfaces
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| as | <code>any</code> | paramter to check |
 
 
 
