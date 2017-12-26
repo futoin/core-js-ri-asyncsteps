@@ -2,6 +2,7 @@
 === (next) ===
 FIXED: invalid dependency on grunt-babel
 FIXED: browser unit test to use dist/ build
+NEW: added dist/polyfill-asyncsteps.js
 
 === 1.10.9 (2017-12-23) ===
 NEW: .assertAS() helper

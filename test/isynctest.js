@@ -1,8 +1,18 @@
 'use strict';
 
-const $as = require( '../lib/asyncsteps.js' );
-const expect = require( 'chai' ).expect;
-const ISync = require( '../ISync' );
+let $as;
+let chai;
+
+if ( typeof window !== 'undefined' ) {
+    $as = window.$as;
+    chai = window.chai;
+} else {
+    $as = module.require( '../lib/asyncsteps-full.js' );
+    chai = module.require( 'chai' );
+}
+
+const expect = chai.expect;
+const { ISync } = $as;
 
 describe( 'ISync', function() {
     it ( 'should throw default errors', function( done ) {

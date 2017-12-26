@@ -8,19 +8,33 @@
   <body>
       <!-- Required for browser reporter -->
       <div id="mocha"></div>
-      <script src="../node_modules/mocha/mocha.js" type="text/javascript" charset="utf-8"></script>
-      <script src="../node_modules/chai/chai.js" type="text/javascript" charset="utf-8"></script>
-      <script type="text/javascript" charset="utf-8">
+      <script src="../node_modules/mocha/mocha.js"></script>
+      <script src="../node_modules/chai/chai.js"></script>
+      <script>
           mocha.ui('bdd');
           chai.should();
       </script>
       
-      <script src="../dist/futoin-asyncsteps.js" type="text/javascript" charset="utf-8"></script>
-      <script src="../dist/unittest.js" type="text/javascript" charset="utf-8"></script>
+      <script src="../dist/polyfill-asyncsteps.js"></script>
+      <script src="../dist/futoin-asyncsteps.js"></script>
+      
+      <script src="../dist/isynctest.js"></script>
+      <script src="../dist/mutextest.js"></script>
+      <script src="../dist/throttletest.js"></script>
+      <script src="../dist/limitertest.js"></script>
+      <script src="../dist/unittest.js"></script>
 
-      <script type="text/javascript" charset="utf-8">
-        if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
-        else { mocha.run(); }
+      <script>
+        function run_on_load(event) {
+            if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
+            else { mocha.run(); }
+        };
+
+        if (document.readyState === "complete") {
+            run_on_load();
+        } else {
+            window.addEventListener("load", run_on_load);
+        }
       </script>
   </body>
 </html>

@@ -52,7 +52,16 @@ module.exports = function( grunt ) {
                 },
             },
         },
-        mocha_phantomjs: { all: { options: { urls: [ 'http://localhost:8000/test/unittest.html' ] } } },
+        mocha_phantomjs: {
+            all: {
+                options: {
+                    urls: [
+                        'http://localhost:8000/test/unittest-lite.html',
+                        'http://localhost:8000/test/unittest.html',
+                    ],
+                },
+            },
+        },
         jsdoc2md: {
             README: {
                 src: [ '*.js', 'lib/**/*.js' ],

@@ -65,14 +65,14 @@ $ yarn add futoin-asyncsteps
 
 # Browser installation
 
-Pre-built ES5 CJS modules are available under `es5/` are available. These modules
+Pre-built ES5 CJS modules are available under `es5/`. These modules
 can be used with `webpack` without transpiler - default "browser" entry point
 points to ES5 version.
 
-Webpack dists are also available under dist/ folder, but their usage should be limited
+Webpack dists are also available under `dist/` folder, but their usage should be limited
 to sites without build process.
 
-*Warning: older browsers require WeakMap polyfill for synchronization primitives.*
+*Warning: older browsers should use `dist/polyfill-asyncsteps.js` for `WeakMap` polyfill used in synchronization primitives.*
 
 *The following globals are available*:
 

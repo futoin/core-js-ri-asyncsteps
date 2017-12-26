@@ -1,8 +1,18 @@
 'use strict';
 
-const $as = require( '../lib/asyncsteps.js' );
-const expect = require( 'chai' ).expect;
-const Mutex = require( '../Mutex' );
+let $as;
+let chai;
+
+if ( typeof window !== 'undefined' ) {
+    $as = window.$as;
+    chai = window.chai;
+} else {
+    $as = module.require( '../lib/asyncsteps-full.js' );
+    chai = module.require( 'chai' );
+}
+
+const expect = chai.expect;
+const { Mutex } = $as;
 
 describe( 'Mutex', function() {
     it ( 'should handle re-entrancy & success params', function( done ) {

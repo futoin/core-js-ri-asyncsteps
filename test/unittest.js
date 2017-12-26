@@ -2,21 +2,18 @@
 
 //
 var async_steps;
-var undefined;
-var assert;
+var chai;
 
 if ( typeof window !== 'undefined' ) {
     async_steps = window.$as;
-    window.chai.should();
-    assert = window.chai.assert;
+    chai = window.chai;
 } else {
     async_steps = module.require( '../lib/asyncsteps' );
-    var chai_module = module.require( 'chai' );
-
-    chai_module.should();
-    assert = chai_module.assert;
+    chai = module.require( 'chai' );
 }
 
+chai.should();
+var assert = chai.assert;
 var performance_now = require( "performance-now" );
 
 
@@ -1765,6 +1762,7 @@ if ( typeof window !== 'undefined' && window.$as ) {
         'FutoIn.AsyncSteps', function() {
             it( 'should be set', function() {
                 window.$as.AsyncSteps.should.equal( window.FutoIn.AsyncSteps );
+                window.FutoIn.$as.should.equal( window.futoin.$as );
             } );
         }
     );
