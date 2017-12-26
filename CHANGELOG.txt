@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.10.10 (2017-12-26) ===
 FIXED: invalid dependency on grunt-babel
 FIXED: browser unit test to use dist/ build
 NEW: added dist/polyfill-asyncsteps.js
