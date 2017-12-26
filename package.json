@@ -1,14 +1,12 @@
 {
   "name": "futoin-asyncsteps",
   "version": "1.10.9",
-  "description": "FutoIn AsyncSteps - Reference Implementation. Adds classical linear program flow structure to async programming supporting exceptions. error handlers, timeouts, unlimited number of sub-steps, execution parallelism, loops and job state/context variables.",
+  "description": "FutoIn AsyncSteps. Adds classical linear program flow structure to async programming supporting exceptions. error handlers, timeouts, unlimited number of sub-steps, execution parallelism, loops and job state/context variables.",
   "main": "lib/asyncsteps-full.js",
   "browser": "es5/lib/browser.js",
   "files": [
     "dist/",
     "es5/",
-    "es5/lib/",
-    "es5/*.js",
     "examples/",
     "lib/",
     "AsyncSteps.js",
@@ -56,8 +54,9 @@
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
-    "eslint": "^4.13.1",
+    "eslint": "^4.14.0",
     "grunt": "^1.0.1",
+    "grunt-babel": "^7.0.0",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-eslint": "^20.1.0",
     "grunt-jsdoc-to-markdown": "^3.0.0",
@@ -70,10 +69,6 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
-    "grunt-babel": "^7.0.0",
     "performance-now": "^2.1.0"
-  },
-  "eslintIgnore": [
-    "test/**"
-  ]
+  }
 }

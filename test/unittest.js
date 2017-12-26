@@ -5,15 +5,13 @@ var async_steps;
 var undefined;
 var assert;
 
-if ( typeof window !== 'undefined' && window.$as ) {
+if ( typeof window !== 'undefined' ) {
     async_steps = window.$as;
     window.chai.should();
     assert = window.chai.assert;
 } else {
-    var hidereq = require;
-
-    async_steps = hidereq( '../lib/asyncsteps' );
-    var chai_module = hidereq( 'chai' );
+    async_steps = module.require( '../lib/asyncsteps' );
+    var chai_module = module.require( 'chai' );
 
     chai_module.should();
     assert = chai_module.assert;

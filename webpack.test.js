@@ -10,6 +10,12 @@ module.exports = {
         libraryTarget: "umd",
     },
     externals: {
+        'futoin-asyncsteps' : {
+            root: "$as",
+            amd: "futoin-asyncsteps",
+            commonjs: "futoin-asyncsteps",
+            commonjs2: "futoin-asyncsteps",
+        },
         chai : {
             root: "chai",
             amd: "chai",
