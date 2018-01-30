@@ -233,7 +233,7 @@ describe( 'Mutex', function() {
                             max = ( max < curr ) ? curr : max;
 
                             as.add( ( as ) => {
-                                as.setCancel( () => {} );
+                                as.waitExternal();
                                 setTimeout( () => as.success(), 100 );
                             } );
                             as.add( ( as ) => {

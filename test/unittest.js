@@ -310,7 +310,7 @@ describe( 'AsyncSteps', function() {
                 var as = this.as;
 
                 as.add( function( as ) {
-                    as.setCancel( function() {} );
+                    as.waitExternal();
                 } );
                 as.execute();
 
@@ -567,8 +567,7 @@ describe( 'AsyncSteps', function() {
                                 as.state.order.push( 5 );
                                 as.success();
                             } );
-                            as.setCancel( function( as ) {
-                            } );
+                            as.waitExternal();
                             async_steps.AsyncTool.callLater(
                                 function() {
                                     try {
@@ -779,7 +778,7 @@ describe( 'AsyncSteps', function() {
                         async_steps.AsyncTool.callLater( function() {
                             as.success();
                         } );
-                        as.setCancel( function( as ) {} );
+                        as.waitExternal();
                     },
                     function( as, err ) {
                         as.state.myerror = true;
@@ -938,7 +937,7 @@ describe( 'AsyncSteps', function() {
                                 // pass
                             }
                         } );
-                        as.setCancel( function( as ) {} );
+                        as.waitExternal();
                     },
                     function( as, err ) {
                         as.state.myerror = ( err === 'MyError' );

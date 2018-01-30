@@ -304,7 +304,7 @@ describe( 'Throttle', function() {
 
             as.execute();
 
-            outer_as.setCancel( ( as ) => {} );
+            outer_as.waitExternal();
             setTimeout( () => {
                 expect( passed ).to.equal( 3 );
                 expect( rejected ).to.equal( 0 );
@@ -312,7 +312,7 @@ describe( 'Throttle', function() {
                 outer_as.success();
             }, 75 );
         } ).add( ( outer_as ) => {
-            outer_as.setCancel( ( as ) => {} );
+            outer_as.waitExternal();
             setTimeout( () => {
                 expect( thrtl._timer ).to.be.null;
                 outer_as.success();
@@ -343,7 +343,7 @@ describe( 'Throttle', function() {
 
             as.execute();
 
-            outer_as.setCancel( ( as ) => {} );
+            outer_as.waitExternal();
             setTimeout( () => {
                 expect( passed ).to.equal( 3 );
                 expect( rejected ).to.equal( 0 );
