@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.11.0 (2018-02-02) ===
 CHANGED: as.successStep() take parameters and always inject a step with as.success() call
 CHANGED: to better define error constants
 NEW: as.await() integration with Promises
