@@ -58,9 +58,9 @@ class AsyncSteps {
     }
 
     /**
-    * @private
-    * @param {function} [func] Step function to check
-    */
+     * @private
+     * @param {function} [func] Step function to check
+     */
     _check_func( func ) {
         if ( func.length < 1 ) {
             this.error( Errors.InternalError, "Step function must expect at least AsyncStep interface" );
@@ -68,9 +68,9 @@ class AsyncSteps {
     }
 
     /**
-    * @private
-    * @param {function} [onerror] error handler to check
-    */
+     * @private
+     * @param {function} [onerror] error handler to check
+     */
     _check_onerror( onerror ) {
         if ( onerror &&
             ( onerror.length !== 2 ) ) {
@@ -79,12 +79,12 @@ class AsyncSteps {
     }
 
     /**
-    * Add sub-step. Can be called multiple times.
-    * @param {ExecFunc} func - function defining non-blocking step execution
-    * @param {ErrorFunc=} onerror - Optional, provide error handler
-    * @returns {AsyncSteps} self
-    * @alias AsyncSteps#add
-    */
+     * Add sub-step. Can be called multiple times.
+     * @param {ExecFunc} func - function defining non-blocking step execution
+     * @param {ErrorFunc=} onerror - Optional, provide error handler
+     * @returns {AsyncSteps} self
+     * @alias AsyncSteps#add
+     */
     add( func, onerror ) {
         this._sanityCheck();
         this._check_func( func );
@@ -95,12 +95,12 @@ class AsyncSteps {
     }
 
     /**
-    * Creates a step internally and returns specialized AsyncSteps interfaces all steps
-    * of which are executed in quasi-parallel.
-    * @param {ErrorFunc=} onerror - Optional, provide error handler
-    * @returns {AsyncSteps} interface for parallel step adding
-    * @alias AsyncSteps#parallel
-    */
+     * Creates a step internally and returns specialized AsyncSteps interfaces all steps
+     * of which are executed in quasi-parallel.
+     * @param {ErrorFunc=} onerror - Optional, provide error handler
+     * @returns {AsyncSteps} interface for parallel step adding
+     * @alias AsyncSteps#parallel
+     */
     parallel( onerror ) {
         const p = new ParallelStep( this, this );
 
@@ -113,13 +113,13 @@ class AsyncSteps {
     }
 
     /**
-    * Add sub-step with synchronization against supplied object.
-    * @param {ISync} object - Mutex, Throttle or other type of synchronization implementation.
-    * @param {ExecFunc} func - function defining non-blocking step execution
-    * @param {ErrorFunc=} onerror - Optional, provide error handler
-    * @returns {AsyncSteps} self
-    * @alias AsyncSteps#sync
-    */
+     * Add sub-step with synchronization against supplied object.
+     * @param {ISync} object - Mutex, Throttle or other type of synchronization implementation.
+     * @param {ExecFunc} func - function defining non-blocking step execution
+     * @param {ErrorFunc=} onerror - Optional, provide error handler
+     * @returns {AsyncSteps} self
+     * @alias AsyncSteps#sync
+     */
     sync( object, func, onerror ) {
         this._sanityCheck();
         this._check_func( func );
@@ -130,14 +130,14 @@ class AsyncSteps {
     }
 
     /**
-    * Set error and throw to abort execution.
-    *
-    * *NOTE: If called outside of AsyncSteps stack (e.g. by external event), make sure you catch the exception*
-    * @param {string} name - error message, expected to be identifier "InternalError"
-    * @param {string=} error_info - optional descriptive message assigned to as.state.error_info
-    * @throws {Error}
-    * @alias AsyncSteps#error
-    */
+     * Set error and throw to abort execution.
+     *
+     * *NOTE: If called outside of AsyncSteps stack (e.g. by external event), make sure you catch the exception*
+     * @param {string} name - error message, expected to be identifier "InternalError"
+     * @param {string=} error_info - optional descriptive message assigned to as.state.error_info
+     * @throws {Error}
+     * @alias AsyncSteps#error
+     */
     error( name, error_info ) {
         this.state.error_info = error_info;
 
@@ -149,11 +149,11 @@ class AsyncSteps {
     }
 
     /**
-    * Copy steps and not yet defined state variables from "model" AsyncSteps instance
-    * @param {AsyncSteps} other - model instance, which must get be executed
-    * @returns {AsyncSteps} self
-    * @alias AsyncSteps#copyFrom
-    */
+     * Copy steps and not yet defined state variables from "model" AsyncSteps instance
+     * @param {AsyncSteps} other - model instance, which must get be executed
+     * @returns {AsyncSteps} self
+     * @alias AsyncSteps#copyFrom
+     */
     copyFrom( other ) {
         this._queue.push.apply( this._queue, other._queue );
 
@@ -170,9 +170,9 @@ class AsyncSteps {
     }
 
     /**
-    * @private
-    * @param {array} [args] List of success() args
-    */
+     * @private
+     * @param {array} [args] List of success() args
+     */
     _handle_success( args ) {
         const stack = this._stack;
         const exec_stack = this._exec_stack;
@@ -213,9 +213,9 @@ class AsyncSteps {
     }
 
     /**
-    * @private
-    * @param {string} [name] Error to handle
-    */
+     * @private
+     * @param {string} [name] Error to handle
+     */
     _handle_error( name ) {
         this._next_args = [];
 
@@ -274,10 +274,10 @@ class AsyncSteps {
     }
 
     /**
-    * Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
-    * @returns {AsyncSteps} self
-    * @alias AsyncSteps#cancel
-    */
+     * Use only on root AsyncSteps instance. Abort execution of AsyncSteps instance in progress.
+     * @returns {AsyncSteps} self
+     * @alias AsyncSteps#cancel
+     */
     cancel() {
         this._next_args = [];
 
@@ -309,12 +309,12 @@ class AsyncSteps {
     }
 
     /**
-    * Start execution of AsyncSteps using AsyncTool
-    *
-    * It must not be called more than once until cancel/complete (instance can be re-used)
-    * @returns {AsyncSteps} self
-    * @alias AsyncSteps#execute
-    */
+     * Start execution of AsyncSteps using AsyncTool
+     *
+     * It must not be called more than once until cancel/complete (instance can be re-used)
+     * @returns {AsyncSteps} self
+     * @alias AsyncSteps#execute
+     */
     execute() {
         this._cancelExecute();
 
@@ -379,8 +379,8 @@ class AsyncSteps {
     }
 
     /**
-    * @private
-    */
+     * @private
+     */
     _sanityCheck() {
         if ( this._stack.length ) {
             this.error( Errors.InternalError, "Top level add in execution" );
@@ -388,15 +388,15 @@ class AsyncSteps {
     }
 
     /**
-    * @private
-    */
+     * @private
+     */
     _scheduleExecute() {
         this._execute_event = this._async_tool.callLater( this._execute_cb );
     }
 
     /**
-    * @private
-    */
+     * @private
+     */
     _cancelExecute() {
         if ( this._execute_event ) {
             this._async_tool.cancelCall( this._execute_event );
@@ -406,20 +406,20 @@ class AsyncSteps {
 
 
     /**
-    * It is just a subset of *ExecFunc*
-    * @callback LoopFunc
-    * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
-    * @alias loop_callback
-    * @see ExecFunc
-    */
+     * It is just a subset of *ExecFunc*
+     * @callback LoopFunc
+     * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
+     * @alias loop_callback
+     * @see ExecFunc
+     */
 
     /**
-    * Execute loop until *as.break()* or *as.error()* is called
-    * @param {LoopFunc} func - loop body
-    * @param {string=} label - optional label to use for *as.break()* and *as.continue()* in inner loops
-    * @returns {AsyncSteps} self
-    * @alias AsyncSteps#loop
-    */
+     * Execute loop until *as.break()* or *as.error()* is called
+     * @param {LoopFunc} func - loop body
+     * @param {string=} label - optional label to use for *as.break()* and *as.continue()* in inner loops
+     * @returns {AsyncSteps} self
+     * @alias AsyncSteps#loop
+     */
     loop( func, label ) {
         this._sanityCheck();
 
@@ -446,10 +446,10 @@ class AsyncSteps {
                         if ( term_label &&
                             ( term_label !== label ) ) {
                             // Unroll loops continue
-                            async_tool.callLater( function() {
+                            async_tool.callLater( () => {
                                 try {
                                     outer_as.continue( term_label );
-                                } catch ( ex ) {
+                                } catch ( _ ) {
                                     // ignore
                                 }
                             } );
@@ -464,29 +464,29 @@ class AsyncSteps {
                         if ( term_label &&
                             ( term_label !== label ) ) {
                             // Unroll loops and break
-                            async_tool.callLater( function() {
+                            async_tool.callLater( () => {
                                 try {
                                     outer_as.break( term_label );
-                                } catch ( ex ) {
+                                } catch ( _ ) {
                                     // ignore
                                 }
                             } );
                         } else {
                             // Continue linear execution
-                            async_tool.callLater( function() {
+                            async_tool.callLater( () => {
                                 try {
                                     outer_as.success();
-                                } catch ( ex ) {
+                                } catch ( _ ) {
                                     // can fail sanity check on race condition after cancel()
                                 }
                             } );
                         }
                     } else {
                         // Forward regular error
-                        async_tool.callLater( function() {
+                        async_tool.callLater( () => {
                             try {
                                 outer_as.error( err, outer_as.state.error_info );
-                            } catch ( ex ) {
+                            } catch ( _ ) {
                                 // ignore
                             }
                         } );
@@ -515,22 +515,22 @@ class AsyncSteps {
     }
 
     /**
-    * It is just a subset of *ExecFunc*
-    * @callback RepeatFunc
-    * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
-    * @param {integer} i - current iteration starting from 0
-    * @alias repeat_callback
-    * @see ExecFunc
-    */
+     * It is just a subset of *ExecFunc*
+     * @callback RepeatFunc
+     * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
+     * @param {integer} i - current iteration starting from 0
+     * @alias repeat_callback
+     * @see ExecFunc
+     */
 
     /**
-    * Call *func(as, i)* for *count* times
-    * @param {integer} count - how many times to call the *func*
-    * @param {RepeatFunc} func - loop body
-    * @param {string=} label - optional label to use for *as.break()* and *as.continue()* in inner loops
-    * @returns {AsyncSteps} self
-    * @alias AsyncSteps#repeat
-    */
+     * Call *func(as, i)* for *count* times
+     * @param {integer} count - how many times to call the *func*
+     * @param {RepeatFunc} func - loop body
+     * @param {string=} label - optional label to use for *as.break()* and *as.continue()* in inner loops
+     * @returns {AsyncSteps} self
+     * @alias AsyncSteps#repeat
+     */
     repeat( count, func, label ) {
         let i = 0;
 
@@ -549,23 +549,23 @@ class AsyncSteps {
     }
 
     /**
-    * It is just a subset of *ExecFunc*
-    * @callback ForEachFunc
-    * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
-    * @param {integer|string} key - key ID or name
-    * @param {*} value - value associated with key
-    * @alias foreach_callback
-    * @see ExecFunc
-    */
+     * It is just a subset of *ExecFunc*
+     * @callback ForEachFunc
+     * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
+     * @param {integer|string} key - key ID or name
+     * @param {*} value - value associated with key
+     * @alias foreach_callback
+     * @see ExecFunc
+     */
 
     /**
-    * For each *map* or *list* element call *func( as, key, value )*
-    * @param {integer} map_or_list - map or list to iterate over
-    * @param {ForEachFunc} func - loop body
-    * @param {string=} label - optional label to use for *as.break()* and *as.continue()* in inner loops
-    * @returns {AsyncSteps} self
-    * @alias AsyncSteps#forEach
-    */
+     * For each *map* or *list* element call *func( as, key, value )*
+     * @param {integer} map_or_list - map or list to iterate over
+     * @param {ForEachFunc} func - loop body
+     * @param {string=} label - optional label to use for *as.break()* and *as.continue()* in inner loops
+     * @returns {AsyncSteps} self
+     * @alias AsyncSteps#forEach
+     */
     forEach( map_or_list, func, label ) {
         if ( Array.isArray( map_or_list ) ) {
             this.repeat(
