@@ -1,6 +1,7 @@
 
 === (next) ===
 CHANGED: as.successStep() take parameters and always inject a step with as.success() call
+CHANGED: to better define error constants
 NEW: as.await() integration with Promises
 NEW: FTN12 v1.11 compliance
 

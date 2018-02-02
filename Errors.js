@@ -21,6 +21,24 @@
  * limitations under the License.
  */
 
+const error_list = [
+    'ConnectError',
+    'CommError',
+    'UnknownInterface',
+    'NotSupportedVersion',
+    'NotImplemented',
+    'Unauthorized',
+    'InternalError',
+    'InvokerError',
+    'InvalidRequest',
+    'DefenseRejected',
+    'PleaseReauth',
+    'SecurityError',
+    'Timeout',
+    'LoopBreak',
+    'LoopCont',
+];
+
 /**
  * List of standard FutoIn Core errors. It may static get extended in runtime.
  * @var FutoInErrors
@@ -33,9 +51,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get ConnectError() {
-        return "ConnectError";
-    }
 
     /**
      * Communication error at any stage after request is sent
@@ -45,9 +60,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get CommError() {
-        return "CommError";
-    }
 
     /**
      * Unknown interface requested.
@@ -56,9 +68,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get UnknownInterface() {
-        return "UnknownInterface";
-    }
 
     /**
      * Not supported interface version.
@@ -67,9 +76,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get NotSupportedVersion() {
-        return "NotSupportedVersion";
-    }
 
     /**
      * In case interface function is not implemented on Executor side
@@ -78,9 +84,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get NotImplemented() {
-        return "NotImplemented";
-    }
 
     /**
      * Security policy on Executor side does not allow to
@@ -90,9 +93,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get Unauthorized() {
-        return "Unauthorized";
-    }
 
     /**
      * Unexpected internal error on Executor side, including internal CommError.
@@ -101,9 +101,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get InternalError() {
-        return "InternalError";
-    }
 
     /**
      * Unexpected internal error on Invoker side, not related to CommError.
@@ -112,9 +109,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get InvokerError() {
-        return "InvokerError";
-    }
 
     /**
      * Invalid data is passed as FutoIn request.
@@ -123,9 +117,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get InvalidRequest() {
-        return "InvalidRequest";
-    }
 
     /**
      * Defense system has triggered rejection
@@ -134,9 +125,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get DefenseRejected() {
-        return "DefenseRejected";
-    }
 
     /**
      * Executor requests re-authorization
@@ -145,9 +133,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get PleaseReauth() {
-        return "PleaseReauth";
-    }
 
     /**
      * 'sec' request section has invalid data or not SecureChannel
@@ -156,9 +141,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get SecurityError() {
-        return "SecurityError";
-    }
 
     /**
      * Timeout occurred in any stage
@@ -167,9 +149,6 @@ class Errors {
      * @default
      * @memberof FutoInErrors
      */
-    static get Timeout() {
-        return "Timeout";
-    }
 
     /**
      * Loop Break called
@@ -179,9 +158,6 @@ class Errors {
      * @private
      * @memberof FutoInErrors
      */
-    static get LoopBreak() {
-        return "LoopBreak";
-    }
 
     /**
      * Loop Continue called
@@ -191,9 +167,11 @@ class Errors {
      * @private
      * @memberof FutoInErrors
      */
-    static get LoopCont() {
-        return "LoopCont";
-    }
 }
+
+error_list.forEach( ( v ) => Object.defineProperty( Errors, v, {
+    enumerable: true,
+    value: v,
+} ) );
 
 module.exports = Errors;
