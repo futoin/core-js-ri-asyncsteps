@@ -1,7 +1,7 @@
 {
   "name": "futoin-asyncsteps",
   "version": "1.10.11",
-  "description": "FutoIn AsyncSteps. Adds classical linear program flow structure to async programming supporting exceptions. error handlers, timeouts, unlimited number of sub-steps, execution parallelism, loops and job state/context variables.",
+  "description": "Mimic traditional threads in single threaded event loop",
   "main": "lib/asyncsteps-full.js",
   "browser": "es5/lib/browser.js",
   "files": [
