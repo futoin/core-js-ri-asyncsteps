@@ -1,4 +1,9 @@
 
+=== (next) ===
+CHANGED: as.successStep() take parameters and always inject a step with as.success() call
+NEW: as.await() integration with Promises
+NEW: FTN12 v1.11 compliance
+
 === 1.10.11 (2017-12-26) ===
 FIXED: missing files in Git
 

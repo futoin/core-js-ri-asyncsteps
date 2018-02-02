@@ -11,13 +11,13 @@
 Reference implementation of:
  
     FTN12: FutoIn Async API
-    Version: 1.10
+    Version: 1.11
     
-Spec: [FTN12: FutoIn Async API v1.x](http://specs.futoin.org/final/preview/ftn12_async_api-1.html)
+Spec: [FTN12: FutoIn Async API v1.x](https://specs.futoin.org/final/preview/ftn12_async_api-1.html)
 
 Author: [Andrey Galkin](mailto:andrey@futoin.org)
 
-[Web Site](http://futoin.org/)
+[Documentation](https://futoin.org/)
 
 
 # About
@@ -1174,8 +1174,9 @@ Wrapper for clearTimeout()/clearImmediate()
     * [.loop(func, [label])](#AsyncSteps+loop) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.repeat(count, func, [label])](#AsyncSteps+repeat) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.successStep()](#AsyncSteps+successStep)
+    * [.await(promise, [onerror])](#AsyncSteps+await)
     * [.success([..._arg])](#AsyncSteps+success)
-    * ~~[.successStep()](#AsyncSteps+successStep)~~
     * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.setCancel(oncancel)](#AsyncSteps+setCancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.waitExternal()](#AsyncSteps+waitExternal) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -1323,6 +1324,29 @@ For each *map* or *list* element call *func( as, key, value )*
 | func | <code>ForEachFunc</code> | loop body |
 | [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
 
+<a name="AsyncSteps+successStep"></a>
+
+### asyncSteps.successStep()
+Shortcut for `this.add( ( as ) => as.success( ...args ) )`
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [args...] | <code>any</code> | argument to pass, if any |
+
+<a name="AsyncSteps+await"></a>
+
+### asyncSteps.await(promise, [onerror])
+Integrate a promise as a step.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| promise | <code>Promise</code> | promise to add as a step |
+| [onerror] | <code>function</code> | error handler to check |
+
 <a name="AsyncSteps+success"></a>
 
 ### asyncSteps.success([..._arg])
@@ -1334,16 +1358,6 @@ Successfully complete current step execution, optionally passing result variable
 | --- | --- | --- |
 | [..._arg] | <code>\*</code> | unlimited number of result variables with no type constraint |
 
-<a name="AsyncSteps+successStep"></a>
-
-### ~~asyncSteps.successStep()~~
-***Deprecated***
-
-Deprecated with FTN12 v1.5
-If sub-steps have been added then add efficient dummy step which behavior of as.success();
-Otherwise, simply call *as.success();*
-
-**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
 <a name="AsyncSteps+setTimeout"></a>
 
 ### asyncSteps.setTimeout(timeout_ms) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -1438,8 +1452,9 @@ Continue loop execution from the next iteration, throws exception
     * [.loop(func, [label])](#AsyncSteps+loop) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.repeat(count, func, [label])](#AsyncSteps+repeat) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.successStep()](#AsyncSteps+successStep)
+    * [.await(promise, [onerror])](#AsyncSteps+await)
     * [.success([..._arg])](#AsyncSteps+success)
-    * ~~[.successStep()](#AsyncSteps+successStep)~~
     * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.setCancel(oncancel)](#AsyncSteps+setCancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.waitExternal()](#AsyncSteps+waitExternal) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -1587,6 +1602,29 @@ For each *map* or *list* element call *func( as, key, value )*
 | func | <code>ForEachFunc</code> | loop body |
 | [label] | <code>string</code> | optional label to use for *as.break()* and *as.continue()* in inner loops |
 
+<a name="AsyncSteps+successStep"></a>
+
+### asyncSteps.successStep()
+Shortcut for `this.add( ( as ) => as.success( ...args ) )`
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [args...] | <code>any</code> | argument to pass, if any |
+
+<a name="AsyncSteps+await"></a>
+
+### asyncSteps.await(promise, [onerror])
+Integrate a promise as a step.
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| promise | <code>Promise</code> | promise to add as a step |
+| [onerror] | <code>function</code> | error handler to check |
+
 <a name="AsyncSteps+success"></a>
 
 ### asyncSteps.success([..._arg])
@@ -1598,16 +1636,6 @@ Successfully complete current step execution, optionally passing result variable
 | --- | --- | --- |
 | [..._arg] | <code>\*</code> | unlimited number of result variables with no type constraint |
 
-<a name="AsyncSteps+successStep"></a>
-
-### ~~asyncSteps.successStep()~~
-***Deprecated***
-
-Deprecated with FTN12 v1.5
-If sub-steps have been added then add efficient dummy step which behavior of as.success();
-Otherwise, simply call *as.success();*
-
-**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
 <a name="AsyncSteps+setTimeout"></a>
 
 ### asyncSteps.setTimeout(timeout_ms) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)

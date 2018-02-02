@@ -589,6 +589,103 @@ class AsyncSteps {
 
         return this;
     }
+
+    /**
+     * Shortcut for `this.add( ( as ) => as.success( ...args ) )`
+     * @param {any} [args...] - argument to pass, if any
+     * @alias AsyncSteps#successStep
+     */
+    successStep( ...args ) {
+        this.add( ( as ) => as.success( ...args ) );
+    }
+
+    /**
+     * Integrate a promise as a step.
+     * @param {Promise} promise - promise to add as a step
+     * @param {function} [onerror] error handler to check
+     * @alias AsyncSteps#await
+     */
+    await( promise, onerror ) {
+        const promise_state = {
+            step_as : null,
+            complete : false,
+        };
+
+        const convert_error = ( as, reason ) => {
+            const state = as.state;
+
+            if ( state ) {
+                const default_error = 'PromiseReject';
+
+                if ( reason instanceof Error ) {
+                    state.last_exception = reason;
+                    state.error_info = undefined;
+                    ( this._root || this )._handle_error( default_error );
+                } else {
+                    try {
+                        this.error( reason || default_error );
+                    } catch ( _ ) {
+                        // ignore
+                    }
+                }
+            }
+        };
+
+        // Attach handlers on the same tick
+        promise.then(
+            ( result ) => {
+                const step_as = promise_state.step_as;
+
+                if ( step_as ) {
+                    step_as.success( result );
+                } else {
+                    promise_state.complete = ( step_as ) => {
+                        step_as.success( result );
+                    };
+                }
+            },
+            ( reason ) => {
+                const step_as = promise_state.step_as;
+
+                if ( step_as ) {
+                    convert_error( step_as, reason );
+                } else {
+                    // prevent cancel logic
+                    promise_state.step_as = null;
+
+                    promise_state.complete = ( step_as ) => {
+                        convert_error( step_as, reason );
+                    };
+                }
+            }
+        );
+
+        this.add(
+            ( as ) => {
+                const { complete } = promise_state;
+
+                if ( complete ) {
+                    complete( as );
+                } else {
+                    promise_state.step_as = as;
+
+                    as.setCancel( () => {
+                        if ( promise_state.step_as ) {
+                            promise_state.step_as = null;
+
+                            try {
+                                // BlueBird cancellation
+                                promise.cancel();
+                            } catch ( _ ) {
+                                // ignore
+                            }
+                        }
+                    } );
+                }
+            },
+            onerror
+        );
+    }
 }
 
 /**
@@ -633,6 +730,8 @@ Object.assign(
         repeat : ASProto.repeat,
         forEach : ASProto.forEach,
         sync : ASProto.sync,
+        successStep : ASProto.successStep,
+        await : ASProto.await,
     }
 );
 

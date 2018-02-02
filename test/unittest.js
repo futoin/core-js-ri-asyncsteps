@@ -1,8 +1,8 @@
 'use strict';
 
 //
-var async_steps;
-var chai;
+let async_steps;
+let chai;
 
 if ( typeof window !== 'undefined' ) {
     async_steps = window.$as;
@@ -13,8 +13,11 @@ if ( typeof window !== 'undefined' ) {
 }
 
 chai.should();
-var assert = chai.assert;
-var performance_now = require( "performance-now" );
+
+const performance_now = require( "performance-now" );
+
+const assert = chai.assert;
+const expect = chai.expect;
 
 
 describe( 'AsyncTool', function() {
@@ -850,15 +853,16 @@ describe( 'AsyncSteps', function() {
                 as.add(
                     function( as ) {
                         as.add( function( as ) {
-                            as.successStep(); // alias for success
+                            as.successStep();
                         } );
-                        as.successStep(); // must add a step
+                        as.successStep( 1, 2, 3 );
                     },
                     function( as, error ) {
                         error.should.equal( "Does not work" );
                     }
                 ).add(
-                    function( as ) {
+                    function( as, a, b, c ) {
+                        expect( [ a, b, c ] ).to.eql( [ 1, 2, 3 ] );
                         as.state.second_called = true;
                         as.success();
                     }
@@ -1725,6 +1729,118 @@ describe( 'AsyncSteps', function() {
         } );
     } );
 } );
+
+if ( typeof Promise !== 'undefined' ) {
+    describe( '#await', function() {
+        it( 'should support Promise', function( done ) {
+            const as = async_steps();
+            as.await( Promise.resolve( 123 ) );
+            as.add( ( as, res ) => {
+                try {
+                    expect( res ).to.equal( 123 );
+                } catch ( e ) {
+                    done( e );
+                }
+            } );
+            as.await( new Promise( ( resolve, reject ) => setTimeout( resolve, 100 ) ) );
+            as.add( ( as ) => {
+                as.await( Promise.resolve() );
+                as.add( ( as, res ) => {
+                    try {
+                        expect( res ).to.equal( undefined );
+                    } catch ( e ) {
+                        done( e );
+                    }
+                } );
+            } );
+            as.add( ( as ) => done() );
+            as.execute();
+        } );
+
+        it( 'should handle rejected Promise', function( done ) {
+            const as = async_steps();
+            const test_error = new Error( 'MyError' );
+
+            try {
+                as.await(
+                    Promise.reject( test_error ),
+                    ( as, res ) => {
+                        try {
+                            expect( res ).to.equal( 'PromiseReject' );
+                            expect( as.state.last_exception ).to.equal( test_error );
+                            as.success();
+                        } catch ( e ) {
+                            done( e );
+                        }
+                    }
+                );
+            } catch ( e ) {
+                done( e );
+            }
+
+            as.await(
+                new Promise( ( resolve, reject ) => setTimeout( reject, 100 ) ),
+                ( as, res ) => {
+                    try {
+                        expect( res ).to.equal( 'PromiseReject' );
+                        expect( as.state.last_exception ).to.equal( test_error );
+                        as.success();
+                    } catch ( e ) {
+                        done( e );
+                    }
+                }
+            );
+
+            as.add(
+                ( as ) => {
+                    as.await(
+                        Promise.reject(),
+                        ( as, res ) => {
+                            try {
+                                expect( res ).to.equal( 'PromiseReject' );
+                                as.success();
+                            } catch ( e ) {
+                                done( e );
+                            }
+                        }
+                    );
+                },
+                ( as, err ) => {
+                    done( as.state.last_exception || 'Fail' );
+                }
+            );
+            as.add( ( as ) => {
+                as.await(
+                    Promise.reject( 'SomeError' ),
+                    ( as, res ) => {
+                        try {
+                            expect( res ).to.equal( 'SomeError' );
+                            as.success();
+                        } catch ( e ) {
+                            done( e );
+                        }
+                    }
+                );
+            } );
+            as.add( ( as ) => done() );
+            as.execute();
+        } );
+
+        it( 'should handle cancel', function( done ) {
+            const as = async_steps();
+            as.add( ( as ) => {
+                as.setCancel( ( as ) => done() );
+                as.add( ( as ) => {
+                    as.await( new Promise( () => {} ) );
+                } );
+            } );
+            as.add( ( as ) => done( 'Fail' ) );
+            as.execute();
+
+            setTimeout( () => as.cancel(), 100 );
+        } );
+    } );
+}
 
 describe( '.assertAS', function( done ) {
     it( "should pass with valid objects", function() {
