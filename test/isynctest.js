@@ -13,24 +13,18 @@ if ( typeof window !== 'undefined' ) {
 
 const expect = chai.expect;
 const { ISync } = $as;
+const $as_test = require( '../testcase' );
 
 describe( 'ISync', function() {
-    it ( 'should throw default errors', function( done ) {
-        const is = new ISync();
-        const as = $as();
-
-        as.add(
-            ( as ) => {
-                as.sync( is, ( as, err ) => done( 'Fail' ) );
-            },
-            ( as, err ) => {
-                if ( err === 'NotImplemented' ) {
-                    done();
-                } else {
-                    done( 'Fail' );
-                }
+    it ( 'should throw default errors', $as_test(
+        ( as ) => {
+            const is = new ISync();
+            as.sync( is, ( as, err ) => as.error( 'MyError' ) );
+        },
+        ( as, err ) => {
+            if ( err === 'NotImplemented' ) {
+                as.success();
             }
-        );
-        as.execute();
-    } );
+        }
+    ) );
 } );

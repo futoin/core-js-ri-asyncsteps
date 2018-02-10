@@ -39,6 +39,7 @@ module.exports = function( grunt ) {
                     "ISync.js",
                     "Limiter.js",
                     "Mutex.js",
+                    'testcase.js',
                     "Throttle.js",
                 ],
                 dest: 'es5/',

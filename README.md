@@ -375,6 +375,31 @@ setTimeout(() => {
 }, 450);
 ```
 
+## Test case aid
+
+```javascript
+$as_test = require( 'futoin-asyncsteps/testcase' );
+
+// positive test
+it( 'should ...', $as_test(
+    ( as ) => {
+        // some test logic
+    }
+) );
+
+// negative test
+it( 'should ...', $as_test(
+    ( as ) => {
+        // some test logic
+    },
+    ( as, err ) => {
+        if ( err === 'ExpectedError' ) {
+            as.success();
+        }
+    }
+) );
+```
+
 # API reference
 
 ## Modules
@@ -444,6 +469,12 @@ setTimeout(() => {
 ## Functions
 
 <dl>
+<dt><a href="#$as_test">$as_test(func, [onerror])</a> ⇒ <code>function</code></dt>
+<dd><p>Mocha-compatible test case based on AsyncSteps.</p>
+<p>Example:</p>
+<pre><code class="lang-javascript">it(&#39;should ...&#39;, $as_test( (as) =&gt; {}, (as, err) =&gt; {} );
+</code></pre>
+</dd>
 <dt><a href="#installAsyncToolTest">installAsyncToolTest([install])</a></dt>
 <dd><p>Use for unit testing to fine control step execution.
 It installs AsyncToolTest in place of AsyncTool</p>
@@ -1189,6 +1220,24 @@ Continue loop execution from the next iteration, throws exception
 | Param | Type | Description |
 | --- | --- | --- |
 | [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is found |
+
+<a name="$as_test"></a>
+
+## $as_test(func, [onerror]) ⇒ <code>function</code>
+Mocha-compatible test case based on AsyncSteps.
+
+Example:
+```javascript
+it('should ...', $as_test( (as) => {}, (as, err) => {} );
+```
+
+**Kind**: global function  
+**Returns**: <code>function</code> - suitable for `it()` Mocha call  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| func | <code>ExecFunc</code> | function defining non-blocking step execution |
+| [onerror] | <code>ErrorFunc</code> | Optional, provide error handler |
 
 <a name="installAsyncToolTest"></a>
 

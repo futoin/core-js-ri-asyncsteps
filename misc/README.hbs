@@ -375,6 +375,31 @@ setTimeout(() => {
 }, 450);
 ```
 
+## Test case aid
+
+```javascript
+$as_test = require( 'futoin-asyncsteps/testcase' );
+
+// positive test
+it( 'should ...', $as_test(
+    ( as ) => {
+        // some test logic
+    }
+) );
+
+// negative test
+it( 'should ...', $as_test(
+    ( as ) => {
+        // some test logic
+    },
+    ( as, err ) => {
+        if ( err === 'ExpectedError' ) {
+            as.success();
+        }
+    }
+) );
+```
+
 # API reference
 
 {{>main}}

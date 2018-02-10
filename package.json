@@ -14,6 +14,7 @@
     "ISync.js",
     "Limiter.js",
     "Mutex.js",
+    "testcase.js",
     "Throttle.js"
   ],
   "engines": {
