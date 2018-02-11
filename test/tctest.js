@@ -65,5 +65,19 @@ describe( '$as_test', function() {
             this.timeout( 1e3 ); // calls Mocha
         }
     ) );
+
+    it ( 'should force failure on negative test', ( done ) => {
+        $as_test(
+            ( as ) => {},
+            ( as, err ) => {}
+        )( ( err ) => {
+            try {
+                expect( err.message ).to.equal( 'NegativeTestMustThrow' );
+                done();
+            } catch ( err ) {
+                done( err );
+            }
+        } );
+    } );
 } );
 

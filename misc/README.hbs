@@ -378,24 +378,34 @@ setTimeout(() => {
 ## Test case aid
 
 ```javascript
+// NOTE: it's not exposed through main entry point
 $as_test = require( 'futoin-asyncsteps/testcase' );
 
-// positive test
+// Positive test example
 it( 'should ...', $as_test(
     ( as ) => {
         // some test logic
     }
 ) );
 
-// negative test
+// Negative test example
 it( 'should ...', $as_test(
     ( as ) => {
         // some test logic
+        // Forced as.error('NegativeTestMustThrow') step in the end
     },
     ( as, err ) => {
         if ( err === 'ExpectedError' ) {
             as.success();
         }
+    }
+) );
+
+// Access "this" provided by Mocha
+it( 'should ...', $as_test(
+    function( as ) {
+        // note use a full function instead of a light arrow function
+        this.timeout( 1e3 );
     }
 ) );
 ```
