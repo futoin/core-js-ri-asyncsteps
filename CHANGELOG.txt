@@ -1,4 +1,7 @@
 
+=== (next) ===
+FIXED: typo in $as_test error message
+
 === 1.11.2 (2018-02-11) ===
 CHANGED: $as_test with onerror now ensures failure
 

@@ -55,7 +55,7 @@ module.exports = function( func, onerror ) {
             },
             ( as, err ) => {
                 // eslint-disable-next-line no-console
-                console.log( `ERRPR: ${err} (${as.state.error_info})` );
+                console.log( `ERROR: ${err} (${as.state.error_info})` );
                 done( as.state.last_exception || new Error( 'Generic Fail' ) );
             }
         );
