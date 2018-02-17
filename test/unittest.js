@@ -1,5 +1,8 @@
 'use strict';
 
+// ensure it works with frozen one
+Object.freeze( Object.prototype );
+
 //
 let async_steps;
 let chai;
@@ -11,8 +14,6 @@ if ( typeof window !== 'undefined' ) {
     async_steps = module.require( '../lib/asyncsteps' );
     chai = module.require( 'chai' );
 }
-
-chai.should();
 
 const performance_now = require( "performance-now" );
 
@@ -34,7 +35,7 @@ describe( 'AsyncTool', function() {
                     function() {
                         var s = performance_now() * 1e3;
 
-                        s.should.be.greaterThan( t + 9 );
+                        expect( s ).be.greaterThan( t + 9 );
                         done();
                     },
                     10
@@ -95,7 +96,7 @@ describe( 'AsyncToolTest', function() {
 
                 assert.equal( async_steps.AsyncTool.getEvents()[0].f, f );
                 async_steps.AsyncTool.resetEvents();
-                async_steps.AsyncTool.getEvents().length.should.equal( 0 );
+                expect( async_steps.AsyncTool.getEvents().length ).equal( 0 );
             } );
         }
     );
@@ -104,18 +105,18 @@ describe( 'AsyncToolTest', function() {
             it( "should cancel call", function( done ) {
                 var h = async_steps.AsyncTool.callLater( done );
 
-                async_steps.AsyncTool.hasEvents().should.be.true;
+                expect( async_steps.AsyncTool.hasEvents() ).be.true;
                 async_steps.AsyncTool.cancelCall( h );
-                async_steps.AsyncTool.hasEvents().should.be.false;
+                expect( async_steps.AsyncTool.hasEvents() ).be.false;
                 done();
             } );
 
             it( "should cancel call timeout", function( done ) {
                 var h = async_steps.AsyncTool.callLater( done, 100 );
 
-                async_steps.AsyncTool.hasEvents().should.be.true;
+                expect( async_steps.AsyncTool.hasEvents() ).be.true;
                 async_steps.AsyncTool.cancelCall( h );
-                async_steps.AsyncTool.hasEvents().should.be.false;
+                expect( async_steps.AsyncTool.hasEvents() ).be.false;
                 done();
             } );
         }
@@ -137,11 +138,11 @@ describe( 'AsyncSteps', function() {
     } );
 
     function assertNoEvents() {
-        async_steps.AsyncTool.getEvents().length.should.equal( 0 );
+        expect( async_steps.AsyncTool.getEvents().length ).equal( 0 );
     }
 
     function assertHasEvents() {
-        async_steps.AsyncTool.getEvents().length.should.be.above( 0 );
+        expect( async_steps.AsyncTool.getEvents().length ).be.above( 0 );
     }
 
     describe(
@@ -162,10 +163,10 @@ describe( 'AsyncSteps', function() {
                     }
                 );
 
-                as._queue.length.should.equal( 2 );
-                as._queue[0][0].should.be.instanceof( Function );
-                as._queue[0][1].should.be.instanceof( Function );
-                as._queue[1][0].should.be.instanceof( Function );
+                expect( as._queue.length ).equal( 2 );
+                expect( as._queue[0][0] ).be.instanceof( Function );
+                expect( as._queue[0][1] ).be.instanceof( Function );
+                expect( as._queue[1][0] ).be.instanceof( Function );
                 assert.isUndefined( as._queue[1][1] );
             } );
 
@@ -183,30 +184,30 @@ describe( 'AsyncSteps', function() {
                             },
                             function( as, err ) {
                                 as.state.order.push( '1_1e' );
-                                err.should.eql( "MyError" );
+                                expect( err ).eql( "MyError" );
                                 as.success( '1_1e' );
                             }
                         );
                         as.add(
                             function( as, val ) {
                                 as.state.order.push( '1_2' );
-                                val.should.eql( '1_1e' );
+                                expect( val ).eql( '1_1e' );
                                 as.error( "MyError2" );
                             },
                             function( as, err ) {
                                 as.state.order.push( '1_2e' );
-                                err.should.eql( "MyError2" );
+                                expect( err ).eql( "MyError2" );
                                 as.success( '1_2e' );
                             }
                         ).add(
                             function( as, val ) {
                                 as.state.order.push( '1_3' );
-                                val.should.eql( '1_2e' );
+                                expect( val ).eql( '1_2e' );
                                 as.success( '1_3', 'yes' );
                             },
                             function( as, err ) {
                                 as.state.order.push( '1_3e' );
-                                err.should.eql( "MyError2" );
+                                expect( err ).eql( "MyError2" );
                                 as.success();
                             }
                         );
@@ -218,8 +219,8 @@ describe( 'AsyncSteps', function() {
                 ).add(
                     function( as, val1, val2 ) {
                         as.state.order.push( '2' );
-                        val1.should.eql( "1_3" );
-                        val2.should.eql( "yes" );
+                        expect( val1 ).eql( "1_3" );
+                        expect( val2 ).eql( "yes" );
                         as.success();
                     }
                 ).add(
@@ -228,7 +229,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         as.state.order.push( '3e' );
-                        err.should.eql( "InternalError" );
+                        expect( err ).eql( "InternalError" );
                         as.success();
                     }
                 );
@@ -244,7 +245,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         as.state.order.push( '4e' );
-                        err.should.eql( "InternalError" );
+                        expect( err ).eql( "InternalError" );
                         as.success();
                     }
                 );
@@ -257,14 +258,14 @@ describe( 'AsyncSteps', function() {
                                 as.add(
                                     function( as ) {
                                         as.state.order.push( '5_2' );
-                                        undefined.should.eql( "InternalError" );
+                                        expect( undefined ).eql( "InternalError" );
                                     },
                                     function( as, err ) {
                                         as.state.order.push( '5_2e' );
                                         as.add(
                                             function( as ) {
                                                 as.state.order.push( '5_3' );
-                                                err.should.eql( "InternalError" );
+                                                expect( err ).eql( "InternalError" );
                                             },
                                             function( as, err ) {
                                                 as.state.order.push( '5_3e' );
@@ -286,7 +287,7 @@ describe( 'AsyncSteps', function() {
 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.order.should.eql( [
+                expect( as.state.order ).eql( [
                     '1',
                     '1_1',
                     '1_1e',
@@ -386,10 +387,10 @@ describe( 'AsyncSteps', function() {
                     as.success();
                 } );
 
-                as._queue.length.should.equal( 3 );
-                as._queue[0][0].should.be.instanceof( Function );
-                as._queue[0][1].should.be.instanceof( Function );
-                as._queue[1][0].should.be.instanceof( Function );
+                expect( as._queue.length ).equal( 3 );
+                expect( as._queue[0][0] ).be.instanceof( Function );
+                expect( as._queue[0][1] ).be.instanceof( Function );
+                expect( as._queue[1][0] ).be.instanceof( Function );
                 assert.isUndefined( as._queue[1][1] );
 
                 as.execute();
@@ -433,7 +434,7 @@ describe( 'AsyncSteps', function() {
 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.order.should.eql( [
+                expect( as.state.order ).eql( [
                     1,
                     2,
                     3,
@@ -483,7 +484,7 @@ describe( 'AsyncSteps', function() {
 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.order.should.eql( [
+                expect( as.state.order ).eql( [
                     1,
                     2,
                     3,
@@ -534,7 +535,7 @@ describe( 'AsyncSteps', function() {
 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.order.should.eql( [
+                expect( as.state.order ).eql( [
                     1,
                     2,
                     3,
@@ -596,7 +597,7 @@ describe( 'AsyncSteps', function() {
 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.order.should.eql( [
+                expect( as.state.order ).eql( [
                     1,
                     2,
                     3,
@@ -609,8 +610,8 @@ describe( 'AsyncSteps', function() {
 
                 as.add( function( as ) {
                     as.parallel( function( as, err ) {
-                        err.should.equal( "MyError" );
-                        as.state.error_info.should.equal( "MyInfo" );
+                        expect( err ).equal( "MyError" );
+                        expect( as.state.error_info ).equal( "MyInfo" );
                     } )
                         .add( function( as ) {
                         } )
@@ -621,7 +622,7 @@ describe( 'AsyncSteps', function() {
                         } );
                 } );
                 as.add( function( as ) {
-                    false.should.be.true;
+                    expect( false ).be.true;
                 } );
 
 
@@ -641,7 +642,7 @@ describe( 'AsyncSteps', function() {
                         as.success();
                     },
                     function( as, error ) {
-                        error.should.equal( "Does not work" );
+                        expect( error ).equal( "Does not work" );
                     }
                 ).add(
                     function( as ) {
@@ -651,11 +652,11 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                as.state.second_called.should.be.false;
+                expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
                 async_steps.AsyncTool.nextEvent();
-                as.state.second_called.should.be.true;
+                expect( as.state.second_called ).be.true;
 
                 assertNoEvents();
             } );
@@ -674,18 +675,18 @@ describe( 'AsyncSteps', function() {
                 ).add(
                     function( as, val1, val2 ) {
                         as.state.second_called = true;
-                        val1.should.equal( 'Value1' );
-                        val2.should.equal( 'Value2' );
+                        expect( val1 ).equal( 'Value1' );
+                        expect( val2 ).equal( 'Value2' );
                         as.success();
                     }
                 );
 
                 as.execute();
-                as.state.second_called.should.be.false;
+                expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
                 async_steps.AsyncTool.nextEvent();
-                as.state.second_called.should.be.true;
+                expect( as.state.second_called ).be.true;
 
                 assertNoEvents();
             } );
@@ -702,7 +703,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, error ) {
                         console.dir( as );
-                        error.should.equal( "Does not work" );
+                        expect( error ).equal( "Does not work" );
                     }
                 ).add(
                     function( as ) {
@@ -712,15 +713,15 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                as.state.second_called.should.be.false;
+                expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
                 async_steps.AsyncTool.nextEvent();
-                as.state.second_called.should.be.false;
+                expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
                 async_steps.AsyncTool.nextEvent();
-                as.state.second_called.should.be.true;
+                expect( as.state.second_called ).be.true;
 
                 assertNoEvents();
             } );
@@ -761,13 +762,13 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         as.state.executed = true;
-                        err.should.be.equal( 'InternalError' );
+                        expect( err ).be.equal( 'InternalError' );
                     }
                 );
 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.executed.should.be.true;
+                expect( as.state.executed ).be.true;
             } );
 
             it( 'should be possible to make async success', function() {
@@ -797,7 +798,7 @@ describe( 'AsyncSteps', function() {
                 async_steps.AsyncTool.nextEvent();
                 assertNoEvents();
 
-                as.state.myerror.should.be.false;
+                expect( as.state.myerror ).be.false;
             } );
 
             it( 'should ignore unexpected success', function() {
@@ -839,8 +840,8 @@ describe( 'AsyncSteps', function() {
                 async_steps.AsyncTool.nextEvent();
                 assertNoEvents();
 
-                as.state.myerror.should.be.false;
-                as.state.executed.should.be.true;
+                expect( as.state.myerror ).be.false;
+                expect( as.state.executed ).be.true;
             } );
         }
     );
@@ -858,7 +859,7 @@ describe( 'AsyncSteps', function() {
                         as.successStep( 1, 2, 3 );
                     },
                     function( as, error ) {
-                        error.should.equal( "Does not work" );
+                        expect( error ).equal( "Does not work" );
                     }
                 ).add(
                     function( as, a, b, c ) {
@@ -869,15 +870,15 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                as.state.second_called.should.be.false;
+                expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
                 async_steps.AsyncTool.nextEvent();
-                as.state.second_called.should.be.false;
+                expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
                 async_steps.AsyncTool.run();
-                as.state.second_called.should.be.true;
+                expect( as.state.second_called ).be.true;
             } );
         }
     );
@@ -898,7 +899,7 @@ describe( 'AsyncSteps', function() {
                     as.error( "MyError", 'My Info' );
                 }, Error, "MyError" );
 
-                as.state.error_info.should.equal( 'My Info' );
+                expect( as.state.error_info ).equal( 'My Info' );
             } );
 
 
@@ -912,13 +913,13 @@ describe( 'AsyncSteps', function() {
                                 as.error( 'Orig' );
                             },
                             function( as, err ) {
-                                err.should.eql( 'Orig' );
+                                expect( err ).eql( 'Orig' );
                                 as.error( 'Changed' );
                             }
                         );
                     },
                     function( as, err ) {
-                        err.should.eql( 'Changed' );
+                        expect( err ).eql( 'Changed' );
                     }
                 );
 
@@ -955,7 +956,7 @@ describe( 'AsyncSteps', function() {
                 async_steps.AsyncTool.nextEvent();
                 assertNoEvents();
 
-                as.state.myerror.should.be.true;
+                expect( as.state.myerror ).be.true;
             } );
 
             it( 'should be possible to make async error in execute', function() {
@@ -989,8 +990,8 @@ describe( 'AsyncSteps', function() {
 
                 assertNoEvents();
 
-                as.state.myerror.should.be.false;
-                as.state.executed.should.be.false;
+                expect( as.state.myerror ).be.false;
+                expect( as.state.executed ).be.false;
             } );
 
             it( 'should ignore unexpected error', function() {
@@ -1026,8 +1027,8 @@ describe( 'AsyncSteps', function() {
                 async_steps.AsyncTool.nextEvent();
                 assertNoEvents();
 
-                as.state.myerror.should.be.false;
-                as.state.executed.should.be.true;
+                expect( as.state.myerror ).be.false;
+                expect( as.state.executed ).be.true;
             } );
         }
     );
@@ -1041,7 +1042,7 @@ describe( 'AsyncSteps', function() {
                 async_steps.installAsyncToolTest( false );
 
                 var done_wrap = function( order ) {
-                    order.should.eql( [
+                    expect( order ).eql( [
                         '1',
                         '2',
                         '3',
@@ -1068,7 +1069,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         as.state.order.push( '4' );
-                        err.should.equal( 'Timeout' );
+                        expect( err ).equal( 'Timeout' );
                         assert.isUndefined( as.state.error_info );
                         done_wrap( as.state.order );
                     }
@@ -1110,14 +1111,14 @@ describe( 'AsyncSteps', function() {
 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.order.should.eql( [
+                expect( as.state.order ).eql( [
                     '1',
                     '2',
                     '3',
                 ] );
                 as.cancel();
                 async_steps.AsyncTool.run();
-                as.state.order.should.eql( [
+                expect( as.state.order ).eql( [
                     '1',
                     '2',
                     '3',
@@ -1169,14 +1170,14 @@ describe( 'AsyncSteps', function() {
                     } );
 
                 as.copyFrom( model_as );
-                as.state.should.have.property( 'old_v', false );
-                as.state.should.have.property( 'new_v', true );
+                expect( as.state ).have.property( 'old_v', false );
+                expect( as.state ).have.property( 'new_v', true );
 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.executed.should.be.true;
-                as.state.parallel1.should.be.true;
-                as.state.parallel2.should.be.true;
+                expect( as.state.executed ).be.true;
+                expect( as.state.parallel1 ).be.true;
+                expect( as.state.parallel2 ).be.true;
 
                 as.state.executed = false;
                 as.state.parallel1 = false;
@@ -1187,9 +1188,9 @@ describe( 'AsyncSteps', function() {
                     model_as.state.new_v2 = true;
                     as.copyFrom( model_as );
 
-                    as.state.should.have.property( 'old_v', false );
-                    as.state.should.have.property( 'new_v', true );
-                    as.state.should.have.property( 'new_v2', true );
+                    expect( as.state ).have.property( 'old_v', false );
+                    expect( as.state ).have.property( 'new_v', true );
+                    expect( as.state ).have.property( 'new_v2', true );
 
                     var m = async_steps();
 
@@ -1202,9 +1203,9 @@ describe( 'AsyncSteps', function() {
 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.executed.should.be.true;
-                as.state.parallel1.should.be.true;
-                as.state.parallel2.should.be.true;
+                expect( as.state.executed ).be.true;
+                expect( as.state.parallel1 ).be.true;
+                expect( as.state.parallel2 ).be.true;
             } );
         }
     );
@@ -1237,7 +1238,7 @@ describe( 'AsyncSteps', function() {
 
                 as.execute();
                 async_steps.AsyncTool.run();
-                as.state.error_code.should.be.equal( 'InternalError' );
+                expect( as.state.error_code ).be.equal( 'InternalError' );
             } );
 
             it( 'should implicitly success', function() {
@@ -1252,7 +1253,7 @@ describe( 'AsyncSteps', function() {
                 async_steps.AsyncTool.run();
                 assertNoEvents();
 
-                as.state.ok.should.be.true;
+                expect( as.state.ok ).be.true;
             } );
         }
     );
@@ -1304,7 +1305,7 @@ describe( 'AsyncSteps', function() {
 
                             as.loop( function( as ) {
                                 s.push( 'MEDIUM' );
-                                i.should.equal( icheck );
+                                expect( i ).equal( icheck );
 
                                 as.loop( function( as ) {
                                     s.push( 'INNER1' );
@@ -1348,7 +1349,7 @@ describe( 'AsyncSteps', function() {
                 async_steps.AsyncTool.run();
                 assertNoEvents();
 
-                s.should.eql( [
+                expect( s ).eql( [
                     'OUTER',
                     'MEDIUM',
                     'INNER1',
@@ -1362,7 +1363,7 @@ describe( 'AsyncSteps', function() {
                     'INNER3',
                 ] );
 
-                i.should.equal( 5 );
+                expect( i ).equal( 5 );
             } );
 
             it( 'should forward regular error', function() {
@@ -1384,7 +1385,7 @@ describe( 'AsyncSteps', function() {
                 async_steps.AsyncTool.run();
                 assertNoEvents();
 
-                reserr.should.equal( 'MyError' );
+                expect( reserr ).equal( 'MyError' );
             } );
 
             it( 'should continue outer loop', function() {
@@ -1445,7 +1446,7 @@ describe( 'AsyncSteps', function() {
                 assertNoEvents();
 
                 assert.equal( reserr, null );
-                i.should.equal( 3 );
+                expect( i ).equal( 3 );
             } );
 
             it( 'should repeat break', function() {
@@ -1473,7 +1474,7 @@ describe( 'AsyncSteps', function() {
                 assertNoEvents();
 
                 assert.equal( reserr, null );
-                i.should.equal( 2 );
+                expect( i ).equal( 2 );
             } );
 
             it( 'should forEach array', function() {
@@ -1502,7 +1503,7 @@ describe( 'AsyncSteps', function() {
                 assertNoEvents();
 
                 assert.equal( reserr, null );
-                i.should.equal( 6 );
+                expect( i ).equal( 6 );
             } );
 
             it( 'should forEach object', function() {
@@ -1536,7 +1537,7 @@ describe( 'AsyncSteps', function() {
                 assertNoEvents();
 
                 assert.equal( reserr, null );
-                i.should.equal( 6 );
+                expect( i ).equal( 6 );
             } );
         }
     );
@@ -1545,7 +1546,7 @@ describe( 'AsyncSteps', function() {
             it( 'should return state', function() {
                 var as = this.as;
 
-                as.state().should.equal( as.state );
+                expect( as.state() ).equal( as.state );
             } );
 
             it( 'should set error_info, last_exception and async_stack', function() {
@@ -1557,17 +1558,17 @@ describe( 'AsyncSteps', function() {
                         as.error( 'FirstError', 'FirstInfo' );
                     },
                     function( as, err ) {
-                        as.state.error_info.should.equal( 'FirstInfo' );
-                        as.state.last_exception.message.should.equal( 'FirstError' );
-                        as.state.async_stack.pop().should.eql( step_func );
+                        expect( as.state.error_info ).equal( 'FirstInfo' );
+                        expect( as.state.last_exception.message ).equal( 'FirstError' );
+                        expect( as.state.async_stack.pop() ).eql( step_func );
                         as.error( 'SecondError', 'SecondInfo' );
                     }
                 );
                 as.execute();
                 async_steps.AsyncTool.run();
                 assertNoEvents();
-                as.state.error_info.should.equal( 'SecondInfo' );
-                as.state.last_exception.message.should.equal( 'SecondError' );
+                expect( as.state.error_info ).equal( 'SecondInfo' );
+                expect( as.state.last_exception.message ).equal( 'SecondError' );
             } );
         }
     );
@@ -1638,7 +1639,7 @@ describe( 'AsyncSteps', function() {
                 as.state.count++;
 
                 try {
-                    as.state.count.should.equal( 19 );
+                    expect( as.state.count ).equal( 19 );
                     done();
                 } catch ( e ) {
                     done( e );
@@ -1864,7 +1865,7 @@ describe( '.assertAS', function( done ) {
                 done( 'Fail' );
                 return;
             } catch ( e ) {
-                e.message.should.equal( `Not an instance of AsyncSteps: ${v}` );
+                expect( e.message ).equal( `Not an instance of AsyncSteps: ${v}` );
             }
         }
 
@@ -1876,8 +1877,8 @@ if ( typeof window !== 'undefined' && window.$as ) {
     describe(
         'FutoIn.AsyncSteps', function() {
             it( 'should be set', function() {
-                window.$as.AsyncSteps.should.equal( window.FutoIn.AsyncSteps );
-                window.FutoIn.$as.should.equal( window.futoin.$as );
+                expect( window.$as.AsyncSteps ).equal( window.FutoIn.AsyncSteps );
+                expect( window.FutoIn.$as ).equal( window.futoin.$as );
             } );
         }
     );

@@ -1,5 +1,8 @@
 'use strict';
 
+// ensure it works with frozen one
+Object.freeze( Object.prototype );
+
 let $as;
 let chai;
 
