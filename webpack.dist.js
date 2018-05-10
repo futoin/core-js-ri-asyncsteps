@@ -5,6 +5,7 @@ const package_json = require( './package' );
 
 module.exports = [
     {
+        mode: 'production',
         entry: {
             'futoin-asyncsteps': `./${package_json.browser}`,
             'futoin-asyncsteps-lite': './es5/lib/browser-lite.js',
@@ -27,6 +28,7 @@ module.exports = [
         ],
     },
     {
+        mode: 'production',
         entry: {
             'polyfill-asyncsteps': './lib/polyfill.js',
         },

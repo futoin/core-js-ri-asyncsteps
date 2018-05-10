@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+    mode: 'development',
     entry: {
         unittest : './es5/test/unittest.js',
         isynctest : './es5/test/isynctest.js',
