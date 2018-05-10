@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 1.11.3 (2018-05-10) ===
 CHANGED: upgraded webpack to v4
 FIXED: typo in $as_test error message
 NEW: Node.js v10 testing

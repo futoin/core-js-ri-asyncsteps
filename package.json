@@ -1,6 +1,6 @@
 {
   "name": "futoin-asyncsteps",
-  "version": "1.11.2",
+  "version": "1.11.3",
   "description": "Mimic traditional threads in single threaded event loop",
   "main": "lib/asyncsteps-full.js",
   "browser": "es5/lib/browser.js",
