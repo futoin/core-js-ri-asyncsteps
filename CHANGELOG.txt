@@ -1,3 +1,5 @@
+=== (next) ===
+FIXED: assertAS() to work with multiple instances of AsyncSteps module
 
 === 1.11.3 (2018-05-10) ===
 CHANGED: upgraded webpack to v4

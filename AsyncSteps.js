@@ -686,6 +686,15 @@ class AsyncSteps {
             onerror
         );
     }
+
+    /**
+     * Not standard API for assertion with multiple instances of the module.
+     * @private
+     * @returns {boolean} true
+     */
+    isAsyncSteps() {
+        return true;
+    }
 }
 
 /**
@@ -732,8 +741,10 @@ Object.assign(
         sync : ASProto.sync,
         successStep : ASProto.successStep,
         await : ASProto.await,
+        isAsyncSteps: ASProto.isAsyncSteps,
     }
 );
+ParallelStep.prototype.isAsyncSteps = ASProto.isAsyncSteps;
 
 ASProto._async_tool = AsyncTool;
 
