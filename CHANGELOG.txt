@@ -1,4 +1,4 @@
-=== (next) ===
+=== 1.11.4 (2018-05-20) ===
 FIXED: assertAS() to work with multiple instances of AsyncSteps module
 
 === 1.11.3 (2018-05-10) ===
