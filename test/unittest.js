@@ -1,24 +1,18 @@
 'use strict';
 
+
 // ensure it works with frozen one
 Object.freeze( Object.prototype );
 
-//
-let async_steps;
-let chai;
-
-if ( typeof window !== 'undefined' ) {
-    async_steps = window.$as;
-    chai = window.chai;
-} else {
-    async_steps = module.require( '../lib/asyncsteps' );
-    chai = module.require( 'chai' );
-}
-
+const chai = require( 'chai' );
 const performance_now = require( "performance-now" );
 
-const assert = chai.assert;
-const expect = chai.expect;
+//
+const async_steps = ( typeof window !== 'undefined' )
+    ? require( 'futoin-asyncsteps' )
+    : module.require( '../lib/asyncsteps-full' );
+
+const { assert, expect } = chai;
 
 
 describe( 'AsyncTool', function() {
@@ -1870,6 +1864,34 @@ describe( '.assertAS', function( done ) {
         }
 
         done();
+    } );
+
+    it( "should have exports", function() {
+        if ( 'ISync' in async_steps ) {
+            expect( async_steps ).to.have.keys( [
+                'ISync',
+                'Mutex',
+                'Throttle',
+                'Limiter',
+                'testcase',
+
+                'Errors',
+                'AsyncSteps',
+                'AsyncTool',
+                'FutoInError',
+                'assertAS',
+                'installAsyncToolTest',
+            ] );
+        } else {
+            expect( async_steps ).to.have.keys( [
+                'Errors',
+                'AsyncSteps',
+                'AsyncTool',
+                'FutoInError',
+                'assertAS',
+                'installAsyncToolTest',
+            ] );
+        }
     } );
 } );
 

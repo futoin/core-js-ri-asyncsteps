@@ -3,16 +3,16 @@
 // ensure it works with frozen one
 Object.freeze( Object.prototype );
 
-let chai;
+const chai = require( 'chai' );
 
-if ( typeof window !== 'undefined' ) {
-    chai = window.chai;
-} else {
-    chai = module.require( 'chai' );
-}
+//
+const $as = ( typeof window !== 'undefined' )
+    ? require( 'futoin-asyncsteps' )
+    : module.require( '../lib/asyncsteps-full' );
 
-const expect = chai.expect;
-const $as_test = require( '../testcase' );
+const { assert, expect } = chai;
+
+const $as_test = $as.testcase;
 
 describe( '$as_test', function() {
     it ( 'should handle possitive test', $as_test(

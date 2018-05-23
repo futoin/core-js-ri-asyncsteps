@@ -1,3 +1,9 @@
+
+=== (next) ===
+FIXED: missing exports in module
+FIXED: improved browser tests to use dist module
+NEW: module exports Errors as alias of legacy FutoInError
+
 === 1.11.4 (2018-05-20) ===
 FIXED: assertAS() to work with multiple instances of AsyncSteps module
 
