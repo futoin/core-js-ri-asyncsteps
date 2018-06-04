@@ -15,6 +15,7 @@
     "upgrade-deps": [
       "@cid tool update",
       "@cid tool exec yarn -- upgrade --latest"
-    ]
+    ],
+    "optihelp" : "nodeEnv=production cid tool exec node -- test/optihelp.js"
   }
 }
