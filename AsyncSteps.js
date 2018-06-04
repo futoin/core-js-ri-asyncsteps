@@ -620,6 +620,7 @@ class AsyncSteps {
      * @param {Promise} promise - promise to add as a step
      * @param {function} [onerror] error handler to check
      * @alias AsyncSteps#await
+     * @returns {AsyncSteps} self
      */
     await( promise, onerror ) {
         const promise_state = {
@@ -701,6 +702,8 @@ class AsyncSteps {
             },
             onerror
         );
+
+        return this;
     }
 
     /**

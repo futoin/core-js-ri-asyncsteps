@@ -1766,14 +1766,14 @@ if ( typeof Promise !== 'undefined' ) {
     describe( '#await', function() {
         it( 'should support Promise', function( done ) {
             const as = async_steps();
-            as.await( Promise.resolve( 123 ) );
-            as.add( ( as, res ) => {
-                try {
-                    expect( res ).to.equal( 123 );
-                } catch ( e ) {
-                    done( e );
-                }
-            } );
+            as.await( Promise.resolve( 123 ) )
+                .add( ( as, res ) => {
+                    try {
+                        expect( res ).to.equal( 123 );
+                    } catch ( e ) {
+                        done( e );
+                    }
+                } );
             as.await( new Promise( ( resolve, reject ) => setTimeout( resolve, 100 ) ) );
             as.add( ( as ) => {
                 as.await( Promise.resolve() );
