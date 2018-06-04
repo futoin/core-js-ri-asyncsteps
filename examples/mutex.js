@@ -1,6 +1,6 @@
 'use strict';
 
-const $as = require('../lib/asyncsteps');
+const $as = require('../lib/main');
 const Mutex = require( '../Mutex' );
 
 const mtx = new Mutex();

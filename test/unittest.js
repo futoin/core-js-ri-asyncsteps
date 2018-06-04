@@ -11,7 +11,7 @@ const performance_now = require( "performance-now" );
 const in_browser = ( typeof window !== 'undefined' );
 const async_steps = in_browser
     ? require( 'futoin-asyncsteps' )
-    : module.require( '../lib/asyncsteps-full' );
+    : module.require( '../lib/main-full' );
 
 const { assert, expect } = chai;
 

@@ -444,11 +444,11 @@ it( 'should ...', $as_test(
 <dt><a href="#FutoInErrors">FutoInErrors</a></dt>
 <dd><p>List of standard FutoIn Core errors. It may static get extended in runtime.</p>
 </dd>
-<dt><a href="#AsyncToolTest">AsyncToolTest</a></dt>
-<dd><p>Special event scheduler for testing to be installed with installAsyncToolTest()</p>
-</dd>
 <dt><a href="#AsyncTool">AsyncTool</a></dt>
 <dd><p>Neutral interface to event scheduler</p>
+</dd>
+<dt><a href="#AsyncToolTest">AsyncToolTest</a></dt>
+<dd><p>Special event scheduler for testing to be installed with installAsyncToolTest()</p>
 </dd>
 <dt><a href="#$as">$as</a></dt>
 <dd><p><strong>window.$as</strong> - browser-only reference to futoin-asyncsteps module</p>
@@ -568,6 +568,41 @@ C-tor
 List of standard FutoIn Core errors. It may static get extended in runtime.
 
 **Kind**: global variable  
+<a name="AsyncTool"></a>
+
+## AsyncTool
+Neutral interface to event scheduler
+
+**Kind**: global variable  
+
+* [AsyncTool](#AsyncTool)
+    * [.callLater(func, [timeout_ms])](#AsyncTool.callLater) ⇒ <code>Object</code>
+    * [.cancelCall(handle)](#AsyncTool.cancelCall)
+
+<a name="AsyncTool.callLater"></a>
+
+### AsyncTool.callLater(func, [timeout_ms]) ⇒ <code>Object</code>
+Wrapper for setTimeout()/setImmediate()
+
+**Kind**: static method of [<code>AsyncTool</code>](#AsyncTool)  
+**Returns**: <code>Object</code> - - timer handle  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| func | <code>function</code> |  | callback to execute |
+| [timeout_ms] | <code>number</code> | <code>0</code> | optional timeout in ms |
+
+<a name="AsyncTool.cancelCall"></a>
+
+### AsyncTool.cancelCall(handle)
+Wrapper for clearTimeout()/clearImmediate()
+
+**Kind**: static method of [<code>AsyncTool</code>](#AsyncTool)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| handle | <code>Object</code> | Handle returned from AsyncTool.callLater |
+
 <a name="AsyncToolTest"></a>
 
 ## AsyncToolTest
@@ -640,41 +675,6 @@ Clear internal event queue
 Execute all remaining events in the internal queue
 
 **Kind**: static method of [<code>AsyncToolTest</code>](#AsyncToolTest)  
-<a name="AsyncTool"></a>
-
-## AsyncTool
-Neutral interface to event scheduler
-
-**Kind**: global variable  
-
-* [AsyncTool](#AsyncTool)
-    * [.callLater(func, [timeout_ms])](#AsyncTool.callLater) ⇒ <code>Object</code>
-    * [.cancelCall(handle)](#AsyncTool.cancelCall)
-
-<a name="AsyncTool.callLater"></a>
-
-### AsyncTool.callLater(func, [timeout_ms]) ⇒ <code>Object</code>
-Wrapper for setTimeout()/setImmediate()
-
-**Kind**: static method of [<code>AsyncTool</code>](#AsyncTool)  
-**Returns**: <code>Object</code> - - timer handle  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| func | <code>function</code> |  | callback to execute |
-| [timeout_ms] | <code>number</code> | <code>0</code> | optional timeout in ms |
-
-<a name="AsyncTool.cancelCall"></a>
-
-### AsyncTool.cancelCall(handle)
-Wrapper for clearTimeout()/clearImmediate()
-
-**Kind**: static method of [<code>AsyncTool</code>](#AsyncTool)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| handle | <code>Object</code> | Handle returned from AsyncTool.callLater |
-
 <a name="$as"></a>
 
 ## $as

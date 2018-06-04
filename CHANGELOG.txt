@@ -1,5 +1,6 @@
 
 === (next) ===
+CHANGED: internal file name refactoring
 FIXED: missing chaining support for await()
 NEW: forEach() supports Map now
 

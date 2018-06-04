@@ -8,7 +8,7 @@ const chai = require( 'chai' );
 //
 const $as = ( typeof window !== 'undefined' )
     ? require( 'futoin-asyncsteps' )
-    : module.require( '../lib/asyncsteps-full' );
+    : module.require( '../lib/main-full' );
 
 const { assert, expect } = chai;
 

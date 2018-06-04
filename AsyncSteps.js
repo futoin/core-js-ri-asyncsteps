@@ -25,11 +25,11 @@
  * @module futoin-asyncsteps
  */
 
-const AsyncTool = require( './lib/asynctool' );
+const AsyncTool = require( './lib/AsyncTool' );
 const Errors = require( './Errors' );
 
-const AsyncStepProtector = require( './lib/asyncstep_protector' );
-const ParallelStep = require( './lib/parallel_step' );
+const AsyncStepProtector = require( './lib/AsyncStepProtector' );
+const ParallelStep = require( './lib/ParallelStep' );
 
 
 /**
