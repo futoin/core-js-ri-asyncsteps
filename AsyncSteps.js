@@ -575,6 +575,22 @@ class AsyncSteps {
                 },
                 label
             );
+        } else if ( typeof Map !== 'undefined' && map_or_list instanceof Map ) {
+            const iter = map_or_list.entries();
+
+            this.loop(
+                ( as ) => {
+                    const next = iter.next();
+
+                    if ( next.done ) {
+                        as.break();
+                    }
+
+                    const [ key, value ] = next.value;
+                    func( as, key, value );
+                },
+                label
+            );
         } else {
             const keys = Object.keys( map_or_list );
 

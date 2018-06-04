@@ -8,7 +8,8 @@ const chai = require( 'chai' );
 const performance_now = require( "performance-now" );
 
 //
-const async_steps = ( typeof window !== 'undefined' )
+const in_browser = ( typeof window !== 'undefined' );
+const async_steps = in_browser
     ? require( 'futoin-asyncsteps' )
     : module.require( '../lib/asyncsteps-full' );
 
@@ -1533,6 +1534,42 @@ describe( 'AsyncSteps', function() {
                 assert.equal( reserr, null );
                 expect( i ).equal( 6 );
             } );
+
+            if ( !in_browser ) {
+                it( 'should forEach Map', function() {
+                    var as = this.as;
+                    var reserr = null;
+                    var i = 0;
+
+                    as.add(
+                        function( as ) {
+                            as.forEach( new Map( [
+                                [ 'a', 1 ],
+                                [ 'b', 2 ],
+                                [ 'c', 3 ],
+                            ] ), function( as, k, v ) {
+                                if ( v == 1 ) assert.equal( k, "a" );
+
+                                if ( v == 2 ) assert.equal( k, "b" );
+
+                                if ( v == 3 ) assert.equal( k, "c" );
+
+                                i += v;
+                            } );
+                        },
+                        function( as, err ) {
+                            reserr = err;
+                        }
+                    );
+
+                    as.execute();
+                    async_steps.AsyncTool.run();
+                    assertNoEvents();
+
+                    assert.equal( reserr, null );
+                    expect( i ).equal( 6 );
+                } );
+            }
         }
     );
     describe(

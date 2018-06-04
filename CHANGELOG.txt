@@ -1,4 +1,7 @@
 
+=== (next) ===
+NEW: forEach() supports Map now
+
 === 1.11.5 (2018-05-23) ===
 FIXED: missing exports in module
 FIXED: improved browser tests to use dist module
