@@ -713,7 +713,7 @@ Wrapper for clearTimeout()/clearImmediate()
     * [.repeat(count, func, [label])](#AsyncSteps+repeat) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.successStep()](#AsyncSteps+successStep)
-    * [.await(promise, [onerror])](#AsyncSteps+await)
+    * [.await(promise, [onerror])](#AsyncSteps+await) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.success([..._arg])](#AsyncSteps+success)
     * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.setCancel(oncancel)](#AsyncSteps+setCancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -875,10 +875,11 @@ Shortcut for `this.add( ( as ) => as.success( ...args ) )`
 
 <a name="AsyncSteps+await"></a>
 
-### asyncSteps.await(promise, [onerror])
+### asyncSteps.await(promise, [onerror]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Integrate a promise as a step.
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -991,7 +992,7 @@ Continue loop execution from the next iteration, throws exception
     * [.repeat(count, func, [label])](#AsyncSteps+repeat) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.successStep()](#AsyncSteps+successStep)
-    * [.await(promise, [onerror])](#AsyncSteps+await)
+    * [.await(promise, [onerror])](#AsyncSteps+await) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.success([..._arg])](#AsyncSteps+success)
     * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.setCancel(oncancel)](#AsyncSteps+setCancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -1153,10 +1154,11 @@ Shortcut for `this.add( ( as ) => as.success( ...args ) )`
 
 <a name="AsyncSteps+await"></a>
 
-### asyncSteps.await(promise, [onerror])
+### asyncSteps.await(promise, [onerror]) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Integrate a promise as a step.
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |

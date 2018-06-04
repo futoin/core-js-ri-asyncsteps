@@ -17,7 +17,7 @@ module.exports = function( grunt ) {
                 'test/**/*.js',
             ],
         },
-        mocha_istanbul: { coverage: { src: [ 'test' ] } },
+        mocha_istanbul: { coverage: { src: [ 'test/*test.js' ] } },
         istanbul_check_coverage: {},
         webpack: {
             dist: require( './webpack.dist' ),
