@@ -14,6 +14,10 @@ const { assert, expect } = chai;
 
 const { Throttle } = $as;
 
+const {
+    TIMER,
+} = require( '../lib/common' );
+
 describe( 'Throttle', function() {
     it ( 'should handle re-entrancy & success params', function( done ) {
         const thrtl = new Throttle( 2, 10 );
@@ -314,7 +318,7 @@ describe( 'Throttle', function() {
         } ).add( ( outer_as ) => {
             outer_as.waitExternal();
             setTimeout( () => {
-                expect( thrtl._timer ).to.be.null;
+                expect( thrtl[TIMER] ).to.be.null;
                 outer_as.success();
             }, 100 );
         } ).add( ( outer_as ) => {

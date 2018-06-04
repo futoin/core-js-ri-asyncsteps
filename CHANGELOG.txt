@@ -1,5 +1,6 @@
 
 === (next) ===
+CHANGED: huge optimization by using Symbol keys (10-35% measured using futoin-optihelp)
 CHANGED: internal file name refactoring
 FIXED: missing chaining support for await()
 NEW: forEach() supports Map now

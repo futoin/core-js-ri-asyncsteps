@@ -3,6 +3,11 @@
 const $as = require( '../lib/main-full' );
 const optihelp = require( '@futoin/optihelp' );
 
+const {
+    THROTTLE,
+} = require( '../lib/common' );
+
+
 //---
 const test_array = [];
 const test_object = {};
@@ -164,7 +169,7 @@ optihelp( 'AsyncSteps', { test_time : 3 } )
             .execute();
     } )
     .test( 'sync Limiter', ( done ) => {
-        lmtr._throttle._resetPeriod();
+        lmtr[THROTTLE]._resetPeriod();
         $as()
             .sync( lmtr, ( as ) => {} )
             .add( ( as ) => done() )
