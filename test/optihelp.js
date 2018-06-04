@@ -1,6 +1,6 @@
 'use strict';
 
-const $as = require( '../lib/asyncsteps-full' );
+const $as = require( '../lib/main-full' );
 const optihelp = require( '@futoin/optihelp' );
 
 //---
@@ -66,7 +66,7 @@ optihelp( 'AsyncSteps', { test_time : 3 } )
                         ( as ) => as.add(
                             ( as ) => as.error( 'SomeError', 'SomeInfo' )
                         )
-                    )
+                    );
                 },
                 ( as, err ) => as.success()
             )
@@ -130,15 +130,15 @@ optihelp( 'AsyncSteps', { test_time : 3 } )
     } )
     .test( 'sync Mutex', ( done ) => {
         $as()
-            .sync( mtx, (as) => {} )
+            .sync( mtx, ( as ) => {} )
             .add( ( as ) => done() )
             .execute();
     } )
     .test( 'sync Mutex blocking', ( done ) => {
         $as()
-            .sync( mtx, (as) => {
+            .sync( mtx, ( as ) => {
                 $as()
-                    .sync( mtx, (as) => {} )
+                    .sync( mtx, ( as ) => {} )
                     .add( ( as ) => done() )
                     .execute();
             } )
@@ -147,16 +147,16 @@ optihelp( 'AsyncSteps', { test_time : 3 } )
     .test( 'sync Throttle', ( done ) => {
         trtl._resetPeriod();
         $as()
-            .sync( trtl, (as) => {} )
+            .sync( trtl, ( as ) => {} )
             .add( ( as ) => done() )
             .execute();
     } )
     .test( 'sync Throttle blocking', ( done ) => {
         trtl._resetPeriod();
         $as()
-            .sync( trtl, (as) => {
+            .sync( trtl, ( as ) => {
                 $as()
-                    .sync( trtl, (as) => {} )
+                    .sync( trtl, ( as ) => {} )
                     .add( ( as ) => done() )
                     .execute();
                 trtl._resetPeriod();
@@ -166,7 +166,7 @@ optihelp( 'AsyncSteps', { test_time : 3 } )
     .test( 'sync Limiter', ( done ) => {
         lmtr._throttle._resetPeriod();
         $as()
-            .sync( lmtr, (as) => {} )
+            .sync( lmtr, ( as ) => {} )
             .add( ( as ) => done() )
             .execute();
     } )
