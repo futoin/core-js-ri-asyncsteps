@@ -448,7 +448,7 @@ class AsyncSteps {
      * @alias AsyncSteps#repeat
      */
     repeat( count, func, label ) {
-        checkFunc( this, func );
+        sanityCheckAdd( this, func );
 
         repeat( this, this, count, func, label );
 
@@ -474,7 +474,7 @@ class AsyncSteps {
      * @alias AsyncSteps#forEach
      */
     forEach( map_or_list, func, label ) {
-        checkFunc( this, func );
+        sanityCheckAdd( this, func );
 
         forEach( this, this, map_or_list, func, label );
 
@@ -488,6 +488,8 @@ class AsyncSteps {
      * @returns {AsyncSteps} self
      */
     successStep( ...args ) {
+        sanityCheck( this );
+
         const queue = this._queue;
 
         if ( queue.length > 0 ) {
@@ -510,6 +512,8 @@ class AsyncSteps {
      * @returns {AsyncSteps} self
      */
     await( promise, onerror ) {
+        sanityCheck( this );
+
         as_await( this, this, promise, onerror );
 
         return this;
