@@ -46,6 +46,18 @@ optihelp( 'AsyncSteps', { test_time : 3 } )
             .add( ( as ) => done() )
             .execute();
     } )
+    .test( 'successStep', ( done ) => {
+        $as()
+            .successStep()
+            .add( ( as ) => done() )
+            .execute();
+    } )
+    .test( 'Inner successStep', ( done ) => {
+        $as()
+            .add( ( as ) => as.successStep() )
+            .add( ( as ) => done() )
+            .execute();
+    } )
     .test( 'Parallel', ( done ) => {
         const as = $as();
         const p = as.parallel();

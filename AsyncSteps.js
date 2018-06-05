@@ -375,7 +375,7 @@ class AsyncSteps {
                         ( asp._on_cancel === null ) &&
                         !asp._wait_external ) {
                     // Implicit success
-                    this._handle_success();
+                    this._handle_success( this._next_args );
                 }
             }
         } catch ( e ) {
@@ -485,9 +485,21 @@ class AsyncSteps {
      * Shortcut for `this.add( ( as ) => as.success( ...args ) )`
      * @param {any} [args...] - argument to pass, if any
      * @alias AsyncSteps#successStep
+     * @returns {AsyncSteps} self
      */
     successStep( ...args ) {
-        this.add( ( as ) => as._root._handle_success( args ) );
+        const queue = this._queue;
+
+        if ( queue.length > 0 ) {
+            queue.push( [
+                ( as ) => as._root._handle_success( args ),
+                undefined,
+            ] );
+        } else {
+            this._next_args = args;
+        }
+
+        return this;
     }
 
     /**

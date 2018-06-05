@@ -850,14 +850,22 @@ describe( 'AsyncSteps', function() {
                 var as = this.as;
 
                 as.state.second_called = false;
+                as.successStep( 'a', 'b', 'c' );
                 as.add(
-                    function( as ) {
-                        as.add( function( as ) {
+                    function( as, a, b, c ) {
+                        expect( a ).equal( 'a' );
+                        expect( b ).equal( 'b' );
+                        expect( c ).equal( 'c' );
+
+                        as.successStep( 'abc' );
+                        as.add( function( as, abc ) {
+                            expect( abc ).to.equal( 'abc' );
                             as.successStep();
                         } );
                         as.successStep( 1, 2, 3 );
                     },
                     function( as, error ) {
+                        console.log( as.state.last_exception );
                         expect( error ).equal( "Does not work" );
                     }
                 ).add(
@@ -867,17 +875,31 @@ describe( 'AsyncSteps', function() {
                         as.success();
                     }
                 );
+                as.successStep();
 
                 as.execute();
+
+                // first step
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
+                // optimized successStep -> inner step
                 async_steps.AsyncTool.nextEvent();
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
-                async_steps.AsyncTool.run();
+                // later successStep
+                async_steps.AsyncTool.nextEvent();
+                expect( as.state.second_called ).be.false;
+                assertHasEvents();
+
+                // final step
+                async_steps.AsyncTool.nextEvent();
                 expect( as.state.second_called ).be.true;
+
+                // final successStep
+                async_steps.AsyncTool.nextEvent();
+                assertNoEvents();
             } );
         }
     );

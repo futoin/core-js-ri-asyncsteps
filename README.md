@@ -712,7 +712,7 @@ Execute all remaining events in the internal queue
     * [.loop(func, [label])](#AsyncSteps+loop) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.repeat(count, func, [label])](#AsyncSteps+repeat) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
-    * [.successStep()](#AsyncSteps+successStep)
+    * [.successStep()](#AsyncSteps+successStep) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.await(promise, [onerror])](#AsyncSteps+await) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.success([..._arg])](#AsyncSteps+success)
     * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -864,10 +864,11 @@ For each *map* or *list* element call *func( as, key, value )*
 
 <a name="AsyncSteps+successStep"></a>
 
-### asyncSteps.successStep()
+### asyncSteps.successStep() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Shortcut for `this.add( ( as ) => as.success( ...args ) )`
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -991,7 +992,7 @@ Continue loop execution from the next iteration, throws exception
     * [.loop(func, [label])](#AsyncSteps+loop) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.repeat(count, func, [label])](#AsyncSteps+repeat) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
-    * [.successStep()](#AsyncSteps+successStep)
+    * [.successStep()](#AsyncSteps+successStep) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.await(promise, [onerror])](#AsyncSteps+await) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.success([..._arg])](#AsyncSteps+success)
     * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -1143,10 +1144,11 @@ For each *map* or *list* element call *func( as, key, value )*
 
 <a name="AsyncSteps+successStep"></a>
 
-### asyncSteps.successStep()
+### asyncSteps.successStep() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
 Shortcut for `this.add( ( as ) => as.success( ...args ) )`
 
 **Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - self  
 
 | Param | Type | Description |
 | --- | --- | --- |
