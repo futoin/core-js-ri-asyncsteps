@@ -1239,6 +1239,7 @@ describe( 'AsyncSteps', function() {
                 as.execute();
                 async_steps.AsyncTool.run();
                 expect( as.state.error_code ).be.equal( 'InternalError' );
+                expect( as.state.error_info ).equal( 'Invalid call (sanity check)' );
             } );
 
             it( 'should implicitly success', function() {

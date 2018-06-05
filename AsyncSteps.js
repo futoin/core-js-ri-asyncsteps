@@ -26,16 +26,19 @@
  */
 
 const AsyncTool = require( './lib/AsyncTool' );
-const Errors = require( './Errors' );
+const { InternalError } = require( './Errors' );
 
 const AsyncStepProtector = require( './lib/AsyncStepProtector' );
 const ParallelStep = require( './lib/ParallelStep' );
 
 const {
+    checkFunc,
+    checkOnError,
+    noop,
+    loop,
+
     ASYNC_TOOL,
     CANCEL_EXECUTE,
-    CHECK_FUNC,
-    CHECK_ONERROR,
     CLEANUP,
     EXECUTE_CB,
     EXECUTE_EVENT,
@@ -44,19 +47,27 @@ const {
     HANDLE_SUCCESS,
     IN_EXECUTE,
     LIMIT_EVENT,
-    LOOP_TERM_LABEL,
     NEXT_ARGS,
     ON_CANCEL,
     ON_ERROR,
     QUEUE,
     ROOT,
-    SANITY_CHECK,
     SCHEDULE_EXECUTE,
     STACK,
     STATE,
     WAIT_EXTERNAL,
 } = require( './lib/common' );
 
+const sanityCheck = noop ? noop : ( as ) => {
+    if ( as[STACK].length > 0 ) {
+        as.error( InternalError, "Top level add in execution" );
+    }
+};
+const sanityCheckAdd = noop ? noop : ( as, func, onerror ) => {
+    sanityCheck( as );
+    checkFunc( as, func );
+    checkOnError( as, onerror );
+};
 
 /**
  * Root AsyncStep implementation
@@ -69,8 +80,7 @@ class AsyncSteps {
             };
         }
 
-        this.state = state;
-        this[STATE] = state;
+        this[STATE] = this.state = state;
         this[QUEUE] = [];
         this[STACK] = [];
         this[EXEC_STACK] = [];
@@ -78,32 +88,9 @@ class AsyncSteps {
         this[EXECUTE_EVENT] = null;
         this[NEXT_ARGS] = [];
 
-
-        this[EXECUTE_CB] = () => {
-            this.execute();
-        };
+        this[EXECUTE_CB] = () => this.execute();
     }
 
-    /**
-     * @private
-     * @param {function} [func] Step function to check
-     */
-    [CHECK_FUNC]( func ) {
-        if ( func.length < 1 ) {
-            this.error( Errors.InternalError, "Step function must expect at least AsyncStep interface" );
-        }
-    }
-
-    /**
-     * @private
-     * @param {function} [onerror] error handler to check
-     */
-    [CHECK_ONERROR]( onerror ) {
-        if ( onerror &&
-            ( onerror.length !== 2 ) ) {
-            this.error( Errors.InternalError, "Error handler must take exactly two arguments" );
-        }
-    }
 
     /**
      * Add sub-step. Can be called multiple times.
@@ -113,11 +100,10 @@ class AsyncSteps {
      * @alias AsyncSteps#add
      */
     add( func, onerror ) {
-        this[SANITY_CHECK]();
-        this[CHECK_FUNC]( func );
-        this[CHECK_ONERROR]( onerror );
+        sanityCheckAdd( this, func, onerror );
 
         this[QUEUE].push( [ func, onerror ] );
+
         return this;
     }
 
@@ -148,11 +134,10 @@ class AsyncSteps {
      * @alias AsyncSteps#sync
      */
     sync( object, func, onerror ) {
-        this[SANITY_CHECK]();
-        this[CHECK_FUNC]( func );
-        this[CHECK_ONERROR]( onerror );
+        sanityCheckAdd( this, func, onerror );
 
         object.sync( this, func, onerror );
+
         return this;
     }
 
@@ -206,7 +191,7 @@ class AsyncSteps {
         const async_tool = this[ASYNC_TOOL];
 
         if ( !stack.length ) {
-            this.error( Errors.InternalError, 'Invalid success completion' );
+            this.error( InternalError, 'Invalid success completion' );
         }
 
         this[NEXT_ARGS] = args;
@@ -415,15 +400,6 @@ class AsyncSteps {
     /**
      * @private
      */
-    [SANITY_CHECK]() {
-        if ( this[STACK].length ) {
-            this.error( Errors.InternalError, "Top level add in execution" );
-        }
-    }
-
-    /**
-     * @private
-     */
     [SCHEDULE_EXECUTE]() {
         this[EXECUTE_EVENT] = this[ASYNC_TOOL].callLater( this[EXECUTE_CB] );
     }
@@ -455,95 +431,9 @@ class AsyncSteps {
      * @alias AsyncSteps#loop
      */
     loop( func, label ) {
-        this[SANITY_CHECK]();
+        sanityCheckAdd( this, func );
 
-        const async_tool = this[ASYNC_TOOL] || this[ROOT][ASYNC_TOOL];
-
-        this.add( ( outer_as ) => {
-            const model_as = new AsyncSteps();
-            let inner_as;
-
-            const create_iteration = () => {
-                inner_as = new AsyncSteps( outer_as[STATE] );
-                inner_as.copyFrom( model_as );
-                inner_as.execute();
-            };
-
-            model_as.add(
-                ( as ) => {
-                    func( as );
-                },
-                ( as, err ) => {
-                    if ( err === Errors.LoopCont ) {
-                        const term_label = as[STATE][LOOP_TERM_LABEL];
-
-                        if ( term_label &&
-                            ( term_label !== label ) ) {
-                            // Unroll loops continue
-                            async_tool.callLater( () => {
-                                try {
-                                    outer_as.continue( term_label );
-                                } catch ( _ ) {
-                                    // ignore
-                                }
-                            } );
-                        } else {
-                            // Continue to next iteration
-                            as.success();
-                            return; // DO not destroy model_as
-                        }
-                    } else if ( err === Errors.LoopBreak ) {
-                        const term_label = as[STATE][LOOP_TERM_LABEL];
-
-                        if ( term_label &&
-                            ( term_label !== label ) ) {
-                            // Unroll loops and break
-                            async_tool.callLater( () => {
-                                try {
-                                    outer_as.break( term_label );
-                                } catch ( _ ) {
-                                    // ignore
-                                }
-                            } );
-                        } else {
-                            // Continue linear execution
-                            async_tool.callLater( () => {
-                                try {
-                                    outer_as.success();
-                                } catch ( _ ) {
-                                    // can fail sanity check on race condition after cancel()
-                                }
-                            } );
-                        }
-                    } else {
-                        // Forward regular error
-                        async_tool.callLater( () => {
-                            try {
-                                outer_as.error( err, outer_as[STATE].error_info );
-                            } catch ( _ ) {
-                                // ignore
-                            }
-                        } );
-                    }
-
-                    // Destroy recursive reference
-                    model_as.cancel();
-                }
-            ).add(
-                ( as ) => {
-                    // schedule new iteration
-                    // NOTE: recursive model_as -> potential mem leak -> destroy model_as on exit
-                    async_tool.callLater( create_iteration );
-                }
-            );
-
-            outer_as.setCancel( ( as ) => {
-                inner_as.cancel();
-                model_as.cancel();
-            } );
-
-            create_iteration();
-        } );
+        loop( this, this, func, label );
 
         return this;
     }
@@ -786,12 +676,8 @@ const ASProto = AsyncSteps.prototype;
 Object.assign(
     AsyncStepProtector.prototype,
     {
-        [CHECK_FUNC] : ASProto[CHECK_FUNC],
-        [CHECK_ONERROR] : ASProto[CHECK_ONERROR],
-        loop : ASProto.loop,
         repeat : ASProto.repeat,
         forEach : ASProto.forEach,
-        sync : ASProto.sync,
         successStep : ASProto.successStep,
         await : ASProto.await,
         isAsyncSteps: ASProto.isAsyncSteps,

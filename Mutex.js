@@ -22,7 +22,7 @@
  */
 
 const ISync = require( './ISync' );
-const Errors = require( './Errors' );
+const { DefenseRejected } = require( './Errors' );
 
 const {
     LOCKED,
@@ -67,7 +67,7 @@ class Mutex extends ISync {
             const max_queue = this[MAX_QUEUE];
 
             if ( ( max_queue !== null ) && ( queue.length >= max_queue ) ) {
-                as.error( Errors.DefenseRejected, 'Mutex queue limit' );
+                as.error( DefenseRejected, 'Mutex queue limit' );
             }
 
             queue.push( as );

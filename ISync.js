@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-const Errors = require( './Errors' );
+const { NotImplemented } = require( './Errors' );
 
 /**
  * Base interface for synchronization primitives
@@ -29,7 +29,7 @@ const Errors = require( './Errors' );
  */
 class ISync {
     sync( as, _func, _onerror ) {
-        as.error( Errors.NotImplemented, '#sync() API' );
+        as.error( NotImplemented, '#sync() API' );
     }
 }
 
