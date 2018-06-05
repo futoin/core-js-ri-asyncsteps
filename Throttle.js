@@ -110,10 +110,13 @@ class Throttle extends ISync {
             as.setCancel( ( as ) => this._cancel( as ) );
             this._lock( as );
         } );
-        as.add( ( as ) => {
-            as._root._next_args = incoming_args;
-            as.add( step, onerror );
-        } );
+        as._queue.push( [
+            ( as ) => {
+                as._root._next_args = incoming_args;
+                as.add( step, onerror );
+            },
+            undefined,
+        ] );
     }
 }
 

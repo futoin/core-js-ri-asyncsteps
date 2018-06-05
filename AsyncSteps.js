@@ -335,8 +335,9 @@ class AsyncSteps {
         }
 
         const curr = q.shift();
+        const func = curr[0];
 
-        if ( curr[0] === null ) {
+        if ( !func ) {
             this._handle_success();
             return;
         }
@@ -359,14 +360,13 @@ class AsyncSteps {
         try {
             asp._on_error = curr[1];
             stack.push( asp );
-            const cb = curr[0];
 
-            this._exec_stack.push( cb );
+            this._exec_stack.push( func );
 
             const oc = stack.length;
 
             this._in_exec = true;
-            cb( ...call_args );
+            func( ...call_args );
 
             if ( oc === stack.length ) {
                 if ( asp._queue !== null ) {
