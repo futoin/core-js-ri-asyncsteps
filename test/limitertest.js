@@ -26,12 +26,12 @@ describe( 'Limiter', function() {
     it ( 'should have correct defaults', function() {
         const lim = new Limiter();
 
-        expect( lim[MUTEX][MAX] ).to.equal( 1 );
-        expect( lim[MUTEX][MAX_QUEUE] ).to.equal( 0 );
+        expect( lim._mutex._max ).to.equal( 1 );
+        expect( lim._mutex._max_queue ).to.equal( 0 );
 
-        expect( lim[THROTTLE][MAX] ).to.equal( 1 );
-        expect( lim[THROTTLE][PERIOD_MS] ).to.equal( 1e3 );
-        expect( lim[THROTTLE][MAX_QUEUE] ).to.equal( 0 );
+        expect( lim._throttle._max ).to.equal( 1 );
+        expect( lim._throttle._period_ms ).to.equal( 1e3 );
+        expect( lim._throttle._max_queue ).to.equal( 0 );
     } );
 
     it ( 'should have correct defaults', function() {
@@ -43,12 +43,12 @@ describe( 'Limiter', function() {
             burst : 45,
         } );
 
-        expect( lim[MUTEX][MAX] ).to.equal( 12 );
-        expect( lim[MUTEX][MAX_QUEUE] ).to.equal( 23 );
+        expect( lim._mutex._max ).to.equal( 12 );
+        expect( lim._mutex._max_queue ).to.equal( 23 );
 
-        expect( lim[THROTTLE][MAX] ).to.equal( 34 );
-        expect( lim[THROTTLE][PERIOD_MS] ).to.equal( 1234 );
-        expect( lim[THROTTLE][MAX_QUEUE] ).to.equal( 45 );
+        expect( lim._throttle._max ).to.equal( 34 );
+        expect( lim._throttle._period_ms ).to.equal( 1234 );
+        expect( lim._throttle._max_queue ).to.equal( 45 );
     } );
 
     it ( 'should handle limits', function( done ) {

@@ -36,30 +36,10 @@ const {
     checkOnError,
     noop,
     loop,
-
-    ASYNC_TOOL,
-    CANCEL_EXECUTE,
-    CLEANUP,
-    EXECUTE_CB,
-    EXECUTE_EVENT,
-    EXEC_STACK,
-    HANDLE_ERROR,
-    HANDLE_SUCCESS,
-    IN_EXECUTE,
-    LIMIT_EVENT,
-    NEXT_ARGS,
-    ON_CANCEL,
-    ON_ERROR,
-    QUEUE,
-    ROOT,
-    SCHEDULE_EXECUTE,
-    STACK,
-    STATE,
-    WAIT_EXTERNAL,
 } = require( './lib/common' );
 
 const sanityCheck = noop ? noop : ( as ) => {
-    if ( as[STACK].length > 0 ) {
+    if ( as._stack.length > 0 ) {
         as.error( InternalError, "Top level add in execution" );
     }
 };
@@ -76,19 +56,19 @@ class AsyncSteps {
     constructor( state = null ) {
         if ( state === null ) {
             state = function() {
-                return this[STATE];
+                return this.state;
             };
         }
 
-        this[STATE] = this.state = state;
-        this[QUEUE] = [];
-        this[STACK] = [];
-        this[EXEC_STACK] = [];
-        this[IN_EXECUTE] = false;
-        this[EXECUTE_EVENT] = null;
-        this[NEXT_ARGS] = [];
+        this.state = state;
+        this._queue = [];
+        this._stack = [];
+        this._exec_stack = [];
+        this._in_exec = false;
+        this._exec_event = null;
+        this._next_args = [];
 
-        this[EXECUTE_CB] = () => this.execute();
+        this._execute_cb = () => this.execute();
     }
 
 
@@ -102,7 +82,7 @@ class AsyncSteps {
     add( func, onerror ) {
         sanityCheckAdd( this, func, onerror );
 
-        this[QUEUE].push( [ func, onerror ] );
+        this._queue.push( [ func, onerror ] );
 
         return this;
     }
@@ -151,10 +131,10 @@ class AsyncSteps {
      * @alias AsyncSteps#error
      */
     error( name, error_info ) {
-        this[STATE].error_info = error_info;
+        this.state.error_info = error_info;
 
-        if ( !this[IN_EXECUTE] ) {
-            this[HANDLE_ERROR]( name );
+        if ( !this._in_exec ) {
+            this._handle_error( name );
         }
 
         throw new Error( name );
@@ -167,10 +147,10 @@ class AsyncSteps {
      * @alias AsyncSteps#copyFrom
      */
     copyFrom( other ) {
-        this[QUEUE].push.apply( this[QUEUE], other[QUEUE] );
+        this._queue.push.apply( this._queue, other._queue );
 
-        const os = other[STATE];
-        const s = this[STATE];
+        const os = other.state;
+        const s = this.state;
 
         for ( let k in os ) {
             if ( !( k in s ) ) {
@@ -185,26 +165,26 @@ class AsyncSteps {
      * @private
      * @param {array} [args] List of success() args
      */
-    [HANDLE_SUCCESS]( args ) {
-        const stack = this[STACK];
-        const exec_stack = this[EXEC_STACK];
-        const async_tool = this[ASYNC_TOOL];
+    _handle_success( args ) {
+        const stack = this._stack;
+        const exec_stack = this._exec_stack;
+        const async_tool = this._async_tool;
 
         if ( !stack.length ) {
             this.error( InternalError, 'Invalid success completion' );
         }
 
-        this[NEXT_ARGS] = args;
+        this._next_args = args;
 
         for ( let asp = stack[ stack.length - 1 ];; ) {
-            const limit_event = asp[LIMIT_EVENT];
+            const limit_event = asp._limit_event;
 
             if ( limit_event ) {
                 async_tool.cancelCall( limit_event );
-                asp[LIMIT_EVENT] = null;
+                asp._limit_event = null;
             }
 
-            asp[CLEANUP](); // aid GC
+            asp._cleanup(); // aid GC
             stack.pop();
             exec_stack.pop();
 
@@ -215,14 +195,14 @@ class AsyncSteps {
 
             asp = stack[ stack.length - 1 ];
 
-            if ( asp[QUEUE].length ) {
+            if ( asp._queue.length ) {
                 break;
             }
         }
 
         if ( stack.length ||
-            this[QUEUE].length ) {
-            this[SCHEDULE_EXECUTE]();
+            this._queue.length ) {
+            this._scheduleExecute();
         }
     }
 
@@ -230,64 +210,64 @@ class AsyncSteps {
      * @private
      * @param {string} [name] Error to handle
      */
-    [HANDLE_ERROR]( name ) {
-        this[NEXT_ARGS] = [];
+    _handle_error( name ) {
+        this._next_args = [];
 
-        const stack = this[STACK];
-        const exec_stack = this[EXEC_STACK];
-        const async_tool = this[ASYNC_TOOL];
+        const stack = this._stack;
+        const exec_stack = this._exec_stack;
+        const async_tool = this._async_tool;
 
-        this[STATE].async_stack = exec_stack.slice( 0 );
+        this.state.async_stack = exec_stack.slice( 0 );
 
         for ( ; stack.length; stack.pop(), exec_stack.pop() ) {
             const asp = stack[ stack.length - 1 ];
-            const limit_event = asp[LIMIT_EVENT];
-            const on_cancel = asp[ON_CANCEL];
-            const on_error = asp[ON_ERROR];
+            const limit_event = asp._limit_event;
+            const on_cancel = asp._on_cancel;
+            const on_error = asp._on_error;
 
             if ( limit_event ) {
                 async_tool.cancelCall( limit_event );
-                asp[LIMIT_EVENT] = null;
+                asp._limit_event = null;
             }
 
             if ( on_cancel ) {
                 on_cancel.call( null, asp );
-                asp[ON_CANCEL] = null;
+                asp._on_cancel = null;
             }
 
             if ( on_error ) {
                 const slen = stack.length;
-                asp[QUEUE] = null; // suppress non-empty queue for success() in onerror
+                asp._queue = null; // suppress non-empty queue for success() in onerror
 
                 try {
-                    this[IN_EXECUTE] = true;
+                    this._in_exec = true;
                     on_error.call( null, asp, name );
 
                     if ( slen !== stack.length ) {
                         return; // override with success()
                     }
 
-                    if ( asp[QUEUE] !== null ) {
+                    if ( asp._queue !== null ) {
                         exec_stack[ exec_stack.length - 1 ] = on_error;
-                        asp[ON_ERROR] = null;
-                        this[SCHEDULE_EXECUTE]();
+                        asp._on_error = null;
+                        this._scheduleExecute();
                         return;
                     }
                 } catch ( e ) {
-                    this[STATE].last_exception = e;
+                    this.state.last_exception = e;
                     name = e.message;
                 } finally {
-                    this[IN_EXECUTE] = false;
+                    this._in_exec = false;
                 }
             }
 
-            asp[CLEANUP](); // aid GC
+            asp._cleanup(); // aid GC
         }
 
         // Clear queue on finish
-        this[QUEUE] = [];
+        this._queue = [];
 
-        this[CANCEL_EXECUTE]();
+        this._cancelExecute();
     }
 
     /**
@@ -296,33 +276,33 @@ class AsyncSteps {
      * @alias AsyncSteps#cancel
      */
     cancel() {
-        this[NEXT_ARGS] = [];
+        this._next_args = [];
 
-        this[CANCEL_EXECUTE]();
+        this._cancelExecute();
 
-        const stack = this[STACK];
-        const async_tool = this[ASYNC_TOOL];
+        const stack = this._stack;
+        const async_tool = this._async_tool;
 
         while ( stack.length ) {
             const asp = stack.pop();
-            const limit_event = asp[LIMIT_EVENT];
-            const on_cancel = asp[ON_CANCEL];
+            const limit_event = asp._limit_event;
+            const on_cancel = asp._on_cancel;
 
             if ( limit_event ) {
                 async_tool.cancelCall( limit_event );
-                asp[LIMIT_EVENT] = null;
+                asp._limit_event = null;
             }
 
             if ( on_cancel ) {
                 on_cancel.call( null, asp );
-                asp[ON_CANCEL] = null;
+                asp._on_cancel = null;
             }
 
-            asp[CLEANUP](); // aid GC
+            asp._cleanup(); // aid GC
         }
 
         // Clear queue on finish
-        this[QUEUE] = [];
+        this._queue = [];
 
         return this;
     }
@@ -335,15 +315,15 @@ class AsyncSteps {
      * @alias AsyncSteps#execute
      */
     execute() {
-        this[CANCEL_EXECUTE]();
+        this._cancelExecute();
 
-        const stack = this[STACK];
+        const stack = this._stack;
         let q;
 
         if ( stack.length ) {
-            q = stack[ stack.length - 1 ][QUEUE];
+            q = stack[ stack.length - 1 ]._queue;
         } else {
-            q = this[QUEUE];
+            q = this._queue;
         }
 
         if ( !q.length ) {
@@ -353,45 +333,45 @@ class AsyncSteps {
         const curr = q.shift();
 
         if ( curr[0] === null ) {
-            this[HANDLE_SUCCESS]( [] );
+            this._handle_success( [] );
             return;
         }
 
         const asp = new AsyncStepProtector( this );
 
-        const next_args = this[NEXT_ARGS];
+        const next_args = this._next_args;
 
-        this[NEXT_ARGS] = [];
+        this._next_args = [];
         next_args.unshift( asp );
 
         try {
-            asp[ON_ERROR] = curr[1];
+            asp._on_error = curr[1];
             stack.push( asp );
             const cb = curr[0];
 
-            this[EXEC_STACK].push( cb );
+            this._exec_stack.push( cb );
 
             const oc = stack.length;
 
-            this[IN_EXECUTE] = true;
+            this._in_exec = true;
             cb.apply( null, next_args );
 
             if ( oc === stack.length ) {
-                if ( asp[QUEUE] !== null ) {
-                    this[SCHEDULE_EXECUTE]();
-                } else if ( ( asp[LIMIT_EVENT] === null ) &&
-                        ( asp[ON_CANCEL] === null ) &&
-                        !asp[WAIT_EXTERNAL] ) {
+                if ( asp._queue !== null ) {
+                    this._scheduleExecute();
+                } else if ( ( asp._limit_event === null ) &&
+                        ( asp._on_cancel === null ) &&
+                        !asp._wait_external ) {
                     // Implicit success
-                    this[HANDLE_SUCCESS]( [] );
+                    this._handle_success( [] );
                 }
             }
         } catch ( e ) {
-            this[IN_EXECUTE] = false;
-            this[STATE].last_exception = e;
-            this[HANDLE_ERROR]( e.message );
+            this._in_exec = false;
+            this.state.last_exception = e;
+            this._handle_error( e.message );
         } finally {
-            this[IN_EXECUTE] = false;
+            this._in_exec = false;
         }
 
         return this;
@@ -400,17 +380,17 @@ class AsyncSteps {
     /**
      * @private
      */
-    [SCHEDULE_EXECUTE]() {
-        this[EXECUTE_EVENT] = this[ASYNC_TOOL].callLater( this[EXECUTE_CB] );
+    _scheduleExecute() {
+        this._exec_event = this._async_tool.callLater( this._execute_cb );
     }
 
     /**
      * @private
      */
-    [CANCEL_EXECUTE]() {
-        if ( this[EXECUTE_EVENT] ) {
-            this[ASYNC_TOOL].cancelCall( this[EXECUTE_EVENT] );
-            this[EXECUTE_EVENT] = null;
+    _cancelExecute() {
+        if ( this._exec_event ) {
+            this._async_tool.cancelCall( this._exec_event );
+            this._exec_event = null;
         }
     }
 
@@ -553,7 +533,7 @@ class AsyncSteps {
         };
 
         const convert_error = ( as, reason ) => {
-            const state = as[STATE];
+            const state = as.state;
 
             if ( state ) {
                 const default_error = 'PromiseReject';
@@ -561,7 +541,7 @@ class AsyncSteps {
                 if ( reason instanceof Error ) {
                     state.last_exception = reason;
                     state.error_info = undefined;
-                    ( this[ROOT] || this )[HANDLE_ERROR]( default_error );
+                    ( this._root || this )._handle_error( default_error );
                 } else {
                     try {
                         this.error( reason || default_error );
@@ -685,7 +665,7 @@ Object.assign(
 );
 ParallelStep.prototype.isAsyncSteps = ASProto.isAsyncSteps;
 
-ASProto[ASYNC_TOOL] = AsyncTool;
+ASProto._async_tool = AsyncTool;
 
 /**
  * Get AsyncSteps state object.

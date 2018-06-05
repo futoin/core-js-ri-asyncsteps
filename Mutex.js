@@ -24,17 +24,6 @@
 const ISync = require( './ISync' );
 const { DefenseRejected } = require( './Errors' );
 
-const {
-    LOCKED,
-    MAX,
-    MAX_QUEUE,
-    NEXT_ARGS,
-    OWNERS,
-    QUEUE,
-    ROOT,
-    STATE,
-} = require( './lib/common' );
-
 /**
  * Mutual exclusion mechanism for AsyncSteps
  */
@@ -47,24 +36,24 @@ class Mutex extends ISync {
     constructor( max = 1, max_queue = null ) {
         super();
 
-        this[MAX] = max;
-        this[LOCKED] = 0;
-        this[OWNERS] = new WeakMap();
-        this[QUEUE] = [];
-        this[MAX_QUEUE] = max_queue;
+        this._max = max;
+        this._locked = 0;
+        this._owners = new WeakMap();
+        this._queue = [];
+        this._max_queue = max_queue;
     }
 
     _lock( as ) {
-        const key = as[ROOT];
-        const owners = this[OWNERS];
+        const key = as._root;
+        const owners = this._owners;
         const owned = owners.get( key );
 
         if ( owned ) {
             owners.set( key, owned + 1 );
             as.success();
-        } else if ( this[LOCKED] >= this[MAX] ) {
-            const queue = this[QUEUE];
-            const max_queue = this[MAX_QUEUE];
+        } else if ( this._locked >= this._max ) {
+            const queue = this._queue;
+            const max_queue = this._max_queue;
 
             if ( ( max_queue !== null ) && ( queue.length >= max_queue ) ) {
                 as.error( DefenseRejected, 'Mutex queue limit' );
@@ -72,15 +61,15 @@ class Mutex extends ISync {
 
             queue.push( as );
         } else {
-            this[LOCKED] += 1;
+            this._locked += 1;
             owners.set( key, 1 );
             as.success();
         }
     }
 
     _release( as ) {
-        const key = as[ROOT];
-        const owners = this[OWNERS];
+        const key = as._root;
+        const owners = this._owners;
         const owned = owners.get( key );
 
         if ( owned ) {
@@ -91,26 +80,26 @@ class Mutex extends ISync {
 
             owners.delete( key );
 
-            if ( this[LOCKED] <= 0 ) {
+            if ( this._locked <= 0 ) {
                 as.error( 'InternalError', 'Mutex must be in locked state' );
             }
 
-            this[LOCKED] -= 1;
-            const queue = this[QUEUE];
+            this._locked -= 1;
+            const queue = this._queue;
 
             while ( queue.length ) {
                 let other_as = queue.shift();
 
-                if ( other_as[STATE] ) {
+                if ( other_as.state ) {
                     this._lock( other_as );
                     break;
                 }
             }
         } else {
-            const idx = this[QUEUE].indexOf( as );
+            const idx = this._queue.indexOf( as );
 
             if ( idx >= 0 ) {
-                this[QUEUE].splice( idx, 1 );
+                this._queue.splice( idx, 1 );
             }
         }
     }
@@ -125,7 +114,7 @@ class Mutex extends ISync {
         } );
         as.add( ( as ) => {
             as.setCancel( ( as ) => this._release( as ) );
-            as[ROOT][NEXT_ARGS] = incoming_args;
+            as._root._next_args = incoming_args;
             as.add( step, onerror );
         } );
         as.add( ( as, ...success_args ) => {

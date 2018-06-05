@@ -318,7 +318,7 @@ describe( 'Throttle', function() {
         } ).add( ( outer_as ) => {
             outer_as.waitExternal();
             setTimeout( () => {
-                expect( thrtl[TIMER] ).to.be.null;
+                expect( thrtl._timer ).to.be.null;
                 outer_as.success();
             }, 100 );
         } ).add( ( outer_as ) => {

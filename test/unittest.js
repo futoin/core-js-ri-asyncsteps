@@ -17,7 +17,6 @@ const { assert, expect } = chai;
 
 const {
     HANDLE_SUCCESS,
-    QUEUE,
 } = require( '../lib/common' );
 
 
@@ -163,11 +162,11 @@ describe( 'AsyncSteps', function() {
                     }
                 );
 
-                expect( as[QUEUE].length ).equal( 2 );
-                expect( as[QUEUE][0][0] ).be.instanceof( Function );
-                expect( as[QUEUE][0][1] ).be.instanceof( Function );
-                expect( as[QUEUE][1][0] ).be.instanceof( Function );
-                assert.isUndefined( as[QUEUE][1][1] );
+                expect( as._queue.length ).equal( 2 );
+                expect( as._queue[0][0] ).be.instanceof( Function );
+                expect( as._queue[0][1] ).be.instanceof( Function );
+                expect( as._queue[1][0] ).be.instanceof( Function );
+                assert.isUndefined( as._queue[1][1] );
             } );
 
             it( "should call steps and errors in correct order", function() {
@@ -387,11 +386,11 @@ describe( 'AsyncSteps', function() {
                     as.success();
                 } );
 
-                expect( as[QUEUE].length ).equal( 3 );
-                expect( as[QUEUE][0][0] ).be.instanceof( Function );
-                expect( as[QUEUE][0][1] ).be.instanceof( Function );
-                expect( as[QUEUE][1][0] ).be.instanceof( Function );
-                assert.isUndefined( as[QUEUE][1][1] );
+                expect( as._queue.length ).equal( 3 );
+                expect( as._queue[0][0] ).be.instanceof( Function );
+                expect( as._queue[0][1] ).be.instanceof( Function );
+                expect( as._queue[1][0] ).be.instanceof( Function );
+                assert.isUndefined( as._queue[1][1] );
 
                 as.execute();
                 async_steps.AsyncTool.run();
@@ -731,7 +730,7 @@ describe( 'AsyncSteps', function() {
 
                 assert.throws(
                     function() {
-                        as[HANDLE_SUCCESS]();
+                        as._handle_success();
                     }, 'InternalError' );
             } );
 

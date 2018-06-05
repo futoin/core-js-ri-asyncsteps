@@ -169,7 +169,7 @@ optihelp( 'AsyncSteps', { test_time : 3 } )
             .execute();
     } )
     .test( 'sync Limiter', ( done ) => {
-        lmtr[THROTTLE]._resetPeriod();
+        lmtr._throttle._resetPeriod();
         $as()
             .sync( lmtr, ( as ) => {} )
             .add( ( as ) => done() )
