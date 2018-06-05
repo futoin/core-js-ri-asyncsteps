@@ -1373,7 +1373,7 @@ describe( 'AsyncSteps', function() {
                 as.add(
                     function( as ) {
                         as.loop( function( as ) {
-                            as.error( "MyError" );
+                            as.error( "MyError", 'Info' );
                         } );
                     },
                     function( as, err ) {
@@ -1386,6 +1386,7 @@ describe( 'AsyncSteps', function() {
                 assertNoEvents();
 
                 expect( reserr ).equal( 'MyError' );
+                expect( as.state.error_info ).equal( 'Info' );
             } );
 
             it( 'should continue outer loop', function() {
