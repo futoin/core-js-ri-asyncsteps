@@ -3,6 +3,7 @@
 CHANGED: huge optimization using @futoin/optihelp tool
 CHANGED: internal file name refactoring
 FIXED: missing chaining support for await()
+FIXED: missing loop func check
 NEW: forEach() supports Map now
 
 === 1.11.5 (2018-05-23) ===

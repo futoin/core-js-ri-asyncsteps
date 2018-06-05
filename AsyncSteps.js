@@ -36,6 +36,8 @@ const {
     checkOnError,
     noop,
     loop,
+    repeat,
+    forEach,
 } = require( './lib/common' );
 
 const sanityCheck = noop ? noop : ( as ) => {
@@ -436,18 +438,9 @@ class AsyncSteps {
      * @alias AsyncSteps#repeat
      */
     repeat( count, func, label ) {
-        let i = 0;
+        checkFunc( this, func );
 
-        this.loop(
-            ( as ) => {
-                if ( i < count ) {
-                    func( as, i++ );
-                } else {
-                    as.break();
-                }
-            },
-            label
-        );
+        repeat( this, this, count, func, label );
 
         return this;
     }
@@ -471,41 +464,9 @@ class AsyncSteps {
      * @alias AsyncSteps#forEach
      */
     forEach( map_or_list, func, label ) {
-        if ( Array.isArray( map_or_list ) ) {
-            this.repeat(
-                map_or_list.length,
-                ( as, i ) => {
-                    func( as, i, map_or_list[i] );
-                },
-                label
-            );
-        } else if ( typeof Map !== 'undefined' && map_or_list instanceof Map ) {
-            const iter = map_or_list.entries();
+        checkFunc( this, func );
 
-            this.loop(
-                ( as ) => {
-                    const next = iter.next();
-
-                    if ( next.done ) {
-                        as.break();
-                    }
-
-                    const [ key, value ] = next.value;
-                    func( as, key, value );
-                },
-                label
-            );
-        } else {
-            const keys = Object.keys( map_or_list );
-
-            this.repeat(
-                keys.length,
-                ( as, i ) => {
-                    func( as, keys[i], map_or_list[ keys[i] ] );
-                },
-                label
-            );
-        }
+        forEach( this, this, map_or_list, func, label );
 
         return this;
     }
@@ -656,11 +617,7 @@ const ASProto = AsyncSteps.prototype;
 Object.assign(
     AsyncStepProtector.prototype,
     {
-        repeat : ASProto.repeat,
-        forEach : ASProto.forEach,
-        successStep : ASProto.successStep,
         await : ASProto.await,
-        isAsyncSteps: ASProto.isAsyncSteps,
     }
 );
 ParallelStep.prototype.isAsyncSteps = ASProto.isAsyncSteps;
