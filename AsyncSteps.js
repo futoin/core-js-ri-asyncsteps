@@ -38,6 +38,7 @@ const {
     loop,
     repeat,
     forEach,
+    as_await,
 } = require( './lib/common' );
 
 const sanityCheck = noop ? noop : ( as ) => {
@@ -488,85 +489,7 @@ class AsyncSteps {
      * @returns {AsyncSteps} self
      */
     await( promise, onerror ) {
-        const promise_state = {
-            step_as : null,
-            complete : false,
-        };
-
-        const convert_error = ( as, reason ) => {
-            const state = as.state;
-
-            if ( state ) {
-                const default_error = 'PromiseReject';
-
-                if ( reason instanceof Error ) {
-                    state.last_exception = reason;
-                    state.error_info = undefined;
-                    ( this._root || this )._handle_error( default_error );
-                } else {
-                    try {
-                        this.error( reason || default_error );
-                    } catch ( _ ) {
-                        // ignore
-                    }
-                }
-            }
-        };
-
-        // Attach handlers on the same tick
-        promise.then(
-            ( result ) => {
-                const step_as = promise_state.step_as;
-
-                if ( step_as ) {
-                    step_as.success( result );
-                } else {
-                    promise_state.complete = ( step_as ) => {
-                        step_as.success( result );
-                    };
-                }
-            },
-            ( reason ) => {
-                const step_as = promise_state.step_as;
-
-                if ( step_as ) {
-                    convert_error( step_as, reason );
-                } else {
-                    // prevent cancel logic
-                    promise_state.step_as = null;
-
-                    promise_state.complete = ( step_as ) => {
-                        convert_error( step_as, reason );
-                    };
-                }
-            }
-        );
-
-        this.add(
-            ( as ) => {
-                const { complete } = promise_state;
-
-                if ( complete ) {
-                    complete( as );
-                } else {
-                    promise_state.step_as = as;
-
-                    as.setCancel( () => {
-                        if ( promise_state.step_as ) {
-                            promise_state.step_as = null;
-
-                            try {
-                                // BlueBird cancellation
-                                promise.cancel();
-                            } catch ( _ ) {
-                                // ignore
-                            }
-                        }
-                    } );
-                }
-            },
-            onerror
-        );
+        as_await( this, this, promise, onerror );
 
         return this;
     }
@@ -612,17 +535,7 @@ class AsyncSteps {
  * @alias cancel_callback
  */
 
-const ASProto = AsyncSteps.prototype;
-
-Object.assign(
-    AsyncStepProtector.prototype,
-    {
-        await : ASProto.await,
-    }
-);
-ParallelStep.prototype.isAsyncSteps = ASProto.isAsyncSteps;
-
-ASProto._async_tool = AsyncTool;
+AsyncSteps.prototype._async_tool = AsyncTool;
 
 /**
  * Get AsyncSteps state object.
