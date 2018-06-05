@@ -5,6 +5,7 @@ CHANGED: internal file name refactoring
 FIXED: missing chaining support for await()
 FIXED: missing loop func check
 NEW: forEach() supports Map now
+NEW: "production" mode optimization
 
 === 1.11.5 (2018-05-23) ===
 FIXED: missing exports in module
