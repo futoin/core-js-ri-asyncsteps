@@ -50,7 +50,7 @@ class Mutex extends ISync {
 
         if ( owned ) {
             owners.set( key, owned + 1 );
-            as.success();
+            as._root._handle_success();
         } else if ( this._locked >= this._max ) {
             const queue = this._queue;
             const max_queue = this._max_queue;
@@ -63,7 +63,7 @@ class Mutex extends ISync {
         } else {
             this._locked += 1;
             owners.set( key, 1 );
-            as.success();
+            as._root._handle_success();
         }
     }
 
@@ -119,7 +119,7 @@ class Mutex extends ISync {
         } );
         as.add( ( as, ...success_args ) => {
             this._release( as );
-            as.success( ...success_args );
+            as._root._handle_success( success_args );
         } );
     }
 }

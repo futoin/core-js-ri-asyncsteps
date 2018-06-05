@@ -47,7 +47,7 @@ describe( 'Mutex', function() {
                         done();
                     }
                 } else {
-                    done( 'Fail' );
+                    done( err || 'Fail' );
                 }
             } );
             as.execute();

@@ -39,6 +39,7 @@ const {
     repeat,
     forEach,
     as_await,
+    EMPTY_ARRAY,
 } = require( './lib/common' );
 
 const sanityCheck = noop ? noop : ( as ) => {
@@ -69,7 +70,7 @@ class AsyncSteps {
         this._exec_stack = [];
         this._in_exec = false;
         this._exec_event = null;
-        this._next_args = [];
+        this._next_args = EMPTY_ARRAY;
 
         this._execute_cb = () => this.execute();
     }
@@ -168,7 +169,7 @@ class AsyncSteps {
      * @private
      * @param {array} [args] List of success() args
      */
-    _handle_success( args ) {
+    _handle_success( args = EMPTY_ARRAY ) {
         const stack = this._stack;
         const exec_stack = this._exec_stack;
         const async_tool = this._async_tool;
@@ -214,7 +215,7 @@ class AsyncSteps {
      * @param {string} [name] Error to handle
      */
     _handle_error( name ) {
-        this._next_args = [];
+        this._next_args = EMPTY_ARRAY;
 
         const stack = this._stack;
         const exec_stack = this._exec_stack;
@@ -279,7 +280,7 @@ class AsyncSteps {
      * @alias AsyncSteps#cancel
      */
     cancel() {
-        this._next_args = [];
+        this._next_args = EMPTY_ARRAY;
 
         this._cancelExecute();
 
@@ -336,16 +337,24 @@ class AsyncSteps {
         const curr = q.shift();
 
         if ( curr[0] === null ) {
-            this._handle_success( [] );
+            this._handle_success();
             return;
         }
 
         const asp = new AsyncStepProtector( this );
 
+        const call_args = [ asp ];
         const next_args = this._next_args;
+        const na_len = next_args.length;
 
-        this._next_args = [];
-        next_args.unshift( asp );
+        if ( na_len > 0 ) {
+            //Array.prototype.push.apply( call_args, next_args );
+            for ( let i = 0; i < na_len; ++i ) {
+                call_args.push( next_args[i] );
+            }
+
+            this._next_args = EMPTY_ARRAY;
+        }
 
         try {
             asp._on_error = curr[1];
@@ -357,7 +366,7 @@ class AsyncSteps {
             const oc = stack.length;
 
             this._in_exec = true;
-            cb.apply( null, next_args );
+            cb( ...call_args );
 
             if ( oc === stack.length ) {
                 if ( asp._queue !== null ) {
@@ -366,7 +375,7 @@ class AsyncSteps {
                         ( asp._on_cancel === null ) &&
                         !asp._wait_external ) {
                     // Implicit success
-                    this._handle_success( [] );
+                    this._handle_success();
                 }
             }
         } catch ( e ) {
@@ -478,7 +487,7 @@ class AsyncSteps {
      * @alias AsyncSteps#successStep
      */
     successStep( ...args ) {
-        this.add( ( as ) => as.success( ...args ) );
+        this.add( ( as ) => as._root._handle_success( args ) );
     }
 
     /**

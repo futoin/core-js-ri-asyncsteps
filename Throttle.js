@@ -59,7 +59,7 @@ class Throttle extends ISync {
             queue.push( as );
         } else {
             this._current += 1;
-            as.success();
+            as._root._handle_success();
         }
     }
 
@@ -87,7 +87,7 @@ class Throttle extends ISync {
 
             if ( other_as.state ) {
                 ++current;
-                other_as.success();
+                other_as._root._handle_success();
             }
         }
 
