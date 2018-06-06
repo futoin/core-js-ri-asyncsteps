@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 2.0.0 (2018-06-06) ===
 CHANGED: huge optimization using @futoin/optihelp tool (5-50% depending on feature)
 CHANGED: internal file name refactoring
 CHANGED: handling of AsyncTool

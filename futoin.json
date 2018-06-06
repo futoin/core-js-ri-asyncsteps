@@ -1,6 +1,6 @@
 {
   "name": "futoin-asyncsteps",
-  "version": "1.11.5",
+  "version": "2.0.0",
   "vcs": "git",
   "rms": "npm",
   "rmsRepo": "ignored",
@@ -16,6 +16,6 @@
       "@cid tool update",
       "@cid tool exec yarn -- upgrade --latest"
     ],
-    "optihelp" : "nodeEnv=production cid tool exec node -- test/optihelp.js"
+    "optihelp": "nodeEnv=production cid tool exec node -- test/optihelp.js"
   }
 }
