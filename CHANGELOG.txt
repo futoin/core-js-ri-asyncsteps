@@ -1,6 +1,6 @@
 
 === (next) ===
-CHANGED: huge optimization using @futoin/optihelp tool
+CHANGED: huge optimization using @futoin/optihelp tool (5-50% depending on feature)
 CHANGED: internal file name refactoring
 CHANGED: handling of AsyncTool
 CHANGED: disabled async execution stack for production

@@ -1611,7 +1611,11 @@ describe( 'AsyncSteps', function() {
                     function( as, err ) {
                         expect( as.state.error_info ).equal( 'FirstInfo' );
                         expect( as.state.last_exception.message ).equal( 'FirstError' );
-                        expect( as.state.async_stack.pop() ).eql( step_func );
+
+                        if ( !in_browser ) {
+                            expect( as.state.async_stack.pop() ).eql( step_func );
+                        }
+
                         as.error( 'SecondError', 'SecondInfo' );
                     }
                 );

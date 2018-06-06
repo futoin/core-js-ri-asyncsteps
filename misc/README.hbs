@@ -10,8 +10,8 @@
 
 # About
 
-FutoIn AsyncSteps miimics traditional threads of execution in single threaded event loop. It
-supports all features including cancellation, exit handlers, thead local storage and synchronization
+FutoIn AsyncSteps mimics traditional threads of execution in single threaded event loop. It
+supports all features including cancellation, exit handlers, thread local storage and synchronization
 primitives.
 
 Additionally, it supports async/Promise integration as step through `as.await()` API.
