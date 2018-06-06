@@ -1492,11 +1492,38 @@ describe( 'AsyncSteps', function() {
                 expect( i ).equal( 2 );
             } );
 
+            it( 'should repeat zero times', function() {
+                var as = this.as;
+                var reserr = null;
+                var i = 0;
+
+                as.add(
+                    function( as ) {
+                        as.repeat( 0, function( as ) {
+                            ++i;
+                        } );
+                    },
+                    function( as, err ) {
+                        reserr = err;
+                    }
+                );
+
+                as.execute();
+                async_steps.AsyncToolTest.run();
+                assertNoEvents();
+
+                assert.equal( reserr, null );
+                expect( i ).equal( 0 );
+            } );
+
             it( 'should forEach array', function() {
                 var as = this.as;
                 var reserr = null;
                 var i = 0;
 
+                as.forEach( [], function( as ) {
+                    ++i;
+                } );
                 as.add(
                     function( as ) {
                         as.forEach( [
@@ -1526,6 +1553,9 @@ describe( 'AsyncSteps', function() {
                 var reserr = null;
                 var i = 0;
 
+                as.forEach( {}, function( as ) {
+                    ++i;
+                } );
                 as.add(
                     function( as ) {
                         as.forEach( {
@@ -1561,6 +1591,9 @@ describe( 'AsyncSteps', function() {
                     var reserr = null;
                     var i = 0;
 
+                    as.forEach( new Map, function( as ) {
+                        ++i;
+                    } );
                     as.add(
                         function( as ) {
                             as.forEach( new Map( [
