@@ -2,6 +2,7 @@
 === (next) ===
 CHANGED: huge optimization using @futoin/optihelp tool
 CHANGED: internal file name refactoring
+CHANGED: handling of AsyncTool
 FIXED: missing chaining support for await()
 FIXED: missing loop func check
 NEW: forEach() supports Map now

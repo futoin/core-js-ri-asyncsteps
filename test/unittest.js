@@ -62,60 +62,52 @@ describe( 'AsyncTool', function() {
 } );
 
 describe( 'AsyncToolTest', function() {
-    before( function() {
-        async_steps.installAsyncToolTest();
-    } );
-
-    after( function() {
-        async_steps.installAsyncToolTest( false );
-    } );
-
     describe(
         '#callLater()', function() {
             it( "should call later", function( done ) {
-                async_steps.AsyncTool.callLater( done );
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.callLater( done );
+                async_steps.AsyncToolTest.nextEvent();
             } );
 
             it( "should call later timeout", function( done ) {
-                async_steps.AsyncTool.callLater(
+                async_steps.AsyncToolTest.callLater(
                     function() {
                         done();
                     },
                     100
                 );
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
             } );
 
             it( 'should insert event', function() {
                 var f = function( as ) {};
 
-                async_steps.AsyncTool.callLater( function() {}, 100 );
-                async_steps.AsyncTool.callLater( f, 10 );
+                async_steps.AsyncToolTest.callLater( function() {}, 100 );
+                async_steps.AsyncToolTest.callLater( f, 10 );
 
-                assert.equal( async_steps.AsyncTool.getEvents()[0].f, f );
-                async_steps.AsyncTool.resetEvents();
-                expect( async_steps.AsyncTool.getEvents().length ).equal( 0 );
+                assert.equal( async_steps.AsyncToolTest.getEvents()[0].f, f );
+                async_steps.AsyncToolTest.resetEvents();
+                expect( async_steps.AsyncToolTest.getEvents().length ).equal( 0 );
             } );
         }
     );
     describe(
         '#cancelCall()', function() {
             it( "should cancel call", function( done ) {
-                var h = async_steps.AsyncTool.callLater( done );
+                var h = async_steps.AsyncToolTest.callLater( done );
 
-                expect( async_steps.AsyncTool.hasEvents() ).be.true;
-                async_steps.AsyncTool.cancelCall( h );
-                expect( async_steps.AsyncTool.hasEvents() ).be.false;
+                expect( async_steps.AsyncToolTest.hasEvents() ).be.true;
+                async_steps.AsyncToolTest.cancelCall( h );
+                expect( async_steps.AsyncToolTest.hasEvents() ).be.false;
                 done();
             } );
 
             it( "should cancel call timeout", function( done ) {
-                var h = async_steps.AsyncTool.callLater( done, 100 );
+                var h = async_steps.AsyncToolTest.callLater( done, 100 );
 
-                expect( async_steps.AsyncTool.hasEvents() ).be.true;
-                async_steps.AsyncTool.cancelCall( h );
-                expect( async_steps.AsyncTool.hasEvents() ).be.false;
+                expect( async_steps.AsyncToolTest.hasEvents() ).be.true;
+                async_steps.AsyncToolTest.cancelCall( h );
+                expect( async_steps.AsyncToolTest.hasEvents() ).be.false;
                 done();
             } );
         }
@@ -137,11 +129,11 @@ describe( 'AsyncSteps', function() {
     } );
 
     function assertNoEvents() {
-        expect( async_steps.AsyncTool.getEvents().length ).equal( 0 );
+        expect( async_steps.AsyncToolTest.getEvents().length ).equal( 0 );
     }
 
     function assertHasEvents() {
-        expect( async_steps.AsyncTool.getEvents().length ).be.above( 0 );
+        expect( async_steps.AsyncToolTest.getEvents().length ).be.above( 0 );
     }
 
     describe(
@@ -285,7 +277,7 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 expect( as.state.order ).eql( [
                     '1',
                     '1_1',
@@ -322,52 +314,54 @@ describe( 'AsyncSteps', function() {
                         as.add( function( as ) {} );
                     }, 'InternalError' );
 
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
             } );
 
-            it( 'should fail on invalid step func', function() {
-                var as = this.as;
+            if ( !in_browser ) {
+                it( 'should fail on invalid step func', function() {
+                    var as = this.as;
 
-                assert.throws(
-                    function() {
-                        as.add( function() {} );
-                    }, 'InternalError' );
+                    assert.throws(
+                        function() {
+                            as.add( function() {} );
+                        }, 'InternalError' );
 
-                as.add( function( as ) {} );
-                as.add( function( as, val ) {} );
-                as.cancel();
-            } );
+                    as.add( function( as ) {} );
+                    as.add( function( as, val ) {} );
+                    as.cancel();
+                } );
 
-            it( 'should fail on invalid error handler', function() {
-                var as = this.as;
+                it( 'should fail on invalid error handler', function() {
+                    var as = this.as;
 
-                assert.throws(
-                    function() {
-                        as.add(
-                            function( as ) {},
-                            function() {}
-                        );
-                    }, 'InternalError' );
+                    assert.throws(
+                        function() {
+                            as.add(
+                                function( as ) {},
+                                function() {}
+                            );
+                        }, 'InternalError' );
 
-                assert.throws(
-                    function() {
-                        as.add(
-                            function( as ) {},
-                            function( as ) {}
-                        );
-                    }, 'InternalError' );
+                    assert.throws(
+                        function() {
+                            as.add(
+                                function( as ) {},
+                                function( as ) {}
+                            );
+                        }, 'InternalError' );
 
-                assert.throws(
-                    function() {
-                        as.add(
-                            function( as ) {},
-                            function( as, error, val ) {}
-                        );
-                    }, 'InternalError' );
+                    assert.throws(
+                        function() {
+                            as.add(
+                                function( as ) {},
+                                function( as, error, val ) {}
+                            );
+                        }, 'InternalError' );
 
-                as.add( function( as ) {}, function( as, error ) {} );
-                as.cancel();
-            } );
+                    as.add( function( as ) {}, function( as, error ) {} );
+                    as.cancel();
+                } );
+            }
         }
     );
     describe(
@@ -393,7 +387,7 @@ describe( 'AsyncSteps', function() {
                 assert.isUndefined( as._queue[1][1] );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
             } );
 
             it( "should run in parallel", function() {
@@ -432,7 +426,7 @@ describe( 'AsyncSteps', function() {
                 } );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 expect( as.state.order ).eql( [
                     1,
                     2,
@@ -482,7 +476,7 @@ describe( 'AsyncSteps', function() {
 
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 expect( as.state.order ).eql( [
                     1,
                     2,
@@ -533,7 +527,7 @@ describe( 'AsyncSteps', function() {
 
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 expect( as.state.order ).eql( [
                     1,
                     2,
@@ -571,7 +565,7 @@ describe( 'AsyncSteps', function() {
                                 as.success();
                             } );
                             as.waitExternal();
-                            async_steps.AsyncTool.callLater(
+                            async_steps.AsyncToolTest.callLater(
                                 function() {
                                     try {
                                         root_as.cancel();
@@ -595,7 +589,7 @@ describe( 'AsyncSteps', function() {
 
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 expect( as.state.order ).eql( [
                     1,
                     2,
@@ -626,7 +620,7 @@ describe( 'AsyncSteps', function() {
 
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
             } );
         }
     );
@@ -654,7 +648,7 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.true;
 
                 assertNoEvents();
@@ -684,7 +678,7 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.true;
 
                 assertNoEvents();
@@ -715,11 +709,11 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.true;
 
                 assertNoEvents();
@@ -766,7 +760,7 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 expect( as.state.executed ).be.true;
             } );
 
@@ -778,7 +772,7 @@ describe( 'AsyncSteps', function() {
 
                 as.add(
                     function( as ) {
-                        async_steps.AsyncTool.callLater( function() {
+                        async_steps.AsyncToolTest.callLater( function() {
                             as.success();
                         } );
                         as.waitExternal();
@@ -792,9 +786,9 @@ describe( 'AsyncSteps', function() {
                     } );
 
                 as.execute();
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 assertHasEvents();
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 assertNoEvents();
 
                 expect( as.state.myerror ).be.false;
@@ -810,7 +804,7 @@ describe( 'AsyncSteps', function() {
 
                 as.add(
                     function( as ) {
-                        async_steps.AsyncTool.callLater( function() {
+                        async_steps.AsyncToolTest.callLater( function() {
                             assert.throws( function() {
                                 as.success();
                             }, Error, 'InternalError' );
@@ -834,9 +828,9 @@ describe( 'AsyncSteps', function() {
                     );
 
                 as.execute();
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 assertHasEvents();
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 assertNoEvents();
 
                 expect( as.state.myerror ).be.false;
@@ -884,21 +878,21 @@ describe( 'AsyncSteps', function() {
                 assertHasEvents();
 
                 // optimized successStep -> inner step
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
                 // later successStep
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
                 // final step
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.true;
 
                 // final successStep
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 assertNoEvents();
             } );
         }
@@ -945,7 +939,7 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
             } );
 
             it( 'should be possible to make async error', function() {
@@ -956,7 +950,7 @@ describe( 'AsyncSteps', function() {
 
                 as.add(
                     function( as ) {
-                        async_steps.AsyncTool.callLater( function() {
+                        async_steps.AsyncToolTest.callLater( function() {
                             try {
                                 as.error( 'MyError' );
                             } catch ( e ) {
@@ -974,7 +968,7 @@ describe( 'AsyncSteps', function() {
                     } );
 
                 as.execute();
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 assertNoEvents();
 
                 expect( as.state.myerror ).be.true;
@@ -1025,7 +1019,7 @@ describe( 'AsyncSteps', function() {
 
                 as.add(
                     function( as ) {
-                        async_steps.AsyncTool.callLater( function() {
+                        async_steps.AsyncToolTest.callLater( function() {
                             assert.throws( function() {
                                 as.error( 'MyError' );
                             }, Error, 'InternalError' );
@@ -1043,9 +1037,9 @@ describe( 'AsyncSteps', function() {
                     } );
 
                 as.execute();
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 assertHasEvents();
-                async_steps.AsyncTool.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
                 assertNoEvents();
 
                 expect( as.state.myerror ).be.false;
@@ -1055,24 +1049,22 @@ describe( 'AsyncSteps', function() {
     );
     describe(
         '#setTimeout()', function() {
-            after( function() {
-                async_steps.installAsyncToolTest( true );
-            } );
-
             it( 'should properly timeout, calling cancel', function( done ) {
-                async_steps.installAsyncToolTest( false );
-
                 var done_wrap = function( order ) {
-                    expect( order ).eql( [
-                        '1',
-                        '2',
-                        '3',
-                        '4',
-                    ] );
-                    done();
+                    try {
+                        expect( order ).eql( [
+                            '1',
+                            '2',
+                            '3',
+                            '4',
+                        ] );
+                        done();
+                    } catch ( e ) {
+                        done( e );
+                    }
                 };
 
-                var as = this.as;
+                const as = new async_steps.AsyncSteps( null, async_steps.AsyncTool );
 
                 as.state.order = [];
                 as.add(
@@ -1131,14 +1123,14 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 expect( as.state.order ).eql( [
                     '1',
                     '2',
                     '3',
                 ] );
                 as.cancel();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 expect( as.state.order ).eql( [
                     '1',
                     '2',
@@ -1195,7 +1187,7 @@ describe( 'AsyncSteps', function() {
                 expect( as.state ).have.property( 'new_v', true );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 expect( as.state.executed ).be.true;
                 expect( as.state.parallel1 ).be.true;
                 expect( as.state.parallel2 ).be.true;
@@ -1223,7 +1215,7 @@ describe( 'AsyncSteps', function() {
                 } );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 expect( as.state.executed ).be.true;
                 expect( as.state.parallel1 ).be.true;
                 expect( as.state.parallel2 ).be.true;
@@ -1258,7 +1250,7 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 expect( as.state.error_code ).be.equal( 'InternalError' );
                 expect( as.state.error_info ).equal( 'Invalid call (sanity check)' );
             } );
@@ -1272,7 +1264,7 @@ describe( 'AsyncSteps', function() {
                     }
                 );
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 assertNoEvents();
 
                 expect( as.state.ok ).be.true;
@@ -1368,7 +1360,7 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 assertNoEvents();
 
                 expect( s ).eql( [
@@ -1404,7 +1396,7 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 assertNoEvents();
 
                 expect( reserr ).equal( 'MyError' );
@@ -1438,7 +1430,7 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 assertNoEvents();
 
                 assert.equal( reserr, null );
@@ -1465,7 +1457,7 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 assertNoEvents();
 
                 assert.equal( reserr, null );
@@ -1493,7 +1485,7 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 assertNoEvents();
 
                 assert.equal( reserr, null );
@@ -1522,7 +1514,7 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 assertNoEvents();
 
                 assert.equal( reserr, null );
@@ -1556,7 +1548,7 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 assertNoEvents();
 
                 assert.equal( reserr, null );
@@ -1591,7 +1583,7 @@ describe( 'AsyncSteps', function() {
                     );
 
                     as.execute();
-                    async_steps.AsyncTool.run();
+                    async_steps.AsyncToolTest.run();
                     assertNoEvents();
 
                     assert.equal( reserr, null );
@@ -1624,7 +1616,7 @@ describe( 'AsyncSteps', function() {
                     }
                 );
                 as.execute();
-                async_steps.AsyncTool.run();
+                async_steps.AsyncToolTest.run();
                 assertNoEvents();
                 expect( as.state.error_info ).equal( 'SecondInfo' );
                 expect( as.state.last_exception.message ).equal( 'SecondError' );
@@ -1707,7 +1699,7 @@ describe( 'AsyncSteps', function() {
 
         as.state.count = 0;
         as.execute();
-        async_steps.AsyncTool.run();
+        async_steps.AsyncToolTest.run();
         assertNoEvents();
     } );
 
@@ -1738,11 +1730,11 @@ describe( 'AsyncSteps', function() {
                 done( 'Fail' );
             } );
             as.execute();
-            async_steps.AsyncTool.run();
+            async_steps.AsyncToolTest.run();
             assertNoEvents();
 
             as.state.cb();
-            async_steps.AsyncTool.run();
+            async_steps.AsyncToolTest.run();
             assertNoEvents();
         } );
     } );
@@ -1784,7 +1776,7 @@ describe( 'AsyncSteps', function() {
                 }
             );
             as.execute();
-            async_steps.AsyncTool.run();
+            async_steps.AsyncToolTest.run();
             assertNoEvents();
         } );
     } );
@@ -1942,7 +1934,9 @@ describe( '.assertAS', function( done ) {
 
                 'Errors',
                 'AsyncSteps',
+                'ActiveAsyncTool',
                 'AsyncTool',
+                'AsyncToolTest',
                 'FutoInError',
                 'assertAS',
                 'installAsyncToolTest',
@@ -1951,7 +1945,9 @@ describe( '.assertAS', function( done ) {
             expect( async_steps ).to.have.keys( [
                 'Errors',
                 'AsyncSteps',
+                'ActiveAsyncTool',
                 'AsyncTool',
+                'AsyncToolTest',
                 'FutoInError',
                 'assertAS',
                 'installAsyncToolTest',

@@ -578,11 +578,13 @@ Neutral interface to event scheduler
 * [AsyncTool](#AsyncTool)
     * [.callLater(func, [timeout_ms])](#AsyncTool.callLater) ⇒ <code>Object</code>
     * [.cancelCall(handle)](#AsyncTool.cancelCall)
+    * [.callImmediate(func)](#AsyncTool.callImmediate) ⇒ <code>Object</code>
+    * [.cancelImmediate(handle)](#AsyncTool.cancelImmediate)
 
 <a name="AsyncTool.callLater"></a>
 
 ### AsyncTool.callLater(func, [timeout_ms]) ⇒ <code>Object</code>
-Wrapper for setTimeout()/setImmediate()
+Wrapper for setTimeout()
 
 **Kind**: static method of [<code>AsyncTool</code>](#AsyncTool)  
 **Returns**: <code>Object</code> - - timer handle  
@@ -602,6 +604,29 @@ Wrapper for clearTimeout()/clearImmediate()
 | Param | Type | Description |
 | --- | --- | --- |
 | handle | <code>Object</code> | Handle returned from AsyncTool.callLater |
+
+<a name="AsyncTool.callImmediate"></a>
+
+### AsyncTool.callImmediate(func) ⇒ <code>Object</code>
+Wrapper for setImmediate()
+
+**Kind**: static method of [<code>AsyncTool</code>](#AsyncTool)  
+**Returns**: <code>Object</code> - - timer handle  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| func | <code>function</code> | callback to execute |
+
+<a name="AsyncTool.cancelImmediate"></a>
+
+### AsyncTool.cancelImmediate(handle)
+Wrapper for clearImmediate()
+
+**Kind**: static method of [<code>AsyncTool</code>](#AsyncTool)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| handle | <code>Object</code> | Handle returned from AsyncTool.callImmediate |
 
 <a name="AsyncToolTest"></a>
 

@@ -57,7 +57,7 @@ const sanityCheckAdd = noop ? noop : ( as, func, onerror ) => {
  * Root AsyncStep implementation
  */
 class AsyncSteps {
-    constructor( state = null ) {
+    constructor( state = null, async_tool = AsyncTool ) {
         if ( state === null ) {
             state = function() {
                 return this.state;
@@ -71,8 +71,14 @@ class AsyncSteps {
         this._in_exec = false;
         this._exec_event = null;
         this._next_args = EMPTY_ARRAY;
+        this._async_tool = async_tool;
 
-        this._execute_cb = () => this.execute();
+        // ---
+        const { callImmediate } = async_tool;
+        const execute_cb = () => this.execute();
+        this._scheduleExecute = () => {
+            this._exec_event = callImmediate( execute_cb );
+        };
     }
 
 
@@ -172,7 +178,6 @@ class AsyncSteps {
     _handle_success( args = EMPTY_ARRAY ) {
         const stack = this._stack;
         const exec_stack = this._exec_stack;
-        const async_tool = this._async_tool;
 
         if ( !stack.length ) {
             this.error( InternalError, 'Invalid success completion' );
@@ -184,7 +189,7 @@ class AsyncSteps {
             const limit_event = asp._limit_event;
 
             if ( limit_event ) {
-                async_tool.cancelCall( limit_event );
+                this._async_tool.cancelCall( limit_event );
                 asp._limit_event = null;
             }
 
@@ -215,11 +220,15 @@ class AsyncSteps {
      * @param {string} [name] Error to handle
      */
     _handle_error( name ) {
+        if ( this._exec_event ) {
+            this.cancel();
+            return;
+        }
+
         this._next_args = EMPTY_ARRAY;
 
         const stack = this._stack;
         const exec_stack = this._exec_stack;
-        const async_tool = this._async_tool;
 
         this.state.async_stack = exec_stack.slice( 0 );
 
@@ -230,7 +239,7 @@ class AsyncSteps {
             const on_error = asp._on_error;
 
             if ( limit_event ) {
-                async_tool.cancelCall( limit_event );
+                this._async_tool.cancelCall( limit_event );
                 asp._limit_event = null;
             }
 
@@ -270,8 +279,6 @@ class AsyncSteps {
 
         // Clear queue on finish
         this._queue = [];
-
-        this._cancelExecute();
     }
 
     /**
@@ -282,7 +289,12 @@ class AsyncSteps {
     cancel() {
         this._next_args = EMPTY_ARRAY;
 
-        this._cancelExecute();
+        const exec_event = this._exec_event;
+
+        if ( exec_event ) {
+            this._async_tool.cancelImmediate( exec_event );
+            this._exec_event = null;
+        }
 
         const stack = this._stack;
         const async_tool = this._async_tool;
@@ -319,7 +331,7 @@ class AsyncSteps {
      * @alias AsyncSteps#execute
      */
     execute() {
-        this._cancelExecute();
+        this._exec_event = null;
 
         const stack = this._stack;
         let q;
@@ -388,24 +400,6 @@ class AsyncSteps {
 
         return this;
     }
-
-    /**
-     * @private
-     */
-    _scheduleExecute() {
-        this._exec_event = this._async_tool.callLater( this._execute_cb );
-    }
-
-    /**
-     * @private
-     */
-    _cancelExecute() {
-        if ( this._exec_event ) {
-            this._async_tool.cancelCall( this._exec_event );
-            this._exec_event = null;
-        }
-    }
-
 
     /**
      * It is just a subset of *ExecFunc*
@@ -559,8 +553,6 @@ class AsyncSteps {
  * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
  * @alias cancel_callback
  */
-
-AsyncSteps.prototype._async_tool = AsyncTool;
 
 /**
  * Get AsyncSteps state object.
