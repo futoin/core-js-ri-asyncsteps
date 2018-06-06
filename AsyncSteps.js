@@ -40,6 +40,7 @@ const {
     forEach,
     as_await,
     EMPTY_ARRAY,
+    newExecStack,
 } = require( './lib/common' );
 
 const sanityCheck = noop ? noop : ( as ) => {
@@ -67,7 +68,7 @@ class AsyncSteps {
         this.state = state;
         this._queue = [];
         this._stack = [];
-        this._exec_stack = [];
+        this._exec_stack = newExecStack();
         this._in_exec = false;
         this._exec_event = null;
         this._next_args = EMPTY_ARRAY;
@@ -177,7 +178,6 @@ class AsyncSteps {
      */
     _handle_success( args = EMPTY_ARRAY ) {
         const stack = this._stack;
-        const exec_stack = this._exec_stack;
 
         if ( !stack.length ) {
             this.error( InternalError, 'Invalid success completion' );
@@ -195,7 +195,6 @@ class AsyncSteps {
 
             asp._cleanup(); // aid GC
             stack.pop();
-            exec_stack.pop();
 
             // ---
             if ( !stack.length ) {
@@ -230,9 +229,9 @@ class AsyncSteps {
         const stack = this._stack;
         const exec_stack = this._exec_stack;
 
-        this.state.async_stack = exec_stack.slice( 0 );
+        this.state.async_stack = exec_stack;
 
-        for ( ; stack.length; stack.pop(), exec_stack.pop() ) {
+        for ( ; stack.length; stack.pop() ) {
             const asp = stack[ stack.length - 1 ];
             const limit_event = asp._limit_event;
             const on_cancel = asp._on_cancel;
@@ -261,7 +260,7 @@ class AsyncSteps {
                     }
 
                     if ( asp._queue !== null ) {
-                        exec_stack[ exec_stack.length - 1 ] = on_error;
+                        exec_stack.push( on_error );
                         asp._on_error = null;
                         this._scheduleExecute();
                         return;
