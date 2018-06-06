@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 2.0.1 (2018-06-06) ===
 FIXED: invalid first iteration in repeat(0) and empty forEach()
 
 === 2.0.0 (2018-06-06) ===
