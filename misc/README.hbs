@@ -49,7 +49,7 @@ can be used with `webpack` without transpiler - default "browser" entry point
 points to ES5 version.
 
 Webpack dists are also available under `dist/` folder, but their usage should be limited
-to sites without build process.
+to sites without build process. There are "full", "lite" and "development" version builds.
 
 *Warning: older browsers should use `dist/polyfill-asyncsteps.js` for `WeakMap` polyfill used in synchronization primitives.*
 

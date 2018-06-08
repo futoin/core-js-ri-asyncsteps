@@ -57,6 +57,7 @@ module.exports = function( grunt ) {
             all: {
                 options: {
                     urls: [
+                        'http://localhost:8000/test/unittest-dev.html',
                         'http://localhost:8000/test/unittest-lite.html',
                         'http://localhost:8000/test/unittest.html',
                     ],

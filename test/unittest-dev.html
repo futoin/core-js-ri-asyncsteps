@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>tests</title>
+    <link href="../node_modules/mocha/mocha.css" media="screen" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+      <!-- Required for browser reporter -->
+      <div id="mocha"></div>
+      <script src="../node_modules/mocha/mocha.js"></script>
+      <script src="../node_modules/chai/chai.js"></script>
+      <script>
+          mocha.ui('bdd');
+      </script>
+      
+      <script src="../dist/polyfill-asyncsteps.js"></script>
+      <script src="../dist/futoin-asyncsteps-dev.js"></script>
+      
+      <script src="../dist/isynctest.js"></script>
+      <script src="../dist/mutextest.js"></script>
+      <script src="../dist/throttletest.js"></script>
+      <script src="../dist/limitertest.js"></script>
+      <script src="../dist/unittest.js"></script>
+
+      <script>
+        function run_on_load(event) {
+            if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
+            else { mocha.run(); }
+        };
+
+        if (document.readyState === "complete") {
+            run_on_load();
+        } else {
+            window.addEventListener("load", run_on_load);
+        }
+      </script>
+  </body>
+</html>

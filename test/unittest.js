@@ -12,7 +12,7 @@ const in_browser = ( typeof window !== 'undefined' );
 const async_steps = in_browser
     ? require( 'futoin-asyncsteps' )
     : module.require( '../lib/main-full' );
-const production_mode = in_browser;
+const production_mode = async_steps.isProduction;
 
 const { assert, expect } = chai;
 
@@ -2058,6 +2058,7 @@ describe( '.assertAS', function( done ) {
                 'FutoInError',
                 'assertAS',
                 'installAsyncToolTest',
+                'isProduction',
             ] );
         } else {
             expect( async_steps ).to.have.keys( [
@@ -2069,6 +2070,7 @@ describe( '.assertAS', function( done ) {
                 'FutoInError',
                 'assertAS',
                 'installAsyncToolTest',
+                'isProduction',
             ] );
         }
     } );

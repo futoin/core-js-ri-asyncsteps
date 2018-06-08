@@ -22,6 +22,23 @@ module.exports = [
         node : false,
     },
     {
+        mode: 'development',
+        entry: {
+            'futoin-asyncsteps-dev': `./${package_json.browser}`,
+        },
+        output: {
+            library: {
+                root: "$as",
+                amd: "futoin-asyncsteps",
+                commonjs: "futoin-asyncsteps",
+            },
+            libraryTarget: "umd",
+            filename: "[name].js",
+            path: __dirname + '/dist',
+        },
+        node : false,
+    },
+    {
         mode: 'production',
         entry: {
             'polyfill-asyncsteps': './lib/polyfill.js',
