@@ -410,6 +410,18 @@ it( 'should ...', $as_test(
 ) );
 ```
 
+## `async`/`await`/`Promise` integration
+
+```javascript
+const func = async () => {
+    // AsyncSteps can be used as Promise
+    await $as().add( (as) => {} ).promise();
+};
+
+// AsyncSteps can await Promise
+$as.await(func);
+```
+
 # API reference
 
 ## Modules
