@@ -2010,6 +2010,50 @@ if ( typeof Promise !== 'undefined' ) {
             setTimeout( () => as.cancel(), 100 );
         } );
     } );
+
+    describe( '#promise', function() {
+        it( 'should wrap in Promise', function( done ) {
+            const as = async_steps();
+            as.add( ( as ) => {
+                as.add( ( as ) => {
+                    as.success( 'Some result' );
+                } );
+            } );
+            as.add( ( as, res ) => {
+                as.successStep( res + ' more' );
+            } );
+            as.promise().then(
+                ( res ) => {
+                    try {
+                        expect( res ).equal( 'Some result more' );
+                        done();
+                    } catch ( e ) {
+                        done( e );
+                    }
+                } );
+        } );
+
+        it( 'should handle error as Promise reject', function( done ) {
+            const as = async_steps();
+            as.add( ( as ) => {
+                as.add( ( as ) => {
+                    as.success( 'Some result' );
+                } );
+            } );
+            as.add( ( as, res ) => {
+                as.error( res + ' more' );
+            } );
+            as.promise().catch(
+                ( err ) => {
+                    try {
+                        expect( err.message ).equal( 'Some result more' );
+                        done();
+                    } catch ( e ) {
+                        done( e );
+                    }
+                } );
+        } );
+    } );
 }
 
 describe( '.assertAS', function( done ) {

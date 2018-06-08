@@ -543,6 +543,37 @@ class AsyncSteps {
     }
 
     /**
+     * Execute AsyncSteps with Promise interface
+     * @returns {Promise} - promise wrapper for AsyncSteps
+     */
+    promise() {
+        sanityCheck( this );
+
+        return new Promise( ( resolve, reject ) => {
+            const q = this._queue;
+
+            this._queue = [
+                [
+                    ( as ) => {
+                        as._queue = q;
+                    },
+                    ( as, err ) => {
+                        reject( new Error( err ) );
+                    },
+                ],
+                [
+                    ( as, res ) => {
+                        resolve( res );
+                    },
+                    undefined,
+                ],
+            ];
+
+            this.execute();
+        } );
+    }
+
+    /**
      * Not standard API for assertion with multiple instances of the module.
      * @private
      * @returns {boolean} true

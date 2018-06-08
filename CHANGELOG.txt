@@ -8,6 +8,7 @@ CHANGED: HUGE 97% optimization of loops
 CHANGED: other minor optimizations
 CHANGED: to cleanup state.last_exception on Promise rejection in await()
 NEW: "-dev" webpack dist build
+NEW: AsyncSteps#promise() integration with await/Promise()
 
 === 2.0.1 (2018-06-06) ===
 FIXED: invalid first iteration in repeat(0) and empty forEach()
