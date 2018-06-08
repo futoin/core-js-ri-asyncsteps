@@ -1,4 +1,7 @@
 
+=== (next) ===
+CHANGED: improvements to browser-specific fast event loop
+
 === 2.1.0 (2018-06-08) ===
 IMPORTANT: the first release with performance very close or exceeding(!) to native async/await
 BREAKING CHANGE: burst execution feature (75-90% increase in speed)
