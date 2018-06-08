@@ -87,7 +87,8 @@ module.exports = {
                 "no-console" : ["off"],
                 "no-unused-vars": ["off"],
                 "require-jsdoc" : ["off"],
-            }
+            },
+            parserOptions: { ecmaVersion: 8 },
         },
     ]
 };

@@ -12,6 +12,7 @@ const in_browser = ( typeof window !== 'undefined' );
 const async_steps = in_browser
     ? require( 'futoin-asyncsteps' )
     : module.require( '../lib/main-full' );
+const production_mode = in_browser;
 
 const { assert, expect } = chai;
 
@@ -125,7 +126,15 @@ describe( 'AsyncSteps', function() {
 
     beforeEach( function( done ) {
         this.as = async_steps();
-        done();
+
+        // reset burst counter
+        try {
+            async_steps.AsyncToolTest.resetEvents();
+            async_steps().add( break_burst ).add( ( as ) => done() ).execute();
+            async_steps.AsyncToolTest.run();
+        } catch ( e ) {
+            console.log( e );
+        }
     } );
 
     function assertNoEvents() {
@@ -135,6 +144,11 @@ describe( 'AsyncSteps', function() {
     function assertHasEvents() {
         expect( async_steps.AsyncToolTest.getEvents().length ).be.above( 0 );
     }
+
+    const break_burst = ( as ) => {
+        as.waitExternal();
+        async_steps.AsyncToolTest.callLater( () => as.state && as.success(), 0 );
+    };
 
     describe(
         '#add()', function() {
@@ -301,23 +315,23 @@ describe( 'AsyncSteps', function() {
                 ] );
             } );
 
-            it( 'should fail on add in execution', function() {
-                var as = this.as;
+            if ( !production_mode ) {
+                it( 'should fail on add in execution', function() {
+                    var as = this.as;
 
-                as.add( function( as ) {
-                    as.waitExternal();
+                    as.add( function( as ) {
+                        as.waitExternal();
+                    } );
+                    as.execute();
+
+                    assert.throws(
+                        function() {
+                            as.add( function( as ) {} );
+                        }, 'InternalError' );
+
+                    async_steps.AsyncToolTest.run();
                 } );
-                as.execute();
 
-                assert.throws(
-                    function() {
-                        as.add( function( as ) {} );
-                    }, 'InternalError' );
-
-                async_steps.AsyncToolTest.run();
-            } );
-
-            if ( !in_browser ) {
                 it( 'should fail on invalid step func', function() {
                     var as = this.as;
 
@@ -401,6 +415,7 @@ describe( 'AsyncSteps', function() {
                     } )
                     .add( function( as ) {
                         as.state.order.push( 1 );
+                        as.add( break_burst );
                         as.add( function( as ) {
                             as.state.order.push( 4 );
                             as.success();
@@ -408,6 +423,7 @@ describe( 'AsyncSteps', function() {
                     } )
                     .add( function( as ) {
                         as.state.order.push( 2 );
+                        as.add( break_burst );
                         as.add( function( as ) {
                             as.state.order.push( 5 );
                             as.success();
@@ -415,6 +431,7 @@ describe( 'AsyncSteps', function() {
                     } )
                     .add( function( as ) {
                         as.state.order.push( 3 );
+                        as.add( break_burst );
                         as.add( function( as ) {
                             as.state.order.push( 6 );
                             as.success();
@@ -449,6 +466,7 @@ describe( 'AsyncSteps', function() {
                     } )
                         .add( function( as ) {
                             as.state.order.push( 1 );
+                            as.add( break_burst );
                             as.add( function( as ) {
                                 as.state.order.push( 4 );
                                 as.success();
@@ -456,6 +474,7 @@ describe( 'AsyncSteps', function() {
                         } )
                         .add( function( as ) {
                             as.state.order.push( 2 );
+                            as.add( break_burst );
                             as.add( function( as ) {
                                 as.state.order.push( 5 );
                                 as.success();
@@ -463,6 +482,7 @@ describe( 'AsyncSteps', function() {
                         } )
                         .add( function( as ) {
                             as.state.order.push( 3 );
+                            as.add( break_burst );
                             as.add( function( as ) {
                                 as.state.order.push( 6 );
                                 as.success();
@@ -500,6 +520,7 @@ describe( 'AsyncSteps', function() {
                         } )
                         .add( function( as ) {
                             as.state.order.push( 1 );
+                            as.add( break_burst );
                             as.add( function( as ) {
                                 as.state.order.push( 4 );
                                 as.success();
@@ -507,6 +528,7 @@ describe( 'AsyncSteps', function() {
                         } )
                         .add( function( as ) {
                             as.state.order.push( 2 );
+                            as.add( break_burst );
                             as.add( function( as ) {
                                 as.state.order.push( 5 );
                                 as.error( 'MyError' );
@@ -514,6 +536,7 @@ describe( 'AsyncSteps', function() {
                         } )
                         .add( function( as ) {
                             as.state.order.push( 3 );
+                            as.add( break_burst );
                             as.add( function( as ) {
                                 as.state.order.push( 6 );
                                 as.success();
@@ -553,6 +576,7 @@ describe( 'AsyncSteps', function() {
                         } )
                         .add( function( as ) {
                             as.state.order.push( 1 );
+                            as.add( break_burst );
                             as.add( function( as ) {
                                 as.state.order.push( 4 );
                                 as.success();
@@ -560,22 +584,25 @@ describe( 'AsyncSteps', function() {
                         } )
                         .add( function( as ) {
                             as.state.order.push( 2 );
+                            as.add( ( as ) => {
+                                async_steps.AsyncToolTest.callLater(
+                                    function() {
+                                        try {
+                                            root_as.cancel();
+                                        } catch ( e ) {
+                                            console.dir( e );
+                                        }
+                                    } );
+                                break_burst( as );
+                            } );
                             as.add( function( as ) {
                                 as.state.order.push( 5 );
                                 as.success();
                             } );
-                            as.waitExternal();
-                            async_steps.AsyncToolTest.callLater(
-                                function() {
-                                    try {
-                                        root_as.cancel();
-                                    } catch ( e ) {
-                                        console.dir( e );
-                                    }
-                                } );
                         } )
                         .add( function( as ) {
                             as.state.order.push( 3 );
+                            as.add( break_burst );
                             as.add( function( as ) {
                                 as.state.order.push( 6 );
                                 as.success();
@@ -631,9 +658,7 @@ describe( 'AsyncSteps', function() {
 
                 as.state.second_called = false;
                 as.add(
-                    function( as ) {
-                        as.success();
-                    },
+                    break_burst,
                     function( as, error ) {
                         expect( error ).equal( "Does not work" );
                     }
@@ -660,19 +685,21 @@ describe( 'AsyncSteps', function() {
                 as.state.second_called = false;
                 as.add(
                     function( as ) {
-                        as.error( false );
+                        as.add( break_burst );
+                        as.add( ( as ) => as.error( false ) );
                     },
                     function( as, error ) {
                         as.success( 'Value1', 'Value2' );
                     }
-                ).add(
-                    function( as, val1, val2 ) {
-                        as.state.second_called = true;
-                        expect( val1 ).equal( 'Value1' );
-                        expect( val2 ).equal( 'Value2' );
-                        as.success();
-                    }
-                );
+                )
+                    .add(
+                        function( as, val1, val2 ) {
+                            as.state.second_called = true;
+                            expect( val1 ).equal( 'Value1' );
+                            expect( val2 ).equal( 'Value2' );
+                            as.success();
+                        }
+                    );
 
                 as.execute();
                 expect( as.state.second_called ).be.false;
@@ -698,7 +725,9 @@ describe( 'AsyncSteps', function() {
                         console.dir( as );
                         expect( error ).equal( "Does not work" );
                     }
-                ).add(
+                );
+                as.add( break_burst );
+                as.add(
                     function( as ) {
                         as.state.second_called = true;
                         as.success();
@@ -706,10 +735,6 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
-                expect( as.state.second_called ).be.false;
-                assertHasEvents();
-
-                async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
@@ -780,10 +805,11 @@ describe( 'AsyncSteps', function() {
                     function( as, err ) {
                         as.state.myerror = true;
                     }
-                ).
-                    add( function( as ) {
-                        as.success();
-                    } );
+                );
+                as.add( break_burst );
+                as.add( function( as ) {
+                    as.success();
+                } );
 
                 as.execute();
                 async_steps.AsyncToolTest.nextEvent();
@@ -805,9 +831,18 @@ describe( 'AsyncSteps', function() {
                 as.add(
                     function( as ) {
                         async_steps.AsyncToolTest.callLater( function() {
-                            assert.throws( function() {
-                                as.success();
-                            }, Error, 'InternalError' );
+                            if ( production_mode ) {
+                                try {
+                                    as.success();
+                                    throw new Error( 'Fail' );
+                                } catch ( e ) {
+                                    expect( e.message ).not.equal( 'Fail' );
+                                }
+                            } else {
+                                assert.throws( function() {
+                                    as.success();
+                                }, Error, 'InternalError' );
+                            }
                         } );
 
                         as.success();
@@ -816,20 +851,21 @@ describe( 'AsyncSteps', function() {
                         console.log( err );
                         as.state.myerror = true;
                     }
-                ).
-                    add(
-                        function( as ) {
-                            as.state.executed = true;
-                            as.success();
-                        },
-                        function( as, err ) {
-                            console.dir( err );
-                        }
-                    );
+                );
+                as.add( break_burst );
+                as.add(
+                    function( as ) {
+                        as.state.executed = true;
+                        as.success();
+                    },
+                    function( as, err ) {
+                        console.dir( err );
+                    }
+                );
 
                 as.execute();
-                async_steps.AsyncToolTest.nextEvent();
                 assertHasEvents();
+                async_steps.AsyncToolTest.nextEvent();
                 async_steps.AsyncToolTest.nextEvent();
                 assertNoEvents();
 
@@ -854,8 +890,9 @@ describe( 'AsyncSteps', function() {
                         as.successStep( 'abc' );
                         as.add( function( as, abc ) {
                             expect( abc ).to.equal( 'abc' );
-                            as.successStep();
                         } );
+                        as.add( break_burst );
+                        as.add( ( as ) => as.successStep() );
                         as.successStep( 1, 2, 3 );
                     },
                     function( as, error ) {
@@ -873,26 +910,13 @@ describe( 'AsyncSteps', function() {
 
                 as.execute();
 
-                // first step
+                // first step + burst break;
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
-                // optimized successStep -> inner step
-                async_steps.AsyncToolTest.nextEvent();
-                expect( as.state.second_called ).be.false;
-                assertHasEvents();
-
-                // later successStep
-                async_steps.AsyncToolTest.nextEvent();
-                expect( as.state.second_called ).be.false;
-                assertHasEvents();
-
-                // final step
+                // later successStep + burst
                 async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.true;
-
-                // final successStep
-                async_steps.AsyncToolTest.nextEvent();
                 assertNoEvents();
             } );
         }
@@ -983,17 +1007,15 @@ describe( 'AsyncSteps', function() {
                 as.state.executed = false;
 
                 as.add(
-                    function( as ) {
-                        as.success();
-                    },
-                    function( as, err ) {
+                    break_burst,
+                    ( as, err ) => {
                         as.state.myerror = ( err === 'MyError' );
                     }
-                ).
-                    add( function( as ) {
-                        as.state.executed = true;
-                        as.success();
-                    } );
+                );
+                as.add( function( as ) {
+                    as.state.executed = true;
+                    as.success();
+                } );
 
                 as.execute();
 
@@ -1003,9 +1025,10 @@ describe( 'AsyncSteps', function() {
                     // pass
                 }
 
+                async_steps.AsyncToolTest.nextEvent();
                 assertNoEvents();
 
-                expect( as.state.myerror ).be.false;
+                expect( as.state.myerror ).be.true;
                 expect( as.state.executed ).be.false;
             } );
 
@@ -1020,9 +1043,17 @@ describe( 'AsyncSteps', function() {
                 as.add(
                     function( as ) {
                         async_steps.AsyncToolTest.callLater( function() {
-                            assert.throws( function() {
-                                as.error( 'MyError' );
-                            }, Error, 'InternalError' );
+                            if ( production_mode ) {
+                                try {
+                                    as.error( 'MyError' );
+                                } catch ( e ) {
+                                    expect( e.message ).not.equal( 'MyError' );
+                                }
+                            } else {
+                                assert.throws( function() {
+                                    as.error( 'MyError' );
+                                }, Error, 'InternalError' );
+                            }
                         } );
 
                         as.success();
@@ -1030,11 +1061,12 @@ describe( 'AsyncSteps', function() {
                     function( as, err ) {
                         as.state.myerror = ( err === 'MyError' );
                     }
-                ).
-                    add( function( as ) {
-                        as.state.executed = true;
-                        as.success();
-                    } );
+                );
+                as.add( break_burst );
+                as.add( function( as ) {
+                    as.state.executed = true;
+                    as.success();
+                } );
 
                 as.execute();
                 async_steps.AsyncToolTest.nextEvent();
@@ -1252,7 +1284,8 @@ describe( 'AsyncSteps', function() {
                 as.execute();
                 async_steps.AsyncToolTest.run();
                 expect( as.state.error_code ).be.equal( 'InternalError' );
-                expect( as.state.error_info ).equal( 'Invalid call (sanity check)' );
+                expect( as.state.error_info ).equal(
+                    production_mode ? 'Invalid success() call' : 'Invalid call (sanity check)' );
             } );
 
             it( 'should implicitly success', function() {
@@ -1623,6 +1656,40 @@ describe( 'AsyncSteps', function() {
                     expect( i ).equal( 6 );
                 } );
             }
+
+            it( 'should continue after break()+next error()', function() {
+                // Spotted bug after burst optimization.
+                var as = this.as;
+                var _this = this;
+                var root_as = as;
+
+                as.state.myerror = false;
+                as.state.executed = false;
+
+                as.add(
+                    ( as ) => {
+                        as.loop( ( as ) => as.break() );
+                        as.add( ( as ) => {
+                            as.error( 'MyError' );
+                        } );
+                    },
+                    ( as, err ) => {
+                        as.state.myerror = ( err === 'MyError' );
+                        as.success();
+                    }
+                );
+                as.add( function( as ) {
+                    as.state.executed = true;
+                    as.success();
+                } );
+
+                as.execute();
+
+                async_steps.AsyncToolTest.run();
+
+                expect( as.state.myerror ).be.true;
+                expect( as.state.executed ).be.true;
+            } );
         }
     );
     describe(
@@ -1636,17 +1703,31 @@ describe( 'AsyncSteps', function() {
             it( 'should set error_info, last_exception and async_stack', function() {
                 var as = this.as;
                 var step_func;
+                var error_func;
 
                 as.add(
                     step_func = function( as ) {
+                        if ( !production_mode ) {
+                            const async_stack = as._root._exec_stack;
+                            expect( async_stack[async_stack.length - 1] ).eql( step_func );
+                        }
+
                         as.error( 'FirstError', 'FirstInfo' );
                     },
-                    function( as, err ) {
-                        expect( as.state.error_info ).equal( 'FirstInfo' );
-                        expect( as.state.last_exception.message ).equal( 'FirstError' );
+                    error_func = function( as, err ) {
+                        try {
+                            const { state } = as;
+                            expect( err ).equal( 'FirstError' );
+                            expect( state.error_info ).equal( 'FirstInfo' );
+                            expect( state.last_exception.message ).equal( 'FirstError' );
 
-                        if ( !in_browser ) {
-                            expect( as.state.async_stack.pop() ).eql( step_func );
+                            if ( !production_mode ) {
+                                const { async_stack } = state;
+                                expect( async_stack[async_stack.length - 1] ).eql( error_func );
+                            }
+                        } catch( e ) {
+                            console.log( e );
+                            throw e;
                         }
 
                         as.error( 'SecondError', 'SecondInfo' );
@@ -1872,7 +1953,7 @@ if ( typeof Promise !== 'undefined' ) {
                 ( as, res ) => {
                     try {
                         expect( res ).to.equal( 'PromiseReject' );
-                        expect( as.state.last_exception ).to.equal( test_error );
+                        expect( as.state.last_exception ).to.equal( null );
                         as.success();
                     } catch ( e ) {
                         done( e );

@@ -60,7 +60,7 @@ describe( 'Throttle', function() {
 
     it ( 'should correctly handle concurrency limit', function( done ) {
         const limit = 3;
-        const thrtl = new Throttle( limit, 5 );
+        const thrtl = new Throttle( limit, 100 );
         let curr = 0;
         let max = 0;
 
@@ -73,7 +73,12 @@ describe( 'Throttle', function() {
                     max = ( max < curr ) ? curr : max;
 
                     as.add( ( as ) => {
-                        curr -= 1;
+                        // break burst execution
+                        as.waitExternal();
+                        $as.ActiveAsyncTool.callLater( () => {
+                            curr -= 1;
+                            as.success();
+                        }, 0 );
                     } );
                 }
             );
@@ -228,14 +233,19 @@ describe( 'Throttle', function() {
         for ( let i = 0; i < 100; ++i ) {
             p.add( ( as ) => {
                 as.sync( thrtl, ( as ) => {
-                    passed += 1;
+                    // break burst execution
+                    as.waitExternal();
+                    $as.ActiveAsyncTool.callLater( () => {
+                        passed += 1;
+                        as.success();
+                    }, 0 );
                 } );
             } );
         }
 
         as.execute();
 
-        setTimeout( () => {
+        $as.ActiveAsyncTool.callLater( () => {
             expect( passed ).to.equal( 50 );
             as.cancel();
             done();
@@ -270,7 +280,7 @@ describe( 'Throttle', function() {
 
         as.execute();
 
-        setTimeout( () => {
+        $as.ActiveAsyncTool.callLater( () => {
             expect( passed ).to.equal( 43 );
             expect( rejected ).to.equal( 57 );
             as.cancel();
@@ -309,7 +319,7 @@ describe( 'Throttle', function() {
             as.execute();
 
             outer_as.waitExternal();
-            setTimeout( () => {
+            $as.ActiveAsyncTool.callLater( () => {
                 expect( passed ).to.equal( 3 );
                 expect( rejected ).to.equal( 0 );
                 as.cancel();
@@ -317,7 +327,7 @@ describe( 'Throttle', function() {
             }, 75 );
         } ).add( ( outer_as ) => {
             outer_as.waitExternal();
-            setTimeout( () => {
+            $as.ActiveAsyncTool.callLater( () => {
                 expect( thrtl._timer ).to.be.null;
                 outer_as.success();
             }, 100 );
@@ -348,7 +358,7 @@ describe( 'Throttle', function() {
             as.execute();
 
             outer_as.waitExternal();
-            setTimeout( () => {
+            $as.ActiveAsyncTool.callLater( () => {
                 expect( passed ).to.equal( 3 );
                 expect( rejected ).to.equal( 0 );
                 as.cancel();

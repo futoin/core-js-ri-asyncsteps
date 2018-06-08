@@ -69,7 +69,12 @@ describe( 'Mutex', function() {
                     max = ( max < curr ) ? curr : max;
 
                     as.add( ( as ) => {
-                        curr -= 1;
+                        // break burst execution
+                        as.waitExternal();
+                        setTimeout( () => {
+                            curr -= 1;
+                            as.success();
+                        }, 0 );
                     } );
                 }
             );

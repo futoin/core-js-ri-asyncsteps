@@ -1,4 +1,13 @@
 
+=== (next) ===
+IMPORTANT: the first release with performance very close or exceeding(!) to native async/await
+BREAKING CHANGE: burst execution feature (75-90% increase in speed)
+- previous assumptions for parallelism of AsyncSteps instances is not valid anymore
+- no determinism in event loop shortcut usage
+CHANGED: HUGE 97% optimization of loops
+CHANGED: other minor optimizations
+CHANGED: to cleanup state.last_exception on Promise rejection in await()
+
 === 2.0.1 (2018-06-06) ===
 FIXED: invalid first iteration in repeat(0) and empty forEach()
 

@@ -32,6 +32,7 @@ const AsyncStepProtector = require( './lib/AsyncStepProtector' );
 const ParallelStep = require( './lib/ParallelStep' );
 
 const {
+    isProduction,
     checkFunc,
     checkOnError,
     noop,
@@ -43,15 +44,25 @@ const {
     newExecStack,
 } = require( './lib/common' );
 
-const sanityCheck = noop ? noop : ( as ) => {
+const sanityCheck = isProduction ? noop : ( as ) => {
     if ( as._stack.length > 0 ) {
         as.error( InternalError, "Top level add in execution" );
     }
 };
-const sanityCheckAdd = noop ? noop : ( as, func, onerror ) => {
+const sanityCheckAdd = isProduction ? noop : ( as, func, onerror ) => {
     sanityCheck( as );
     checkFunc( as, func );
     checkOnError( as, onerror );
+};
+
+// This small trick has a huge speedup result (75-90%)
+const EXEC_BURST = 100;
+let curr_burst = EXEC_BURST;
+
+
+const post_execute_cb = ( asi ) => {
+    asi._post_exec = noop;
+    asi.execute();
 };
 
 /**
@@ -70,15 +81,26 @@ class AsyncSteps {
         this._stack = [];
         this._exec_stack = newExecStack();
         this._in_exec = false;
+        this._post_exec = noop;
         this._exec_event = null;
         this._next_args = EMPTY_ARRAY;
         this._async_tool = async_tool;
 
         // ---
         const { callImmediate } = async_tool;
-        const execute_cb = () => this.execute();
+        const event_execute_cb = () => {
+            curr_burst = EXEC_BURST;
+            this._exec_event = null;
+            this.execute();
+        };
         this._scheduleExecute = () => {
-            this._exec_event = callImmediate( execute_cb );
+            if ( --curr_burst <= 0 ) {
+                this._exec_event = callImmediate( event_execute_cb );
+            } else if ( this._in_exec ) {
+                this._post_exec = post_execute_cb;
+            } else {
+                this.execute();
+            }
         };
     }
 
@@ -208,8 +230,7 @@ class AsyncSteps {
             }
         }
 
-        if ( stack.length ||
-            this._queue.length ) {
+        if ( stack.length || this._queue.length ) {
             this._scheduleExecute();
         }
     }
@@ -231,7 +252,10 @@ class AsyncSteps {
 
         this.state.async_stack = exec_stack;
 
-        for ( ; stack.length; stack.pop() ) {
+        const orig_in_exec = this._in_exec;
+        let cleanup = true;
+
+        while ( stack.length ) {
             const asp = stack[ stack.length - 1 ];
             const limit_event = asp._limit_event;
             const on_cancel = asp._on_cancel;
@@ -250,34 +274,41 @@ class AsyncSteps {
             if ( on_error ) {
                 const slen = stack.length;
                 asp._queue = null; // suppress non-empty queue for success() in onerror
+                asp._on_error = null; // do no repeat
+                exec_stack.push( on_error );
 
                 try {
                     this._in_exec = true;
                     on_error.call( null, asp, name );
 
                     if ( slen !== stack.length ) {
-                        return; // override with success()
+                        cleanup = false;
+                        break; // override with success()
                     }
 
                     if ( asp._queue !== null ) {
-                        exec_stack.push( on_error );
-                        asp._on_error = null;
+                        cleanup = false;
                         this._scheduleExecute();
-                        return;
+                        break;
                     }
                 } catch ( e ) {
                     this.state.last_exception = e;
                     name = e.message;
                 } finally {
-                    this._in_exec = false;
+                    this._in_exec = orig_in_exec;
                 }
             }
 
             asp._cleanup(); // aid GC
+            stack.pop();
         }
 
-        // Clear queue on finish
-        this._queue = [];
+        if ( cleanup ) {
+            // Clear queue on finish
+            this._queue = [];
+        } else if ( !orig_in_exec ) {
+            this._post_exec( this );
+        }
     }
 
     /**
@@ -330,8 +361,6 @@ class AsyncSteps {
      * @alias AsyncSteps#execute
      */
     execute() {
-        this._exec_event = null;
-
         const stack = this._stack;
         let q;
 
@@ -390,12 +419,13 @@ class AsyncSteps {
                 }
             }
         } catch ( e ) {
-            this._in_exec = false;
             this.state.last_exception = e;
             this._handle_error( e.message );
         } finally {
             this._in_exec = false;
         }
+
+        this._post_exec( this );
 
         return this;
     }
