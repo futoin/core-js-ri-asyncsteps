@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 2.1.2 (2018-06-09) ===
 CHANGED: not to burst-execute on async completion
 
 === 2.1.1 (2018-06-08) ===
