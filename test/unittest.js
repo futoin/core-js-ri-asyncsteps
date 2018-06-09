@@ -147,7 +147,9 @@ describe( 'AsyncSteps', function() {
 
     const break_burst = ( as ) => {
         as.waitExternal();
-        async_steps.AsyncToolTest.callLater( () => as.state && as.success(), 0 );
+        async_steps.AsyncToolTest.callLater( () => {
+            as.state && as.success();
+        }, 0 );
     };
 
     describe(
@@ -563,7 +565,6 @@ describe( 'AsyncSteps', function() {
 
             it( "should cancel on cancel in parallel (inner)", function() {
                 var as = this.as;
-                var root_as = as;
 
                 as.state.order = [];
 
@@ -584,17 +585,7 @@ describe( 'AsyncSteps', function() {
                         } )
                         .add( function( as ) {
                             as.state.order.push( 2 );
-                            as.add( ( as ) => {
-                                async_steps.AsyncToolTest.callLater(
-                                    function() {
-                                        try {
-                                            root_as.cancel();
-                                        } catch ( e ) {
-                                            console.dir( e );
-                                        }
-                                    } );
-                                break_burst( as );
-                            } );
+                            as.add( break_burst );
                             as.add( function( as ) {
                                 as.state.order.push( 5 );
                                 as.success();
@@ -616,6 +607,22 @@ describe( 'AsyncSteps', function() {
 
 
                 as.execute();
+                expect( as.state.order ).eql( [
+                    1,
+                    2,
+                    3,
+                ] );
+
+                // burst
+                async_steps.AsyncToolTest.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
+                async_steps.AsyncToolTest.nextEvent();
+
+                // step 4
+                async_steps.AsyncToolTest.nextEvent();
+
+                as.cancel();
+
                 async_steps.AsyncToolTest.run();
                 expect( as.state.order ).eql( [
                     1,
@@ -673,6 +680,11 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
+                // burst
+                async_steps.AsyncToolTest.nextEvent();
+                expect( as.state.second_called ).be.false;
+                assertHasEvents();
+
                 async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.true;
 
@@ -702,6 +714,11 @@ describe( 'AsyncSteps', function() {
                     );
 
                 as.execute();
+                expect( as.state.second_called ).be.false;
+                assertHasEvents();
+
+                // burst
+                async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
@@ -735,6 +752,11 @@ describe( 'AsyncSteps', function() {
                 );
 
                 as.execute();
+                expect( as.state.second_called ).be.false;
+                assertHasEvents();
+
+                // burst
+                async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
@@ -794,6 +816,7 @@ describe( 'AsyncSteps', function() {
                 var _this = this;
 
                 as.state.myerror = false;
+                as.state.executed = false;
 
                 as.add(
                     function( as ) {
@@ -806,18 +829,24 @@ describe( 'AsyncSteps', function() {
                         as.state.myerror = true;
                     }
                 );
-                as.add( break_burst );
                 as.add( function( as ) {
+                    as.state.executed = true;
                     as.success();
                 } );
 
                 as.execute();
+
+                // async success
                 async_steps.AsyncToolTest.nextEvent();
+                expect( as.state.executed ).be.false;
                 assertHasEvents();
+
+                // continue
                 async_steps.AsyncToolTest.nextEvent();
                 assertNoEvents();
 
                 expect( as.state.myerror ).be.false;
+                expect( as.state.executed ).be.true;
             } );
 
             it( 'should ignore unexpected success', function() {
@@ -866,6 +895,12 @@ describe( 'AsyncSteps', function() {
                 as.execute();
                 assertHasEvents();
                 async_steps.AsyncToolTest.nextEvent();
+
+                // burst
+                async_steps.AsyncToolTest.nextEvent();
+                expect( as.state.executed ).be.false;
+                assertHasEvents();
+
                 async_steps.AsyncToolTest.nextEvent();
                 assertNoEvents();
 
@@ -914,7 +949,11 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.second_called ).be.false;
                 assertHasEvents();
 
-                // later successStep + burst
+                // burst async complete
+                async_steps.AsyncToolTest.nextEvent();
+                assertHasEvents();
+                expect( as.state.second_called ).be.false;
+                // continue to end
                 async_steps.AsyncToolTest.nextEvent();
                 expect( as.state.second_called ).be.true;
                 assertNoEvents();
@@ -1069,6 +1108,8 @@ describe( 'AsyncSteps', function() {
                 } );
 
                 as.execute();
+                async_steps.AsyncToolTest.nextEvent();
+                assertHasEvents();
                 async_steps.AsyncToolTest.nextEvent();
                 assertHasEvents();
                 async_steps.AsyncToolTest.nextEvent();

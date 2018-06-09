@@ -1,4 +1,7 @@
 
+=== (next) ===
+CHANGED: not to burst-execute on async completion
+
 === 2.1.1 (2018-06-08) ===
 CHANGED: improvements to browser-specific fast event loop
 

@@ -94,12 +94,10 @@ class AsyncSteps {
             this.execute();
         };
         this._scheduleExecute = () => {
-            if ( --curr_burst <= 0 ) {
+            if ( --curr_burst <= 0 || !this._in_exec ) {
                 this._exec_event = callImmediate( event_execute_cb );
             } else if ( this._in_exec ) {
                 this._post_exec = post_execute_cb;
-            } else {
-                this.execute();
             }
         };
     }
