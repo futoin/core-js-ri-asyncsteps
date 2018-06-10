@@ -1780,6 +1780,53 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.error_info ).equal( 'SecondInfo' );
                 expect( as.state.last_exception.message ).equal( 'SecondError' );
             } );
+
+            it( 'should set error_info, last_exception and async_stack in async', function() {
+                var as = this.as;
+                var step_func;
+                var error_func;
+
+                as.add(
+                    step_func = function( as ) {
+                        if ( !production_mode ) {
+                            const async_stack = as._root._exec_stack;
+                            expect( async_stack[async_stack.length - 1] ).eql( step_func );
+                        }
+
+                        as.waitExternal();
+                        async_steps.AsyncToolTest.callImmediate( () => {
+                            try {
+                                as.error( 'FirstError', 'FirstInfo' );
+                            } catch ( _ ) {
+                                // ignore
+                            }
+                        } );
+                    },
+                    error_func = function( as, err ) {
+                        try {
+                            const { state } = as;
+                            expect( err ).equal( 'FirstError' );
+                            expect( state.error_info ).equal( 'FirstInfo' );
+                            expect( state.last_exception.message ).equal( 'FirstError' );
+
+                            if ( !production_mode ) {
+                                const { async_stack } = state;
+                                expect( async_stack[async_stack.length - 1] ).eql( error_func );
+                            }
+                        } catch( e ) {
+                            console.log( e );
+                            throw e;
+                        }
+
+                        as.error( 'SecondError', 'SecondInfo' );
+                    }
+                );
+                as.execute();
+                async_steps.AsyncToolTest.run();
+                assertNoEvents();
+                expect( as.state.error_info ).equal( 'SecondInfo' );
+                expect( as.state.last_exception.message ).equal( 'SecondError' );
+            } );
         }
     );
 
@@ -1994,7 +2041,7 @@ if ( typeof Promise !== 'undefined' ) {
                 ( as, res ) => {
                     try {
                         expect( res ).to.equal( 'PromiseReject' );
-                        expect( as.state.last_exception ).to.equal( null );
+                        expect( as.state.last_exception.message ).to.equal( 'PromiseReject' );
                         as.success();
                     } catch ( e ) {
                         done( e );

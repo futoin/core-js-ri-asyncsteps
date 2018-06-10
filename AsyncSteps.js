@@ -164,11 +164,14 @@ class AsyncSteps {
     error( name, error_info ) {
         this.state.error_info = error_info;
 
+        const e = new Error( name );
+
         if ( !this._in_exec ) {
+            this.state.last_exception = e;
             this._handle_error( name );
         }
 
-        throw new Error( name );
+        throw e;
     }
 
     /**

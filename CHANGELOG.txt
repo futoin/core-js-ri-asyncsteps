@@ -1,4 +1,7 @@
 
+=== (next) ===
+FIXED: to set state.last_exception on async error
+
 === 2.1.2 (2018-06-09) ===
 CHANGED: not to burst-execute on async completion
 
