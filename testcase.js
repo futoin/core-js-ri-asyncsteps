@@ -47,7 +47,9 @@ module.exports = function( func, onerror ) {
                         func.call( this, as );
 
                         if ( onerror ) {
-                            as.add( ( as ) => as.error( 'NegativeTestMustThrow' ) );
+                            as.add( ( as ) => {
+                                as.error( 'NegativeTestMustThrow' );
+                            } );
                         }
                     },
                     onerror

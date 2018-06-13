@@ -2,6 +2,7 @@
 === (next) ===
 FIXED: lost error in burst execution of await Promise
 NEW: internal _burst_success() API for efficient async success()
+NEW: minor optimizations
 
 === 2.1.3 (2018-06-10) ===
 FIXED: to set state.last_exception on async error

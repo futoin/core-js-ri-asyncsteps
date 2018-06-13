@@ -129,7 +129,9 @@ class AsyncSteps {
         const p = new ParallelStep( this, this );
 
         this.add(
-            ( as ) => p.executeParallel( as ),
+            ( as ) => {
+                p.executeParallel( as );
+            },
             onerror
         );
 
@@ -381,13 +383,6 @@ class AsyncSteps {
         }
 
         const curr = q.shift();
-        const func = curr[0];
-
-        if ( !func ) {
-            this._handle_success();
-            return;
-        }
-
         const asp = new AsyncStepProtector( this );
 
         const call_args = [ asp ];
@@ -404,6 +399,7 @@ class AsyncSteps {
         }
 
         try {
+            const func = curr[0];
             asp._on_error = curr[1];
             stack.push( asp );
 
@@ -592,7 +588,7 @@ class AsyncSteps {
                 ],
             ];
 
-            this.execute();
+            this._execute();
         } );
     }
 

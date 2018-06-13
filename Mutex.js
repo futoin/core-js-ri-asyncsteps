@@ -109,13 +109,17 @@ class Mutex extends ISync {
 
         as.add( ( as, ...success_args ) => {
             incoming_args = success_args;
-            as.setCancel( ( as ) => this._release( as ) );
+            as.setCancel( ( as ) => {
+                this._release( as );
+            } );
             this._lock( as );
         } );
         const asq = as._queue;
         asq.push( [
             ( as ) => {
-                as.setCancel( ( as ) => this._release( as ) );
+                as.setCancel( ( as ) => {
+                    this._release( as );
+                } );
                 as._root._next_args = incoming_args;
                 as.add( step, onerror );
             },

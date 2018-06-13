@@ -65,7 +65,9 @@ class Throttle extends ISync {
 
     _ensureTimer() {
         if ( !this._timer ) {
-            this._timer = setInterval( () => this._resetPeriod(), this._period_ms );
+            this._timer = setInterval( () => {
+                this._resetPeriod();
+            }, this._period_ms );
         }
     }
 
@@ -107,7 +109,9 @@ class Throttle extends ISync {
 
         as.add( ( as, ...success_args ) => {
             incoming_args = success_args;
-            as.setCancel( ( as ) => this._cancel( as ) );
+            as.setCancel( ( as ) => {
+                this._cancel( as );
+            } );
             this._lock( as );
         } );
         as._queue.push( [
