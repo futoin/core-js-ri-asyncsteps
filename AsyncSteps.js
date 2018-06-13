@@ -126,14 +126,17 @@ class AsyncSteps {
      * @alias AsyncSteps#parallel
      */
     parallel( onerror ) {
+        sanityCheck( this );
+        checkOnError( this, onerror );
+
         const p = new ParallelStep( this, this );
 
-        this.add(
+        this._queue.push( [
             ( as ) => {
                 p.executeParallel( as );
             },
-            onerror
-        );
+            onerror,
+        ] );
 
         return p;
     }
