@@ -62,7 +62,7 @@ let curr_burst = EXEC_BURST;
 
 const post_execute_cb = ( asi ) => {
     asi._post_exec = noop;
-    asi.execute();
+    asi._execute();
 };
 
 /**
@@ -91,7 +91,7 @@ class AsyncSteps {
         const event_execute_cb = () => {
             curr_burst = EXEC_BURST;
             this._exec_event = null;
-            this.execute();
+            this._execute();
         };
         this._scheduleExecute = () => {
             if ( --curr_burst <= 0 || !this._in_exec ) {
@@ -362,6 +362,11 @@ class AsyncSteps {
      * @alias AsyncSteps#execute
      */
     execute() {
+        this._execute();
+        return this;
+    }
+
+    _execute() {
         const stack = this._stack;
         let q;
 
@@ -427,8 +432,25 @@ class AsyncSteps {
         }
 
         this._post_exec( this );
+    }
 
-        return this;
+    /**
+     * Optimized success() which performs burst execution
+     * @param {array} [args] List of success() args
+     * @private
+     */
+    _burst_success( args = EMPTY_ARRAY ) {
+        try {
+            this._in_exec = true;
+            this._handle_success( args );
+        } catch ( e ) {
+            this.state.last_exception = e;
+            this._handle_error( e.message );
+        } finally {
+            this._in_exec = false;
+        }
+
+        this._post_exec( this );
     }
 
     /**
