@@ -386,32 +386,26 @@ class AsyncSteps {
         }
 
         const curr = q.shift();
-        const asp = new AsyncStepProtector( this );
+        const func = curr[0];
+        this._exec_stack.push( func );
 
-        const call_args = [ asp ];
         const next_args = this._next_args;
         const na_len = next_args.length;
 
-        if ( na_len > 0 ) {
-            //Array.prototype.push.apply( call_args, next_args );
-            for ( let i = 0; i < na_len; ++i ) {
-                call_args.push( next_args[i] );
-            }
-
-            this._next_args = EMPTY_ARRAY;
-        }
+        const asp = new AsyncStepProtector( this, curr[1], next_args );
+        stack.push( asp );
 
         try {
-            const func = curr[0];
-            asp._on_error = curr[1];
-            stack.push( asp );
-
-            this._exec_stack.push( func );
-
             const oc = stack.length;
 
             this._in_exec = true;
-            func( ...call_args );
+
+            if ( !na_len ) {
+                func( asp );
+            } else {
+                this._next_args = EMPTY_ARRAY;
+                func( asp, ...next_args );
+            }
 
             if ( oc === stack.length ) {
                 if ( asp._queue !== null ) {
@@ -536,10 +530,9 @@ class AsyncSteps {
         const queue = this._queue;
 
         if ( queue.length > 0 ) {
-            queue.push( [
-                ( as ) => as._root._handle_success( args ),
-                undefined,
-            ] );
+            queue.push( [ () => {
+                this._handle_success( args );
+            }, undefined ] );
         } else {
             this._next_args = args;
         }

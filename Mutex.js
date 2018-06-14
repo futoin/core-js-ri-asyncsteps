@@ -25,15 +25,15 @@ const ISync = require( './ISync' );
 const { DefenseRejected } = require( './Errors' );
 const { prev_queue } = require( './lib/common' );
 
-const mtx_sync = ( asp, mtx, step, on_error, args ) => {
+const mtx_sync = ( asp, mtx, step, on_error ) => {
     const root = asp._root;
-    const release_step = ( _, ...next_args ) => {
+    const release_step = ( asi ) => {
         mtx._release( root );
-        root._handle_success( next_args );
+        root._handle_success( asi._call_args );
     };
 
     asp._on_cancel = mtx._release_handler;
-    root._next_args = args;
+    root._next_args = asp._call_args;
 
     if ( mtx._lock( asp, root ) ) {
         asp._queue = [
@@ -130,8 +130,8 @@ class Mutex extends ISync {
 
     sync( as, step, onerror ) {
         as.add(
-            ( as, ...success_args ) => {
-                mtx_sync( as, this, step, onerror, success_args );
+            ( as ) => {
+                mtx_sync( as, this, step, onerror );
             }
         );
     }

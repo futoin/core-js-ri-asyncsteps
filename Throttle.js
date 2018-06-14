@@ -25,14 +25,15 @@ const ISync = require( './ISync' );
 const { DefenseRejected } = require( './Errors' );
 const { prev_queue } = require( './lib/common' );
 
-const throttle_sync = ( asp, throttle, step, on_error, args ) => {
+const throttle_sync = ( asp, throttle, step, on_error ) => {
+    const root = asp._root;
+
     if ( throttle._lock( asp ) ) {
         asp._on_error = on_error;
-        step( asp, ...args );
+        step( asp, ...asp._call_args );
     } else {
-        const root = asp._root;
         asp._on_cancel = throttle._cancel_handler;
-        root._next_args = args;
+        root._next_args = asp._call_args;
 
         prev_queue( root ).unshift(
             [ step, on_error ]
@@ -66,7 +67,6 @@ class Throttle extends ISync {
                 queue.splice( idx, 1 );
             }
         };
-        Object.seal( this );
     }
 
     _lock( asi ) {
@@ -124,8 +124,8 @@ class Throttle extends ISync {
 
     sync( as, step, onerror ) {
         as.add(
-            ( as, ...success_args ) => {
-                throttle_sync( as, this, step, onerror, success_args );
+            ( as ) => {
+                throttle_sync( as, this, step, onerror );
             }
         );
     }

@@ -2,6 +2,7 @@
 === (next) ===
 CHANGED: optimization for synchornization primitives (10-30%)
 CHANGED: eliminated _wait_external ASP field
+CHANGES: optimized execution handler calling (up to 10% in same cases)
 
 === 2.1.4 (2018-06-13) ===
 FIXED: lost error in burst execution of await Promise

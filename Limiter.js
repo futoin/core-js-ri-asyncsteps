@@ -53,8 +53,8 @@ class Limiter extends ISync {
     }
 
     sync( as, step, onerror ) {
-        as.sync( this._mutex, ( as, ...args ) => {
-            as._root._next_args = args;
+        as.sync( this._mutex, ( as ) => {
+            as._root._next_args = as._call_args;
             as.sync( this._throttle, step, onerror );
         } );
     }

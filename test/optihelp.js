@@ -25,7 +25,7 @@ const mtx = new Mutex;
 const trtl = new Throttle( 1 );
 const lmtr = new Limiter;
 
-optihelp( 'AsyncSteps', { test_time : 3 } )
+optihelp( 'AsyncSteps', { test_time : 5 } )
     .test( 'Add step', () => {
         $as().add( ( as ) => {} );
     } )
