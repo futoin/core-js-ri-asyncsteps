@@ -57,8 +57,9 @@ const sanityCheckAdd = isProduction ? noop : ( as, func, onerror ) => {
 
 // This small trick has a huge speedup result (75-90%)
 const EXEC_BURST = 100;
-let curr_burst = EXEC_BURST;
-
+let g_curr_burst = EXEC_BURST;
+// avoid another AsyncSteps instance continuation
+let g_burst_owner = null;
 
 const post_execute_cb = ( asi ) => {
     asi._post_exec = noop;
@@ -89,12 +90,13 @@ class AsyncSteps {
         // ---
         const { callImmediate } = async_tool;
         const event_execute_cb = () => {
-            curr_burst = EXEC_BURST;
+            g_curr_burst = EXEC_BURST;
+            g_burst_owner = this;
             this._exec_event = null;
             this._execute();
         };
         this._scheduleExecute = () => {
-            if ( --curr_burst <= 0 || !this._in_exec ) {
+            if ( --g_curr_burst <= 0 || !this._in_exec || ( g_burst_owner !== this ) ) {
                 this._exec_event = callImmediate( event_execute_cb );
             } else if ( this._in_exec ) {
                 this._post_exec = post_execute_cb;
@@ -367,7 +369,10 @@ class AsyncSteps {
      * @alias AsyncSteps#execute
      */
     execute() {
+        const prev_owner = g_burst_owner;
+        g_burst_owner = this;
         this._execute();
+        g_burst_owner = prev_owner;
         return this;
     }
 
@@ -433,6 +438,7 @@ class AsyncSteps {
     _burst_success( args = EMPTY_ARRAY ) {
         try {
             this._in_exec = true;
+            g_burst_owner = this;
             this._handle_success( args );
         } catch ( e ) {
             this.state.last_exception = e;
@@ -582,6 +588,7 @@ class AsyncSteps {
                 ],
             ];
 
+            g_burst_owner = this;
             this._execute();
         } );
     }

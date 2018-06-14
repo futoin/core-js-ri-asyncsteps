@@ -1,4 +1,7 @@
 
+=== (next) ===
+CHANGED: burst execution works only for first AsyncSteps instance on stack
+
 === 2.2.0 (2018-06-14) ===
 CHANGED: optimization for synchornization primitives (10-30%)
 CHANGED: eliminated _wait_external ASP field
