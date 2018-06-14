@@ -23,6 +23,22 @@
 
 const ISync = require( './ISync' );
 const { DefenseRejected } = require( './Errors' );
+const { prev_queue } = require( './lib/common' );
+
+const throttle_sync = ( asp, throttle, step, on_error, args ) => {
+    if ( throttle._lock( asp ) ) {
+        asp._on_error = on_error;
+        step( asp, ...args );
+    } else {
+        const root = asp._root;
+        asp._on_cancel = throttle._cancel_handler;
+        root._next_args = args;
+
+        prev_queue( root ).unshift(
+            [ step, on_error ]
+        );
+    }
+};
 
 /**
  * Throttling for AsyncSteps
@@ -39,13 +55,21 @@ class Throttle extends ISync {
 
         this._max = max;
         this._current = 0;
-        this._queue = [];
+        const queue = this._queue = [];
         this._timer = null;
         this._period_ms = period_ms;
         this._max_queue = max_queue;
+        this._cancel_handler = ( asi ) => {
+            const idx = queue.indexOf( asi );
+
+            if ( idx >= 0 ) {
+                queue.splice( idx, 1 );
+            }
+        };
+        Object.seal( this );
     }
 
-    _lock( as ) {
+    _lock( asi ) {
         this._ensureTimer();
 
         if ( this._current >= this._max ) {
@@ -53,13 +77,14 @@ class Throttle extends ISync {
             const max_queue = this._max_queue;
 
             if ( ( max_queue !== null ) && ( queue.length >= max_queue ) ) {
-                as.error( DefenseRejected, 'Throttle queue limit' );
+                asi.error( DefenseRejected, 'Throttle queue limit' );
             }
 
-            queue.push( as );
+            queue.push( asi );
+            return false;
         } else {
             this._current += 1;
-            as._root._handle_success();
+            return true;
         }
     }
 
@@ -89,38 +114,20 @@ class Throttle extends ISync {
 
             if ( other_as.state ) {
                 ++current;
-                other_as._root._handle_success();
+                const other_root = other_as._root;
+                other_root._handle_success( other_root._next_args );
             }
         }
 
         this._current = current;
     }
 
-    _cancel( as ) {
-        const idx = this._queue.indexOf( as );
-
-        if ( idx >= 0 ) {
-            this._queue.splice( idx, 1 );
-        }
-    }
-
     sync( as, step, onerror ) {
-        let incoming_args;
-
-        as.add( ( as, ...success_args ) => {
-            incoming_args = success_args;
-            as.setCancel( ( as ) => {
-                this._cancel( as );
-            } );
-            this._lock( as );
-        } );
-        as._queue.push( [
-            ( as ) => {
-                as._root._next_args = incoming_args;
-                as.add( step, onerror );
-            },
-            undefined,
-        ] );
+        as.add(
+            ( as, ...success_args ) => {
+                throttle_sync( as, this, step, onerror, success_args );
+            }
+        );
     }
 }
 

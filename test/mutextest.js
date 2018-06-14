@@ -47,7 +47,7 @@ describe( 'Mutex', function() {
                         done();
                     }
                 } else {
-                    done( err || 'Fail' );
+                    done( as.state.last_exception || 'Fail' );
                 }
             } );
             as.execute();
@@ -73,7 +73,7 @@ describe( 'Mutex', function() {
                         as.waitExternal();
                         setTimeout( () => {
                             curr -= 1;
-                            as.success();
+                            as.state && as.success();
                         }, 0 );
                     } );
                 }
@@ -239,7 +239,7 @@ describe( 'Mutex', function() {
 
                             as.add( ( as ) => {
                                 as.waitExternal();
-                                setTimeout( () => as.success(), 100 );
+                                setTimeout( () => as.state && as.success(), 100 );
                             } );
                             as.add( ( as ) => {
                                 curr -= 1;

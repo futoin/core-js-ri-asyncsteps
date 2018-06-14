@@ -1,4 +1,8 @@
 
+=== (next) ===
+CHANGED: optimization for synchornization primitives (10-30%)
+CHANGED: eliminated _wait_external ASP field
+
 === 2.1.4 (2018-06-13) ===
 FIXED: lost error in burst execution of await Promise
 NEW: internal _burst_success() API for efficient async success()
