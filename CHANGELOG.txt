@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 2.3.0 (2018-06-14) ===
 CHANGED: burst execution works only for first AsyncSteps instance on stack
 
 === 2.2.0 (2018-06-14) ===
