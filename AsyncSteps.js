@@ -416,9 +416,7 @@ class AsyncSteps {
             if ( oc === stack.length ) {
                 if ( asp._queue !== null ) {
                     this._scheduleExecute();
-                } else if ( ( asp._limit_event === null ) &&
-                        ( asp._on_cancel === null ) &&
-                        !asp._wait_external ) {
+                } else if ( !asp._on_cancel && !asp._limit_event ) {
                     // Implicit success
                     this._handle_success( this._next_args );
                 }
