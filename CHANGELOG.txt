@@ -1,5 +1,5 @@
 
-=== (next) ===
+=== 2.2.0 (2018-06-14) ===
 CHANGED: optimization for synchornization primitives (10-30%)
 CHANGED: eliminated _wait_external ASP field
 CHANGES: optimized execution handler calling (up to 10% in same cases)
