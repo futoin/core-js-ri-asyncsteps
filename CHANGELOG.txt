@@ -1,6 +1,7 @@
 
 === 2.3.0 (2018-06-14) ===
 CHANGED: burst execution works only for first AsyncSteps instance on stack
+FIXED: critical issue with Mutex optimization
 
 === 2.2.0 (2018-06-14) ===
 CHANGED: optimization for synchornization primitives (10-30%)

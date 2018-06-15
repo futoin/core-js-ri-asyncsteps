@@ -23,7 +23,6 @@
 
 const ISync = require( './ISync' );
 const { DefenseRejected } = require( './Errors' );
-const { prev_queue } = require( './lib/common' );
 
 const mtx_sync = ( asp, mtx, step, on_error ) => {
     const root = asp._root;
@@ -33,19 +32,21 @@ const mtx_sync = ( asp, mtx, step, on_error ) => {
     };
 
     asp._on_cancel = mtx._release_handler;
-    root._next_args = asp._call_args;
-
-    if ( mtx._lock( asp, root ) ) {
-        asp._queue = [
-            [ step, on_error ],
-            [ release_step, undefined ],
-        ];
-    } else {
-        prev_queue( root ).unshift(
-            [ step, on_error ],
-            [ release_step, undefined ]
-        );
-    }
+    asp._queue = [
+        [
+            ( asi ) => {
+                if ( mtx._lock( asp, root ) ) {
+                    root._handle_success( asp._call_args );
+                } else {
+                    asi.waitExternal();
+                    asi._call_args = asp._call_args;
+                }
+            },
+            undefined,
+        ],
+        [ step, on_error ],
+        [ release_step, undefined ],
+    ];
 };
 
 /**
@@ -70,41 +71,41 @@ class Mutex extends ISync {
         };
     }
 
-    _lock( asi, key ) {
+    _lock( asi, root ) {
         const owners = this._owners;
-        const owned = owners.get( key );
+        const owned = owners.get( root );
 
         if ( owned ) {
-            owners.set( key, owned + 1 );
+            owners.set( root, owned + 1 );
             return true;
         } else if ( this._locked >= this._max ) {
             const queue = this._queue;
             const max_queue = this._max_queue;
 
             if ( ( max_queue !== null ) && ( queue.length >= max_queue ) ) {
-                asi.error( DefenseRejected, 'Mutex queue limit' );
+                root.error( DefenseRejected, 'Mutex queue limit' );
             }
 
             queue.push( asi );
             return false;
         } else {
             this._locked += 1;
-            owners.set( key, 1 );
+            owners.set( root, 1 );
             return true;
         }
     }
 
-    _release( key ) {
+    _release( root ) {
         const owners = this._owners;
-        const owned = owners.get( key );
+        const owned = owners.get( root );
 
         if ( owned ) {
             if ( owned > 1 ) {
-                owners.set( key, owned - 1 );
+                owners.set( root, owned - 1 );
                 return;
             }
 
-            owners.delete( key );
+            owners.delete( root );
 
             this._locked -= 1;
             const queue = this._queue;
@@ -115,12 +116,12 @@ class Mutex extends ISync {
                 if ( other_as.state ) {
                     const other_root = other_as._root;
                     this._lock( other_as, other_root );
-                    other_root._handle_success( other_root._next_args );
+                    other_root._handle_success( other_as._call_args );
                     break;
                 }
             }
         } else {
-            const idx = this._queue.indexOf( key );
+            const idx = this._queue.indexOf( root );
 
             if ( idx >= 0 ) {
                 this._queue.splice( idx, 1 );
