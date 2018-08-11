@@ -1,4 +1,4 @@
-=== (next) ===
+=== 2.3.2 (2018-08-11) ===
 CHANGED: dependency maintenance
 FIXED: documentation of standard error codes
 
