@@ -453,9 +453,6 @@ $as.await(func);
 ## Members
 
 <dl>
-<dt><a href="#FutoInErrors">FutoInErrors</a></dt>
-<dd><p>List of standard FutoIn Core errors. It may static get extended in runtime.</p>
-</dd>
 <dt><a href="#AsyncTool">AsyncTool</a></dt>
 <dd><p>Neutral interface to event scheduler</p>
 </dd>
@@ -485,6 +482,14 @@ $as.await(func);
 </dd>
 <dt><a href="#AsyncSteps">AsyncSteps</a></dt>
 <dd><p><strong>window.futoin.AsyncSteps</strong> - browser-only reference to futoin-asyncsteps.AsyncSteps</p>
+</dd>
+</dl>
+
+## Objects
+
+<dl>
+<dt><a href="#FutoInErrors">FutoInErrors</a> : <code>object</code></dt>
+<dd><p>List of standard FutoIn Core errors. It may static get extended in runtime.</p>
 </dd>
 </dl>
 
@@ -574,12 +579,6 @@ C-tor
 | [period_ms] | <code>intger</code> | <code>1000</code> | time period in milliseconds |
 | [max_queue] | <code>integer</code> | <code></code> | limit queue length, if set |
 
-<a name="FutoInErrors"></a>
-
-## FutoInErrors
-List of standard FutoIn Core errors. It may static get extended in runtime.
-
-**Kind**: global variable  
 <a name="AsyncTool"></a>
 
 ## AsyncTool
@@ -1272,6 +1271,121 @@ Continue loop execution from the next iteration, throws exception
 | --- | --- | --- |
 | [label] | <code>string</code> | Optional. unwind loops, until *label* named loop is found |
 
+<a name="FutoInErrors"></a>
+
+## FutoInErrors : <code>object</code>
+List of standard FutoIn Core errors. It may static get extended in runtime.
+
+**Kind**: global namespace  
+
+* [FutoInErrors](#FutoInErrors) : <code>object</code>
+    * [.ConnectError](#FutoInErrors.ConnectError) : <code>string</code>
+    * [.CommError](#FutoInErrors.CommError) : <code>string</code>
+    * [.UnknownInterface](#FutoInErrors.UnknownInterface) : <code>string</code>
+    * [.NotSupportedVersion](#FutoInErrors.NotSupportedVersion) : <code>string</code>
+    * [.NotImplemented](#FutoInErrors.NotImplemented) : <code>string</code>
+    * [.Unauthorized](#FutoInErrors.Unauthorized) : <code>string</code>
+    * [.InternalError](#FutoInErrors.InternalError) : <code>string</code>
+    * [.InvokerError](#FutoInErrors.InvokerError) : <code>string</code>
+    * [.InvalidRequest](#FutoInErrors.InvalidRequest) : <code>string</code>
+    * [.DefenseRejected](#FutoInErrors.DefenseRejected) : <code>string</code>
+    * [.PleaseReauth](#FutoInErrors.PleaseReauth) : <code>string</code>
+    * [.SecurityError](#FutoInErrors.SecurityError) : <code>string</code>
+    * [.Timeout](#FutoInErrors.Timeout) : <code>string</code>
+
+<a name="FutoInErrors.ConnectError"></a>
+
+### FutoInErrors.ConnectError : <code>string</code>
+Connection error before request is sent.
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated on Invoker side  
+<a name="FutoInErrors.CommError"></a>
+
+### FutoInErrors.CommError : <code>string</code>
+Communication error at any stage after request is sent
+and before response is received.
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated on Invoker side  
+<a name="FutoInErrors.UnknownInterface"></a>
+
+### FutoInErrors.UnknownInterface : <code>string</code>
+Unknown interface requested.
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated only on Executor side  
+<a name="FutoInErrors.NotSupportedVersion"></a>
+
+### FutoInErrors.NotSupportedVersion : <code>string</code>
+Not supported interface version.
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated only on Executor side  
+<a name="FutoInErrors.NotImplemented"></a>
+
+### FutoInErrors.NotImplemented : <code>string</code>
+In case interface function is not implemented on Executor side
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated on Executor side  
+<a name="FutoInErrors.Unauthorized"></a>
+
+### FutoInErrors.Unauthorized : <code>string</code>
+Security policy on Executor side does not allow to
+access interface or specific function.
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated only on Executor side  
+<a name="FutoInErrors.InternalError"></a>
+
+### FutoInErrors.InternalError : <code>string</code>
+Unexpected internal error on Executor side, including internal CommError.
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated only on Executor side  
+<a name="FutoInErrors.InvokerError"></a>
+
+### FutoInErrors.InvokerError : <code>string</code>
+Unexpected internal error on Invoker side, not related to CommError.
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated only on Invoker side  
+<a name="FutoInErrors.InvalidRequest"></a>
+
+### FutoInErrors.InvalidRequest : <code>string</code>
+Invalid data is passed as FutoIn request.
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated only on Executor side  
+<a name="FutoInErrors.DefenseRejected"></a>
+
+### FutoInErrors.DefenseRejected : <code>string</code>
+Defense system has triggered rejection
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated on Executor side, but also possible to be triggered on Invoker  
+<a name="FutoInErrors.PleaseReauth"></a>
+
+### FutoInErrors.PleaseReauth : <code>string</code>
+Executor requests re-authorization
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated only on Executor side  
+<a name="FutoInErrors.SecurityError"></a>
+
+### FutoInErrors.SecurityError : <code>string</code>
+'sec' request section has invalid data or not SecureChannel
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be generated only on Executor side  
+<a name="FutoInErrors.Timeout"></a>
+
+### FutoInErrors.Timeout : <code>string</code>
+Timeout occurred in any stage
+
+**Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
+**Note**: Must be used only internally and should never travel in request message  
 <a name="$as_test"></a>
 
 ## $as_test(func, [onerror]) ⇒ <code>function</code>

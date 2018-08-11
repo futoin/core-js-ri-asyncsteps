@@ -41,133 +41,118 @@ const error_list = [
 
 /**
  * List of standard FutoIn Core errors. It may static get extended in runtime.
- * @var FutoInErrors
+ * @namespace FutoInErrors
  */
-class Errors {
-    /**
-     * Connection error before request is sent.
-     * Must be generated on Invoker side
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+class Errors {}
 
-    /**
-     * Communication error at any stage after request is sent
-     * and before response is received.
-     * Must be generated on Invoker side
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * Connection error before request is sent.
+ * @note Must be generated on Invoker side
+ * @const {string} ConnectError
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * Unknown interface requested.
-     * Must be generated only on Executor side
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * Communication error at any stage after request is sent
+ * and before response is received.
+ * @note Must be generated on Invoker side
+ * @const {string} CommError
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * Not supported interface version.
-     * Must be generated only on Executor side
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * Unknown interface requested.
+ * @note Must be generated only on Executor side
+ * @const {string} UnknownInterface
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * In case interface function is not implemented on Executor side
-     * Must be generated on Executor side
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * Not supported interface version.
+ * @note Must be generated only on Executor side
+ * @const {string} NotSupportedVersion
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * Security policy on Executor side does not allow to
-     * access interface or specific function.
-     * Must be generated only on Executor side
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * In case interface function is not implemented on Executor side
+ * @note Must be generated on Executor side
+ * @const {string} NotImplemented
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * Unexpected internal error on Executor side, including internal CommError.
-     * Must be generated only on Executor side
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * Security policy on Executor side does not allow to
+ * access interface or specific function.
+ * @note Must be generated only on Executor side
+ * @const {string} Unauthorized
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * Unexpected internal error on Invoker side, not related to CommError.
-     * Must be generated only on Invoker side
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * Unexpected internal error on Executor side, including internal CommError.
+ * @note Must be generated only on Executor side
+ * @const {string} InternalError
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * Invalid data is passed as FutoIn request.
-     * Must be generated only on Executor side
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * Unexpected internal error on Invoker side, not related to CommError.
+ * @note Must be generated only on Invoker side
+ * @const {string} InvokerError
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * Defense system has triggered rejection
-     * Must be generated on Executor side, but also possible to be triggered on Invoker
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * Invalid data is passed as FutoIn request.
+ * @note Must be generated only on Executor side
+ * @const {string} InvalidRequest
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * Executor requests re-authorization
-     * Must be generated only on Executor side
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * Defense system has triggered rejection
+ * @note Must be generated on Executor side, but also possible to be triggered on Invoker
+ * @const {string} DefenseRejected
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * 'sec' request section has invalid data or not SecureChannel
-     * Must be generated only on Executor side
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * Executor requests re-authorization
+ * @note Must be generated only on Executor side
+ * @const {string} PleaseReauth
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * Timeout occurred in any stage
-     * Must be used only internally and should never travel in request message
-     * @const
-     * @default
-     * @memberof FutoInErrors
-     */
+/**
+ * 'sec' request section has invalid data or not SecureChannel
+ * @note Must be generated only on Executor side
+ * @const {string} SecurityError
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * Loop Break called
-     * Must not be used directly.
-     * @const
-     * @default
-     * @private
-     * @memberof FutoInErrors
-     */
+/**
+ * Timeout occurred in any stage
+ * @note Must be used only internally and should never travel in request message
+ * @const {string} Timeout
+ * @memberof FutoInErrors
+ */
 
-    /**
-     * Loop Continue called
-     * Must not be used directly.
-     * @const
-     * @default
-     * @private
-     * @memberof FutoInErrors
-     */
-}
+/**
+ * Loop Break called
+ * @note Must not be used directly.
+ * @const {string} LoopBreak
+ * @private
+ * @memberof FutoInErrors
+ */
+
+/**
+ * Loop Continue called
+ * @note Must not be used directly.
+ * @const {string} LoopCont
+ * @private
+ * @memberof FutoInErrors
+ */
 
 error_list.forEach( ( v ) => Object.defineProperty( Errors, v, {
     enumerable: true,
