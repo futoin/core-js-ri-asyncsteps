@@ -7,7 +7,7 @@ const REPEAT_COUNT = 10000;
 let as_i = 0;
 let await_i = 0;
 
-optihelp( 'Compare', { test_time : 3 } )
+optihelp( 'Compare', { test_time : 10 } )
     .test( 'AsyncSteps', ( done ) => {
         $as()
             .add( ( as ) => {
