@@ -1,12 +1,10 @@
 'use strict';
 
-const package_json = require( './package' );
-
 module.exports = [
     {
         mode: 'production',
         entry: {
-            'futoin-asyncsteps': `./${package_json.browser}`,
+            'futoin-asyncsteps': './es5/lib/browser.js',
             'futoin-asyncsteps-lite': './es5/lib/browser-lite.js',
         },
         output: {
@@ -24,7 +22,7 @@ module.exports = [
     {
         mode: 'development',
         entry: {
-            'futoin-asyncsteps-dev': `./${package_json.browser}`,
+            'futoin-asyncsteps-dev': './es5/lib/browser.js',
         },
         output: {
             library: {
