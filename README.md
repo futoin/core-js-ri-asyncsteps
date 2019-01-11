@@ -1388,7 +1388,7 @@ Timeout occurred in any stage
 **Note**: Must be used only internally and should never travel in request message  
 <a name="$as_test"></a>
 
-## $as_test(func, [onerror]) ⇒ <code>function</code>
+## $as\_test(func, [onerror]) ⇒ <code>function</code>
 Mocha-compatible test case based on AsyncSteps.
 
 Example:
