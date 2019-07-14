@@ -104,7 +104,12 @@ module.exports = function( grunt ) {
                 reporters: [ 'mocha' ],
                 singleRun: true,
                 files: [
-                    { src: [ 'dist/*.js' ], serve: true, include: false },
+                    { src: [ 'dist/polyfill-asyncsteps.js' ],
+                        serve: true, include: true },
+                    { src: [ 'dist/futoin-asyncsteps.js' ],
+                        serve: true, include: true },
+                    { src: [ 'dist/*test.js' ],
+                        serve: true, include: false },
                 ],
             },
         },

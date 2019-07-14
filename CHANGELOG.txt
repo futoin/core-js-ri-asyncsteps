@@ -1,3 +1,6 @@
+=== (next) ===
+CHANGED: to use core-js v3.x for polyfill
+
 === 2.4.0 (2019-07-14) ===
 CHANGED: dropped Node v6 support
 CHANGED: dependency maintenance
