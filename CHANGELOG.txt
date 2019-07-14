@@ -1,4 +1,4 @@
-=== (next) ===
+=== 2.4.0 (2019-07-14) ===
 CHANGED: dropped Node v6 support
 CHANGED: dependency maintenance
 
