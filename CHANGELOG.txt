@@ -1,4 +1,5 @@
 === (next) ===
+CHANGED: dropped Node v6 support
 CHANGED: dependency maintenance
 
 === 2.3.3 (2019-01-11) ===

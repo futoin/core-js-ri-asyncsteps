@@ -6,7 +6,6 @@ node_js:
 - '12'
 - '10'
 - '8'
-- '6'
 before_install:
 - sudo pip install futoin-cid
 script:
