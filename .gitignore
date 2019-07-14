@@ -5,3 +5,4 @@ dist/
 es5/
 *.tgz
 optihelp-report.json
+/.nyc_output

@@ -17,8 +17,6 @@ module.exports = function( grunt ) {
                 'test/**/*.js',
             ],
         },
-        mocha_istanbul: { coverage: { src: [ 'test/*test.js' ] } },
-        istanbul_check_coverage: {},
         webpack: {
             dist: require( './webpack.dist' ),
             test: require( './webpack.test' ),
@@ -45,25 +43,6 @@ module.exports = function( grunt ) {
                 dest: 'es5/',
             },
         },
-        connect: {
-            server: {
-                options: {
-                    port: 8000,
-                    base: '.',
-                },
-            },
-        },
-        mocha_phantomjs: {
-            all: {
-                options: {
-                    urls: [
-                        'http://localhost:8000/test/unittest-dev.html',
-                        'http://localhost:8000/test/unittest-lite.html',
-                        'http://localhost:8000/test/unittest.html',
-                    ],
-                },
-            },
-        },
         jsdoc2md: {
             README: {
                 src: [ '*.js', 'lib/**/*.js' ],
@@ -83,21 +62,66 @@ module.exports = function( grunt ) {
                 ],
             },
         },
+        nyc: {
+            cover: {
+                options: {
+                    cwd: '.',
+                    exclude: [
+                        'coverage/**',
+                        'dist/**',
+                        'es5/**',
+                        'examples/**',
+                        'test/**',
+                        '.eslintrc.js',
+                        'Gruntfile.js',
+                        'webpack.*.js',
+                    ],
+                    reporter: [ 'lcov', 'text-summary' ],
+                    reportDir: 'coverage',
+                    all: true,
+                },
+                cmd: false,
+                args: [ 'mocha', 'test/*test.js' ],
+            },
+            report: {
+                options: {
+                    reporter: 'text-summary',
+                },
+            },
+        },
+        karma: {
+            test: {
+                browsers: [ 'FirefoxHeadless' ],
+                customLaunchers: {
+                    FirefoxHeadless: {
+                        base: 'Firefox',
+                        flags: [
+                            '-headless',
+                        ],
+                    },
+                },
+                frameworks: [ 'mocha' ],
+                reporters: [ 'mocha' ],
+                singleRun: true,
+                files: [
+                    { src: [ 'dist/*.js' ], serve: true, include: false },
+                ],
+            },
+        },
     } );
 
     grunt.loadNpmTasks( 'grunt-eslint' );
     grunt.loadNpmTasks( 'grunt-babel' );
     grunt.loadNpmTasks( 'grunt-webpack' );
-    grunt.loadNpmTasks( 'grunt-contrib-connect' );
-    grunt.loadNpmTasks( 'grunt-mocha-phantomjs' );
-    grunt.loadNpmTasks( 'grunt-mocha-istanbul' );
+    grunt.loadNpmTasks( 'grunt-karma' );
+    grunt.loadNpmTasks( 'grunt-simple-nyc' );
 
     grunt.registerTask( 'check', [ 'eslint' ] );
 
     grunt.registerTask( 'build-browser', [ 'babel', 'webpack:dist' ] );
-    grunt.registerTask( 'test-browser', [ 'webpack:test', 'connect', 'mocha_phantomjs' ] );
+    grunt.registerTask( 'test-browser', [ 'webpack:test', 'karma' ] );
 
-    grunt.registerTask( 'node', [ 'mocha_istanbul' ] );
+    grunt.registerTask( 'node', [ 'nyc' ] );
     grunt.registerTask( 'browser', [ 'build-browser', 'test-browser' ] );
     grunt.registerTask( 'test', [
         'check',

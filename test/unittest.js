@@ -86,7 +86,7 @@ describe( 'AsyncToolTest', function() {
                 async_steps.AsyncToolTest.callLater( function() {}, 100 );
                 async_steps.AsyncToolTest.callLater( f, 10 );
 
-                assert.equal( async_steps.AsyncToolTest.getEvents()[0].f, f );
+                expect( async_steps.AsyncToolTest.getEvents()[0].f ).eql( f );
                 async_steps.AsyncToolTest.resetEvents();
                 expect( async_steps.AsyncToolTest.getEvents().length ).equal( 0 );
             } );

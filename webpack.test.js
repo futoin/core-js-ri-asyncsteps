@@ -21,18 +21,6 @@ module.exports = {
             commonjs: "futoin-asyncsteps",
             commonjs2: "futoin-asyncsteps",
         },
-        chai : {
-            root: "chai",
-            amd: "chai",
-            commonjs: "chai",
-            commonjs2: "chai",
-        },
-        mocha : {
-            root: "mocha",
-            amd: "mocha",
-            commonjs: "mocha",
-            commonjs2: "mocha",
-        },
     },
     node : false,
 };
