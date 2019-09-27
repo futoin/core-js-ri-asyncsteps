@@ -1,3 +1,6 @@
+=== (next) ===
+CHANGED: deps maintenance
+
 === 2.4.1 (2019-07-14) ===
 CHANGED: to use core-js v3.x for polyfill
 
