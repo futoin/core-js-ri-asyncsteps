@@ -25,6 +25,6 @@ describe( 'ISync', function() {
             if ( err === 'NotImplemented' ) {
                 as.success();
             }
-        }
+        },
     ) );
 } );

@@ -34,12 +34,12 @@ describe( 'Mutex', function() {
                             if ( err === 'Wrong' ) {
                                 as.error( 'OK' );
                             }
-                        }
+                        },
                     );
                 },
                 ( as, err ) => {
                     as.success( err );
-                }
+                },
             );
             as.add( ( as, err ) => {
                 if ( err === 'OK' ) {
@@ -76,7 +76,7 @@ describe( 'Mutex', function() {
                             as.state && as.success();
                         }, 0 );
                     } );
-                }
+                },
             );
 
             if ( i === 0 ) {
@@ -106,7 +106,7 @@ describe( 'Mutex', function() {
             },
             ( as, err ) => {
                 done( as.state.last_exception || 'Fail' );
-            }
+            },
         ).execute();
 
         $as().add(
@@ -122,7 +122,7 @@ describe( 'Mutex', function() {
                 } else {
                     done( as.state.last_exception || 'Fail' );
                 }
-            }
+            },
         ).execute();
 
         $as().add(
@@ -133,7 +133,7 @@ describe( 'Mutex', function() {
             },
             ( as, err ) => {
                 done( as.state.last_exception || 'Fail' );
-            }
+            },
         ).execute();
     } );
 
@@ -155,7 +155,7 @@ describe( 'Mutex', function() {
                 } else {
                     done( as.state.last_exception || 'Fail' );
                 }
-            }
+            },
         ).execute();
 
         $as().add(
@@ -177,7 +177,7 @@ describe( 'Mutex', function() {
             },
             ( as, err ) => {
                 done( as.state.last_exception || 'Fail' );
-            }
+            },
         ).execute();
     } );
 
@@ -199,7 +199,7 @@ describe( 'Mutex', function() {
                         as.add( ( as ) => {
                             curr -= 1;
                         } );
-                    }
+                    },
                 );
             } );
 
@@ -244,14 +244,14 @@ describe( 'Mutex', function() {
                             as.add( ( as ) => {
                                 curr -= 1;
                             } );
-                        }
+                        },
                     ),
                     ( as, err ) => {
                         if ( err === 'DefenseRejected' ) {
                             rejected += 1;
                             as.success();
                         }
-                    }
+                    },
                 );
             } );
         }

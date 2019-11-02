@@ -38,10 +38,10 @@ describe( 'AsyncTool', function() {
                         expect( s ).be.greaterThan( t + 9 );
                         done();
                     },
-                    10
+                    10,
                 );
             } );
-        }
+        },
     );
     describe(
         '#cancelCall()', function() {
@@ -58,7 +58,7 @@ describe( 'AsyncTool', function() {
                 async_steps.AsyncTool.cancelCall( h );
                 done();
             } );
-        }
+        },
     );
 } );
 
@@ -75,7 +75,7 @@ describe( 'AsyncToolTest', function() {
                     function() {
                         done();
                     },
-                    100
+                    100,
                 );
                 async_steps.AsyncToolTest.run();
             } );
@@ -90,7 +90,7 @@ describe( 'AsyncToolTest', function() {
                 async_steps.AsyncToolTest.resetEvents();
                 expect( async_steps.AsyncToolTest.getEvents().length ).equal( 0 );
             } );
-        }
+        },
     );
     describe(
         '#cancelCall()', function() {
@@ -111,7 +111,7 @@ describe( 'AsyncToolTest', function() {
                 expect( async_steps.AsyncToolTest.hasEvents() ).be.false;
                 done();
             } );
-        }
+        },
     );
 } );
 
@@ -163,11 +163,11 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         as.success();
-                    }
+                    },
                 ).add(
                     function( as ) {
                         as.success();
-                    }
+                    },
                 );
 
                 expect( as._queue.length ).equal( 2 );
@@ -193,7 +193,7 @@ describe( 'AsyncSteps', function() {
                                 as.state.order.push( '1_1e' );
                                 expect( err ).eql( "MyError" );
                                 as.success( '1_1e' );
-                            }
+                            },
                         );
                         as.add(
                             function( as, val ) {
@@ -205,7 +205,7 @@ describe( 'AsyncSteps', function() {
                                 as.state.order.push( '1_2e' );
                                 expect( err ).eql( "MyError2" );
                                 as.success( '1_2e' );
-                            }
+                            },
                         ).add(
                             function( as, val ) {
                                 as.state.order.push( '1_3' );
@@ -216,20 +216,20 @@ describe( 'AsyncSteps', function() {
                                 as.state.order.push( '1_3e' );
                                 expect( err ).eql( "MyError2" );
                                 as.success();
-                            }
+                            },
                         );
                     },
                     function( as, err ) {
                         as.state.order.push( '1e' );
                         as.success();
-                    }
+                    },
                 ).add(
                     function( as, val1, val2 ) {
                         as.state.order.push( '2' );
                         expect( val1 ).eql( "1_3" );
                         expect( val2 ).eql( "yes" );
                         as.success();
-                    }
+                    },
                 ).add(
                     function( as ) {
                         as.state.order.push( '3' );
@@ -238,7 +238,7 @@ describe( 'AsyncSteps', function() {
                         as.state.order.push( '3e' );
                         expect( err ).eql( "InternalError" );
                         as.success();
-                    }
+                    },
                 );
                 as.add(
                     function( as ) {
@@ -254,7 +254,7 @@ describe( 'AsyncSteps', function() {
                         as.state.order.push( '4e' );
                         expect( err ).eql( "InternalError" );
                         as.success();
-                    }
+                    },
                 );
                 as.add(
                     function( as ) {
@@ -276,20 +276,20 @@ describe( 'AsyncSteps', function() {
                                             },
                                             function( as, err ) {
                                                 as.state.order.push( '5_3e' );
-                                            }
+                                            },
                                         );
-                                    }
+                                    },
                                 );
                             },
                             function( as, err ) {
                                 as.state.order.push( '5_1e' );
-                            }
+                            },
                         );
                     },
                     function( as, err ) {
                         as.state.order.push( '5e' );
                         as.success();
-                    }
+                    },
                 );
 
                 as.execute();
@@ -354,7 +354,7 @@ describe( 'AsyncSteps', function() {
                         function() {
                             as.add(
                                 function( as ) {},
-                                function() {}
+                                function() {},
                             );
                         }, 'InternalError' );
 
@@ -362,7 +362,7 @@ describe( 'AsyncSteps', function() {
                         function() {
                             as.add(
                                 function( as ) {},
-                                function( as ) {}
+                                function( as ) {},
                             );
                         }, 'InternalError' );
 
@@ -370,7 +370,7 @@ describe( 'AsyncSteps', function() {
                         function() {
                             as.add(
                                 function( as ) {},
-                                function( as, error, val ) {}
+                                function( as, error, val ) {},
                             );
                         }, 'InternalError' );
 
@@ -378,7 +378,7 @@ describe( 'AsyncSteps', function() {
                     as.cancel();
                 } );
             }
-        }
+        },
     );
     describe(
         '#parallel()', function() {
@@ -388,7 +388,7 @@ describe( 'AsyncSteps', function() {
                 as.parallel(
                     function( as, err ) {
                         as.success();
-                    }
+                    },
                 );
 
                 as.parallel();
@@ -656,7 +656,7 @@ describe( 'AsyncSteps', function() {
                 as.execute();
                 async_steps.AsyncToolTest.run();
             } );
-        }
+        },
     );
     describe(
         '#success()', function() {
@@ -668,12 +668,12 @@ describe( 'AsyncSteps', function() {
                     break_burst,
                     function( as, error ) {
                         expect( error ).equal( "Does not work" );
-                    }
+                    },
                 ).add(
                     function( as ) {
                         as.state.second_called = true;
                         as.success();
-                    }
+                    },
                 );
 
                 as.execute();
@@ -702,7 +702,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, error ) {
                         as.success( 'Value1', 'Value2' );
-                    }
+                    },
                 )
                     .add(
                         function( as, val1, val2 ) {
@@ -710,7 +710,7 @@ describe( 'AsyncSteps', function() {
                             expect( val1 ).equal( 'Value1' );
                             expect( val2 ).equal( 'Value2' );
                             as.success();
-                        }
+                        },
                     );
 
                 as.execute();
@@ -741,14 +741,14 @@ describe( 'AsyncSteps', function() {
                     function( as, error ) {
                         console.dir( as );
                         expect( error ).equal( "Does not work" );
-                    }
+                    },
                 );
                 as.add( break_burst );
                 as.add(
                     function( as ) {
                         as.state.second_called = true;
                         as.success();
-                    }
+                    },
                 );
 
                 as.execute();
@@ -803,7 +803,7 @@ describe( 'AsyncSteps', function() {
                     function( as, err ) {
                         as.state.executed = true;
                         expect( err ).be.equal( 'InternalError' );
-                    }
+                    },
                 );
 
                 as.execute();
@@ -827,7 +827,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         as.state.myerror = true;
-                    }
+                    },
                 );
                 as.add( function( as ) {
                     as.state.executed = true;
@@ -879,7 +879,7 @@ describe( 'AsyncSteps', function() {
                     function( as, err ) {
                         console.log( err );
                         as.state.myerror = true;
-                    }
+                    },
                 );
                 as.add( break_burst );
                 as.add(
@@ -889,7 +889,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         console.dir( err );
-                    }
+                    },
                 );
 
                 as.execute();
@@ -907,7 +907,7 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.myerror ).be.false;
                 expect( as.state.executed ).be.true;
             } );
-        }
+        },
     );
     describe(
         '#successStep()', function() {
@@ -933,13 +933,13 @@ describe( 'AsyncSteps', function() {
                     function( as, error ) {
                         console.log( as.state.last_exception );
                         expect( error ).equal( "Does not work" );
-                    }
+                    },
                 ).add(
                     function( as, a, b, c ) {
                         expect( [ a, b, c ] ).to.eql( [ 1, 2, 3 ] );
                         as.state.second_called = true;
                         as.success();
-                    }
+                    },
                 );
                 as.successStep();
 
@@ -958,7 +958,7 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.second_called ).be.true;
                 assertNoEvents();
             } );
-        }
+        },
     );
     describe(
         '#error()', function() {
@@ -993,12 +993,12 @@ describe( 'AsyncSteps', function() {
                             function( as, err ) {
                                 expect( err ).eql( 'Orig' );
                                 as.error( 'Changed' );
-                            }
+                            },
                         );
                     },
                     function( as, err ) {
                         expect( err ).eql( 'Changed' );
-                    }
+                    },
                 );
 
                 as.execute();
@@ -1024,7 +1024,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         as.state.myerror = ( err === 'MyError' );
-                    }
+                    },
                 ).
                     add( function( as ) {
                         as.success();
@@ -1049,7 +1049,7 @@ describe( 'AsyncSteps', function() {
                     break_burst,
                     ( as, err ) => {
                         as.state.myerror = ( err === 'MyError' );
-                    }
+                    },
                 );
                 as.add( function( as ) {
                     as.state.executed = true;
@@ -1099,7 +1099,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         as.state.myerror = ( err === 'MyError' );
-                    }
+                    },
                 );
                 as.add( break_burst );
                 as.add( function( as ) {
@@ -1118,7 +1118,7 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.myerror ).be.false;
                 expect( as.state.executed ).be.true;
             } );
-        }
+        },
     );
     describe(
         '#setTimeout()', function() {
@@ -1158,12 +1158,12 @@ describe( 'AsyncSteps', function() {
                         expect( err ).equal( 'Timeout' );
                         assert.isUndefined( as.state.error_info );
                         done_wrap( as.state.order );
-                    }
+                    },
                 );
 
                 as.execute();
             } );
-        }
+        },
     );
     describe(
         '#setCancel()', function() {
@@ -1192,7 +1192,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         as.state.order.push( 'e' );
-                    }
+                    },
                 );
 
                 as.execute();
@@ -1213,7 +1213,7 @@ describe( 'AsyncSteps', function() {
                     '1c',
                 ] );
             } );
-        }
+        },
     );
     describe(
         '#copyFrom()', function() {
@@ -1239,7 +1239,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, error ) {
                         as.success();
-                    }
+                    },
                 ).add( function( as ) {
                     as.state.executed = true;
                     as.success();
@@ -1293,7 +1293,7 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.parallel1 ).be.true;
                 expect( as.state.parallel2 ).be.true;
             } );
-        }
+        },
     );
     describe(
         '#execute()', function() {
@@ -1319,7 +1319,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         as.state.error_code = err;
-                    }
+                    },
                 );
 
                 as.execute();
@@ -1335,7 +1335,7 @@ describe( 'AsyncSteps', function() {
                 as.add(
                     function( as ) {
                         as.state.ok = true;
-                    }
+                    },
                 );
                 as.execute();
                 async_steps.AsyncToolTest.run();
@@ -1343,7 +1343,7 @@ describe( 'AsyncSteps', function() {
 
                 expect( as.state.ok ).be.true;
             } );
-        }
+        },
     );
     describe(
         '#cancel()', function() {
@@ -1374,7 +1374,7 @@ describe( 'AsyncSteps', function() {
                 as.cancel();
                 assertNoEvents();
             } );
-        }
+        },
     );
 
     describe(
@@ -1430,7 +1430,7 @@ describe( 'AsyncSteps', function() {
                     function( as, err ) {
                         console.dir( s );
                         console.dir( err + ": " + as.state.error_info );
-                    }
+                    },
                 );
 
                 as.execute();
@@ -1466,7 +1466,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         reserr = err;
-                    }
+                    },
                 );
 
                 as.execute();
@@ -1500,7 +1500,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         reserr = err;
-                    }
+                    },
                 );
 
                 as.execute();
@@ -1527,7 +1527,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         reserr = err;
-                    }
+                    },
                 );
 
                 as.execute();
@@ -1555,7 +1555,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         reserr = err;
-                    }
+                    },
                 );
 
                 as.execute();
@@ -1579,7 +1579,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         reserr = err;
-                    }
+                    },
                 );
 
                 as.execute();
@@ -1611,7 +1611,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         reserr = err;
-                    }
+                    },
                 );
 
                 as.execute();
@@ -1648,7 +1648,7 @@ describe( 'AsyncSteps', function() {
                     },
                     function( as, err ) {
                         reserr = err;
-                    }
+                    },
                 );
 
                 as.execute();
@@ -1686,7 +1686,7 @@ describe( 'AsyncSteps', function() {
                         },
                         function( as, err ) {
                             reserr = err;
-                        }
+                        },
                     );
 
                     as.execute();
@@ -1717,7 +1717,7 @@ describe( 'AsyncSteps', function() {
                     ( as, err ) => {
                         as.state.myerror = ( err === 'MyError' );
                         as.success();
-                    }
+                    },
                 );
                 as.add( function( as ) {
                     as.state.executed = true;
@@ -1731,7 +1731,7 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.myerror ).be.true;
                 expect( as.state.executed ).be.true;
             } );
-        }
+        },
     );
     describe(
         '#state()', function() {
@@ -1772,7 +1772,7 @@ describe( 'AsyncSteps', function() {
                         }
 
                         as.error( 'SecondError', 'SecondInfo' );
-                    }
+                    },
                 );
                 as.execute();
                 async_steps.AsyncToolTest.run();
@@ -1819,7 +1819,7 @@ describe( 'AsyncSteps', function() {
                         }
 
                         as.error( 'SecondError', 'SecondInfo' );
-                    }
+                    },
                 );
                 as.execute();
                 async_steps.AsyncToolTest.run();
@@ -1827,7 +1827,7 @@ describe( 'AsyncSteps', function() {
                 expect( as.state.error_info ).equal( 'SecondInfo' );
                 expect( as.state.last_exception.message ).equal( 'SecondError' );
             } );
-        }
+        },
     );
 
     it( 'should support chaining', function( done ) {
@@ -1867,7 +1867,7 @@ describe( 'AsyncSteps', function() {
             function( as, err ) {
                 console.dir( err + ": " + as.state.error_info );
                 console.log( as.state.last_exception );
-            }
+            },
         );
 
 
@@ -1930,7 +1930,7 @@ describe( 'AsyncSteps', function() {
                     } else {
                         done( as.state.last_exception );
                     }
-                }
+                },
             );
             as.add( function( as ) {
                 done( 'Fail' );
@@ -1966,7 +1966,7 @@ describe( 'AsyncSteps', function() {
                             if ( err === 'Wrong' ) {
                                 as.error( 'OK' );
                             }
-                        }
+                        },
                     );
 
                     as.add( function( as ) {
@@ -1979,7 +1979,7 @@ describe( 'AsyncSteps', function() {
                     } else {
                         done( as.state.last_exception );
                     }
-                }
+                },
             );
             as.execute();
             async_steps.AsyncToolTest.run();
@@ -2030,7 +2030,7 @@ if ( typeof Promise !== 'undefined' ) {
                         } catch ( e ) {
                             done( e );
                         }
-                    }
+                    },
                 );
             } catch ( e ) {
                 done( e );
@@ -2046,7 +2046,7 @@ if ( typeof Promise !== 'undefined' ) {
                     } catch ( e ) {
                         done( e );
                     }
-                }
+                },
             );
 
             as.add(
@@ -2060,12 +2060,12 @@ if ( typeof Promise !== 'undefined' ) {
                             } catch ( e ) {
                                 done( e );
                             }
-                        }
+                        },
                     );
                 },
                 ( as, err ) => {
                     done( as.state.last_exception || 'Fail' );
-                }
+                },
             );
             as.add( ( as ) => {
                 as.await(
@@ -2077,7 +2077,7 @@ if ( typeof Promise !== 'undefined' ) {
                         } catch ( e ) {
                             done( e );
                         }
-                    }
+                    },
                 );
             } );
             as.add( ( as ) => done() );
@@ -2215,6 +2215,6 @@ if ( typeof window !== 'undefined' && window.$as ) {
                 expect( window.$as.AsyncSteps ).equal( window.FutoIn.AsyncSteps );
                 expect( window.FutoIn.$as ).equal( window.futoin.$as );
             } );
-        }
+        },
     );
 }

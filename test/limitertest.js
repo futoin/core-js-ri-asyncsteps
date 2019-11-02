@@ -84,7 +84,7 @@ describe( 'Limiter', function() {
                             rejected += 1;
                             as.success();
                         }
-                    }
+                    },
                 );
             } );
         }
@@ -134,12 +134,12 @@ describe( 'Limiter', function() {
                             if ( err === 'Wrong' ) {
                                 as.error( 'OK' );
                             }
-                        }
+                        },
                     );
                 },
                 ( as, err ) => {
                     as.success( err );
-                }
+                },
             );
             as.add( ( as, err ) => {
                 if ( err === 'OK' ) {

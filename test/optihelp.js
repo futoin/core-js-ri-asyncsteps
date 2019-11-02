@@ -70,7 +70,7 @@ optihelp( 'AsyncSteps', { test_time : 5 } )
         $as()
             .add(
                 ( as ) => as.error( 'SomeError', 'SomeInfo' ),
-                ( as, err ) => as.success()
+                ( as, err ) => as.success(),
             )
             .add( ( as ) => done() )
             .execute();
@@ -81,11 +81,11 @@ optihelp( 'AsyncSteps', { test_time : 5 } )
                 ( as ) => {
                     as.add(
                         ( as ) => as.add(
-                            ( as ) => as.error( 'SomeError', 'SomeInfo' )
-                        )
+                            ( as ) => as.error( 'SomeError', 'SomeInfo' ),
+                        ),
                     );
                 },
-                ( as, err ) => as.success()
+                ( as, err ) => as.success(),
             )
             .add( ( as ) => done() )
             .execute();

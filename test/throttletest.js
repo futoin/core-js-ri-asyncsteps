@@ -38,12 +38,12 @@ describe( 'Throttle', function() {
                             if ( err === 'Wrong' ) {
                                 as.error( 'OK' );
                             }
-                        }
+                        },
                     );
                 },
                 ( as, err ) => {
                     as.success( err );
-                }
+                },
             );
             as.add( ( as, err ) => {
                 if ( err === 'OK' ) {
@@ -80,7 +80,7 @@ describe( 'Throttle', function() {
                             as.success();
                         }, 0 );
                     } );
-                }
+                },
             );
 
             if ( i === 0 ) {
@@ -110,7 +110,7 @@ describe( 'Throttle', function() {
             },
             ( as, err ) => {
                 done( as.state.last_exception || 'Fail' );
-            }
+            },
         ).execute();
 
         $as().add(
@@ -126,7 +126,7 @@ describe( 'Throttle', function() {
                 } else {
                     done( as.state.last_exception || 'Fail' );
                 }
-            }
+            },
         ).execute();
 
         $as().add(
@@ -137,7 +137,7 @@ describe( 'Throttle', function() {
             },
             ( as, err ) => {
                 done( as.state.last_exception || 'Fail' );
-            }
+            },
         ).execute();
     } );
 
@@ -159,7 +159,7 @@ describe( 'Throttle', function() {
                 } else {
                     done( as.state.last_exception || 'Fail' );
                 }
-            }
+            },
         ).execute();
 
         $as().add(
@@ -181,7 +181,7 @@ describe( 'Throttle', function() {
             },
             ( as, err ) => {
                 done( as.state.last_exception || 'Fail' );
-            }
+            },
         ).execute();
     } );
 
@@ -203,7 +203,7 @@ describe( 'Throttle', function() {
                         as.add( ( as ) => {
                             curr -= 1;
                         } );
-                    }
+                    },
                 );
             } );
 
@@ -273,7 +273,7 @@ describe( 'Throttle', function() {
                             rejected += 1;
                             as.success();
                         }
-                    }
+                    },
                 );
             } );
         }
@@ -311,7 +311,7 @@ describe( 'Throttle', function() {
                                 rejected += 1;
                                 as.success();
                             }
-                        }
+                        },
                     );
                 } );
             }
@@ -350,7 +350,7 @@ describe( 'Throttle', function() {
                                 rejected += 1;
                                 as.success();
                             }
-                        }
+                        },
                     );
                 } );
             }
