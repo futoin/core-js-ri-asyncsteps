@@ -563,6 +563,7 @@ class AsyncSteps {
 
     /**
      * Execute AsyncSteps with Promise interface
+     * @alias AsyncSteps#promise
      * @returns {Promise} - promise wrapper for AsyncSteps
      */
     promise() {
@@ -591,6 +592,15 @@ class AsyncSteps {
             g_burst_owner = this;
             this._execute();
         } );
+    }
+
+    /**
+     * Create a new instance of AsyncSteps for independent execution
+     * @alias AsyncSteps#newInstance
+     * @returns {AsyncSteps} new instance
+     */
+    newInstance() {
+        return new AsyncSteps( null, this._async_tool );
     }
 
     /**

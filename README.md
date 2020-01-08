@@ -23,7 +23,7 @@ Additionally, it supports async/Promise integration as step through `as.await()`
 Reference implementation of:
  
     FTN12: FutoIn Async API
-    Version: 1.11
+    Version: 1.13
     
 Spec: [FTN12: FutoIn Async API v1.x](https://specs.futoin.org/final/preview/ftn12_async_api-1.html)
 
@@ -749,6 +749,8 @@ Execute all remaining events in the internal queue
     * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.successStep()](#AsyncSteps+successStep) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.await(promise, [onerror])](#AsyncSteps+await) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.promise()](#AsyncSteps+promise) ⇒ <code>Promise</code>
+    * [.newInstance()](#AsyncSteps+newInstance) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.success([..._arg])](#AsyncSteps+success)
     * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.setCancel(oncancel)](#AsyncSteps+setCancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -922,6 +924,20 @@ Integrate a promise as a step.
 | promise | <code>Promise</code> | promise to add as a step |
 | [onerror] | <code>function</code> | error handler to check |
 
+<a name="AsyncSteps+promise"></a>
+
+### asyncSteps.promise() ⇒ <code>Promise</code>
+Execute AsyncSteps with Promise interface
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: <code>Promise</code> - - promise wrapper for AsyncSteps  
+<a name="AsyncSteps+newInstance"></a>
+
+### asyncSteps.newInstance() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Create a new instance of AsyncSteps for independent execution
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - new instance  
 <a name="AsyncSteps+success"></a>
 
 ### asyncSteps.success([..._arg])
@@ -1029,6 +1045,8 @@ Continue loop execution from the next iteration, throws exception
     * [.forEach(map_or_list, func, [label])](#AsyncSteps+forEach) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.successStep()](#AsyncSteps+successStep) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.await(promise, [onerror])](#AsyncSteps+await) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+    * [.promise()](#AsyncSteps+promise) ⇒ <code>Promise</code>
+    * [.newInstance()](#AsyncSteps+newInstance) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.success([..._arg])](#AsyncSteps+success)
     * [.setTimeout(timeout_ms)](#AsyncSteps+setTimeout) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
     * [.setCancel(oncancel)](#AsyncSteps+setCancel) ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
@@ -1202,6 +1220,20 @@ Integrate a promise as a step.
 | promise | <code>Promise</code> | promise to add as a step |
 | [onerror] | <code>function</code> | error handler to check |
 
+<a name="AsyncSteps+promise"></a>
+
+### asyncSteps.promise() ⇒ <code>Promise</code>
+Execute AsyncSteps with Promise interface
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: <code>Promise</code> - - promise wrapper for AsyncSteps  
+<a name="AsyncSteps+newInstance"></a>
+
+### asyncSteps.newInstance() ⇒ [<code>AsyncSteps</code>](#AsyncSteps)
+Create a new instance of AsyncSteps for independent execution
+
+**Kind**: instance method of [<code>AsyncSteps</code>](#AsyncSteps)  
+**Returns**: [<code>AsyncSteps</code>](#AsyncSteps) - new instance  
 <a name="AsyncSteps+success"></a>
 
 ### asyncSteps.success([..._arg])

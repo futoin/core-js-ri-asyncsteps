@@ -1,5 +1,6 @@
 === (next)
 CHANGED: deps maintenance
+NEW: FTN12 v1.13 #newInstance() support
 
 === 2.4.2 (2019-09-27) ===
 CHANGED: deps maintenance

@@ -2142,6 +2142,31 @@ if ( typeof Promise !== 'undefined' ) {
                 } );
         } );
     } );
+
+    describe( '#newInstance', function() {
+        it( 'should create on root object', function( done ) {
+            const as = async_steps();
+            const as2 = as.newInstance();
+            expect( as2 ).not.equal( as );
+            expect( as2 ).instanceof( async_steps.AsyncSteps );
+            as2.add( ( as ) => done() ).execute();
+        } );
+
+        it( 'should create on ASP object', function( done ) {
+            const as = async_steps();
+            as.add( ( as ) => {
+                try {
+                    const as2 = as.newInstance();
+                    expect( as2 ).not.equal( as._root );
+                    expect( as2 ).instanceof( async_steps.AsyncSteps );
+                    as2.add( ( as ) => done() ).execute();
+                } catch ( e ) {
+                    done( e );
+                }
+            } );
+            as.execute();
+        } );
+    } );
 }
 
 describe( '.assertAS', function( done ) {
