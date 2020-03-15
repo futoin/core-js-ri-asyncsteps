@@ -1,4 +1,7 @@
-=== (next)
+=== (next) ===
+CHANGED: dependency maintenance
+
+=== 2.5.0 (2020-01-08) ===
 CHANGED: deps maintenance
 NEW: FTN12 v1.13 #newInstance() support
 
