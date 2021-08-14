@@ -499,7 +499,8 @@ $as.await(func);
 <dt><a href="#$as_test">$as_test(func, [onerror])</a> ⇒ <code>function</code></dt>
 <dd><p>Mocha-compatible test case based on AsyncSteps.</p>
 <p>Example:</p>
-<pre><code class="language-javascript">it(&#39;should ...&#39;, $as_test( (as) =&gt; {}, (as, err) =&gt; {} );</code></pre>
+<pre><code class="language-javascript">it(&#39;should ...&#39;, $as_test( (as) =&gt; {}, (as, err) =&gt; {} );
+</code></pre>
 </dd>
 <dt><a href="#installAsyncToolTest">installAsyncToolTest([install])</a></dt>
 <dd><p>Use for unit testing to fine control step execution.
