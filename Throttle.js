@@ -36,7 +36,7 @@ const throttle_sync = ( asp, throttle, step, on_error ) => {
         root._next_args = asp._call_args;
 
         prev_queue( root ).unshift(
-            [ step, on_error ]
+            [ step, on_error ],
         );
     }
 };
@@ -47,9 +47,9 @@ const throttle_sync = ( asp, throttle, step, on_error ) => {
 class Throttle extends ISync {
     /**
      * C-tor
-     * @param {integer} [max=1] - maximum number of simultaneous critical section entries
-     * @param {intger} [period_ms=1000] - time period in milliseconds
-     * @param {integer} [max_queue=null] - limit queue length, if set
+     * @param {number} [max] - maximum number of simultaneous critical section entries
+     * @param {number} [period_ms] - time period in milliseconds
+     * @param {?number} [max_queue] - limit queue length, if set
      */
     constructor( max, period_ms=1e3, max_queue = null ) {
         super();
@@ -126,7 +126,7 @@ class Throttle extends ISync {
         as.add(
             ( as ) => {
                 throttle_sync( as, this, step, onerror );
-            }
+            },
         );
     }
 }

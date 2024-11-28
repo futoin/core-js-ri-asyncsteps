@@ -31,24 +31,24 @@ const Throttle = require( './Throttle' );
 class Limiter extends ISync {
     /**
      * C-tor
-     * @param {object} [options={}] - option map
-     * @param {integer} [options.concurrent=1]  - maximum concurrent flows
-     * @param {integer} [options.max_queue=0] - maximum queued
-     * @param {integer} [options.rate=1]  - maximum entries in period
-     * @param {integer} [options.period_ms=1000]  - period length
-     * @param {integer} [options.burst=0]  - maximum queue for rate limiting
+     * @param {object} [options] - option map
+     * @param {number} [options.concurrent]  - maximum concurrent flows
+     * @param {number} [options.max_queue] - maximum queued
+     * @param {number} [options.rate]  - maximum entries in period
+     * @param {number} [options.period_ms]  - period length
+     * @param {number} [options.burst]  - maximum queue for rate limiting
      */
     constructor( options = {} ) {
         super();
 
         this._mutex = new Mutex(
             options.concurrent || 1,
-            options.max_queue || 0
+            options.max_queue || 0,
         );
         this._throttle = new Throttle(
             options.rate || 1,
             options.period_ms || 1000,
-            options.burst || 0
+            options.burst || 0,
         );
     }
 

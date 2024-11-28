@@ -55,8 +55,8 @@ const mtx_sync = ( asp, mtx, step, on_error ) => {
 class Mutex extends ISync {
     /**
      * C-tor
-     * @param {integer} [max=1] - maximum number of simultaneous critical section entries
-     * @param {integer} [max_queue=null] - limit queue length, if set
+     * @param {number} [max] - maximum number of simultaneous critical section entries
+     * @param {?number} [max_queue] - limit queue length, if set
      */
     constructor( max = 1, max_queue = null ) {
         super();
@@ -133,7 +133,7 @@ class Mutex extends ISync {
         as.add(
             ( as ) => {
                 mtx_sync( as, this, step, onerror );
-            }
+            },
         );
     }
 }

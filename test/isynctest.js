@@ -3,14 +3,10 @@
 // ensure it works with frozen one
 Object.freeze( Object.prototype );
 
-const chai = require( 'chai' );
-
 //
 const $as = ( typeof window !== 'undefined' )
     ? require( 'futoin-asyncsteps' )
     : module.require( '../lib/main-full' );
-
-const { assert, expect } = chai;
 
 const { ISync } = $as;
 const $as_test = $as.testcase;

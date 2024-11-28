@@ -143,6 +143,8 @@ class AsyncSteps {
         return p;
     }
 
+    /* globals ISync */
+
     /**
      * Add sub-step with synchronization against supplied object.
      * @param {ISync} object - Mutex, Throttle or other type of synchronization implementation.
@@ -162,7 +164,7 @@ class AsyncSteps {
     /**
      * Set error and throw to abort execution.
      *
-     * *NOTE: If called outside of AsyncSteps stack (e.g. by external event), make sure you catch the exception*
+     * **NOTE: If called outside of AsyncSteps stack (e.g. by external event), make sure you catch the exception**
      * @param {string} name - error message, expected to be identifier "InternalError"
      * @param {string=} error_info - optional descriptive message assigned to as.state.error_info
      * @throws {Error}
@@ -204,7 +206,7 @@ class AsyncSteps {
 
     /**
      * @private
-     * @param {array} [args] List of success() args
+     * @param {Array} [args] List of success() args
      */
     _handle_success( args = EMPTY_ARRAY ) {
         const stack = this._stack;
@@ -432,7 +434,7 @@ class AsyncSteps {
 
     /**
      * Optimized success() which performs burst execution
-     * @param {array} [args] List of success() args
+     * @param {Array} [args] List of success() args
      * @private
      */
     _burst_success( args = EMPTY_ARRAY ) {
@@ -477,14 +479,14 @@ class AsyncSteps {
      * It is just a subset of *ExecFunc*
      * @callback RepeatFunc
      * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
-     * @param {integer} i - current iteration starting from 0
+     * @param {number} i - current iteration starting from 0
      * @alias repeat_callback
      * @see ExecFunc
      */
 
     /**
      * Call *func(as, i)* for *count* times
-     * @param {integer} count - how many times to call the *func*
+     * @param {number} count - how many times to call the *func*
      * @param {RepeatFunc} func - loop body
      * @param {string=} label - optional label to use for *as.break()* and *as.continue()* in inner loops
      * @returns {AsyncSteps} self
@@ -502,7 +504,7 @@ class AsyncSteps {
      * It is just a subset of *ExecFunc*
      * @callback ForEachFunc
      * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
-     * @param {integer|string} key - key ID or name
+     * @param {number|string} key - key ID or name
      * @param {*} value - value associated with key
      * @alias foreach_callback
      * @see ExecFunc
@@ -510,7 +512,7 @@ class AsyncSteps {
 
     /**
      * For each *map* or *list* element call *func( as, key, value )*
-     * @param {integer} map_or_list - map or list to iterate over
+     * @param {number} map_or_list - map or list to iterate over
      * @param {ForEachFunc} func - loop body
      * @param {string=} label - optional label to use for *as.break()* and *as.continue()* in inner loops
      * @returns {AsyncSteps} self
@@ -526,7 +528,7 @@ class AsyncSteps {
 
     /**
      * Shortcut for `this.add( ( as ) => as.success( ...args ) )`
-     * @param {any} [args...] - argument to pass, if any
+     * @param {...any} [args] - argument to pass, if any
      * @alias AsyncSteps#successStep
      * @returns {AsyncSteps} self
      */
@@ -549,7 +551,7 @@ class AsyncSteps {
     /**
      * Integrate a promise as a step.
      * @param {Promise} promise - promise to add as a step
-     * @param {function} [onerror] error handler to check
+     * @param {Function} [onerror] error handler to check
      * @alias AsyncSteps#await
      * @returns {AsyncSteps} self
      */
@@ -614,7 +616,7 @@ class AsyncSteps {
 }
 
 /**
- * *execute_callback* as defined in **FTN12: FutoIn AsyncSteps** specification. Function must have
+ * **execute_callback** as defined in **FTN12: FutoIn AsyncSteps** specification. Function must have
  * non-blocking body calling:  *as.success()* or *as.error()* or *as.add()/as.parallel()*.
  * @callback ExecFunc
  * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
@@ -623,12 +625,12 @@ class AsyncSteps {
  */
 
 /**
- * *error_callback* as defined in **FTN12: FutoIn AsyncSteps** specification.
+ * **error_callback** as defined in **FTN12: FutoIn AsyncSteps** specification.
  * Function can:
  *
- * * do nothing
- * * override error message with *as.error( new_error )*
- * * continue execution with *as.success()*
+ * - do nothing,
+ * - override error message with `as.error( new_error )`,
+ * - continue execution with `as.success()`.
  * @callback ErrorFunc
  * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
  * @param {string} err - error message
@@ -636,8 +638,7 @@ class AsyncSteps {
  */
 
 /**
- * *cancel_callback* as defined in **FTN12: FutoIn AsyncSteps** specification.
- *
+ * **cancel_callback** as defined in **FTN12: FutoIn AsyncSteps** specification.
  * @callback CancelFunc
  * It must be used to cancel any external processing to avoid invalidated AsyncSteps object use.
  * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
@@ -647,13 +648,13 @@ class AsyncSteps {
 /**
  * Get AsyncSteps state object.
  *
- * *Note: There is a JS-specific improvement: as.state === as.state()*
+ * **Note: There is a JS-specific improvement: as.state === as.state()**
  *
  * The are the following pre-defined state variables:
  *
- * * **error_info** - error description, if provided to *as.error()*
- * * **last_exception** - the last exception caught
- * * **async_stack** - array of references to executed step handlers in current stack
+ * - **error_info** - error description, if provided to *as.error()*
+ * - **last_exception** - the last exception caught
+ * - **async_stack** - array of references to executed step handlers in current stack
  * @returns {object}
  * @alias AsyncSteps#state
  */

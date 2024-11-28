@@ -3,20 +3,21 @@
 // ensure it works with frozen one
 Object.freeze( Object.prototype );
 
-const chai = require( 'chai' );
-
 //
 const $as = ( typeof window !== 'undefined' )
     ? require( 'futoin-asyncsteps' )
     : module.require( '../lib/main-full' );
-
-const { assert, expect } = chai;
 
 const { Throttle } = $as;
 
 const {
     TIMER,
 } = require( '../lib/common' );
+
+let expect;
+before( async () => {
+    ( { expect } = ( await import( 'chai' ) ) );
+} );
 
 describe( 'Throttle', function() {
     it ( 'should handle re-entrancy & success params', function( done ) {

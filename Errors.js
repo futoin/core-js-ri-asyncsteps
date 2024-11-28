@@ -47,109 +47,109 @@ class Errors {}
 
 /**
  * Connection error before request is sent.
- * @note Must be generated on Invoker side
- * @const {string} ConnectError
+ * Must be generated on Invoker side
+ * @constant {string} ConnectError
  * @memberof FutoInErrors
  */
 
 /**
  * Communication error at any stage after request is sent
  * and before response is received.
- * @note Must be generated on Invoker side
- * @const {string} CommError
+ * Must be generated on Invoker side
+ * @constant {string} CommError
  * @memberof FutoInErrors
  */
 
 /**
  * Unknown interface requested.
- * @note Must be generated only on Executor side
- * @const {string} UnknownInterface
+ * Must be generated only on Executor side
+ * @constant {string} UnknownInterface
  * @memberof FutoInErrors
  */
 
 /**
  * Not supported interface version.
- * @note Must be generated only on Executor side
- * @const {string} NotSupportedVersion
+ * Must be generated only on Executor side
+ * @constant {string} NotSupportedVersion
  * @memberof FutoInErrors
  */
 
 /**
  * In case interface function is not implemented on Executor side
- * @note Must be generated on Executor side
- * @const {string} NotImplemented
+ * Must be generated on Executor side
+ * @constant {string} NotImplemented
  * @memberof FutoInErrors
  */
 
 /**
  * Security policy on Executor side does not allow to
  * access interface or specific function.
- * @note Must be generated only on Executor side
- * @const {string} Unauthorized
+ * Must be generated only on Executor side
+ * @constant {string} Unauthorized
  * @memberof FutoInErrors
  */
 
 /**
  * Unexpected internal error on Executor side, including internal CommError.
- * @note Must be generated only on Executor side
- * @const {string} InternalError
+ * Must be generated only on Executor side
+ * @constant {string} InternalError
  * @memberof FutoInErrors
  */
 
 /**
  * Unexpected internal error on Invoker side, not related to CommError.
- * @note Must be generated only on Invoker side
- * @const {string} InvokerError
+ * Must be generated only on Invoker side
+ * @constant {string} InvokerError
  * @memberof FutoInErrors
  */
 
 /**
  * Invalid data is passed as FutoIn request.
- * @note Must be generated only on Executor side
- * @const {string} InvalidRequest
+ * Must be generated only on Executor side
+ * @constant {string} InvalidRequest
  * @memberof FutoInErrors
  */
 
 /**
  * Defense system has triggered rejection
- * @note Must be generated on Executor side, but also possible to be triggered on Invoker
- * @const {string} DefenseRejected
+ * Must be generated on Executor side, but also possible to be triggered on Invoker
+ * @constant {string} DefenseRejected
  * @memberof FutoInErrors
  */
 
 /**
  * Executor requests re-authorization
- * @note Must be generated only on Executor side
- * @const {string} PleaseReauth
+ * Must be generated only on Executor side
+ * @constant {string} PleaseReauth
  * @memberof FutoInErrors
  */
 
 /**
  * 'sec' request section has invalid data or not SecureChannel
- * @note Must be generated only on Executor side
- * @const {string} SecurityError
+ * Must be generated only on Executor side
+ * @constant {string} SecurityError
  * @memberof FutoInErrors
  */
 
 /**
  * Timeout occurred in any stage
- * @note Must be used only internally and should never travel in request message
- * @const {string} Timeout
+ * Must be used only internally and should never travel in request message
+ * @constant {string} Timeout
  * @memberof FutoInErrors
  */
 
 /**
  * Loop Break called
- * @note Must not be used directly.
- * @const {string} LoopBreak
+ * Must not be used directly.
+ * @constant {string} LoopBreak
  * @private
  * @memberof FutoInErrors
  */
 
 /**
  * Loop Continue called
- * @note Must not be used directly.
- * @const {string} LoopCont
+ * Must not be used directly.
+ * @constant {string} LoopCont
  * @private
  * @memberof FutoInErrors
  */

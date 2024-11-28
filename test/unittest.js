@@ -4,7 +4,6 @@
 // ensure it works with frozen one
 Object.freeze( Object.prototype );
 
-const chai = require( 'chai' );
 const performance_now = require( "performance-now" );
 
 //
@@ -14,12 +13,14 @@ const async_steps = in_browser
     : module.require( '../lib/main-full' );
 const production_mode = async_steps.isProduction;
 
-const { assert, expect } = chai;
-
 const {
     HANDLE_SUCCESS,
 } = require( '../lib/common' );
 
+let assert; let expect;
+before( async () => {
+    ( { assert, expect } = ( await import( 'chai' ) ) );
+} );
 
 describe( 'AsyncTool', function() {
     describe(

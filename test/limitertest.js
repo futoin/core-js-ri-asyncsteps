@@ -3,14 +3,10 @@
 // ensure it works with frozen one
 Object.freeze( Object.prototype );
 
-const chai = require( 'chai' );
-
 //
 const $as = ( typeof window !== 'undefined' )
     ? require( 'futoin-asyncsteps' )
     : module.require( '../lib/main-full' );
-
-const { assert, expect } = chai;
 
 const { Limiter } = $as;
 
@@ -21,6 +17,11 @@ const {
     PERIOD_MS,
     THROTTLE,
 } = require( '../lib/common' );
+
+let expect;
+before( async () => {
+    ( { expect } = ( await import( 'chai' ) ) );
+} );
 
 describe( 'Limiter', function() {
     it ( 'should have correct defaults', function() {
