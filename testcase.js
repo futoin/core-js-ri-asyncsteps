@@ -25,6 +25,7 @@ const AsyncSteps = require( './AsyncSteps' );
 
 /* globals ExecFunc */
 /* globals ErrorFunc */
+/* globals GenericFunc */
 
 /**
  * Mocha-compatible test case based on AsyncSteps.
@@ -35,7 +36,7 @@ const AsyncSteps = require( './AsyncSteps' );
  * ```
  * @param {ExecFunc} func - function defining non-blocking step execution
  * @param {ErrorFunc} [onerror] - Optional, provide error handler
- * @returns {Function} suitable for `it()` Mocha call
+ * @returns {GenericFunc} suitable for `it()` Mocha call
  * @alias $as_test
  */
 module.exports = function( func, onerror ) {

@@ -505,7 +505,7 @@ class AsyncSteps {
      * @callback ForEachFunc
      * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
      * @param {number|string} key - key ID or name
-     * @param {*} value - value associated with key
+     * @param {any} value - value associated with key
      * @alias foreach_callback
      * @see ExecFunc
      */
@@ -551,7 +551,7 @@ class AsyncSteps {
     /**
      * Integrate a promise as a step.
      * @param {Promise} promise - promise to add as a step
-     * @param {Function} [onerror] error handler to check
+     * @param {ErrorFunc=} [onerror] error handler to check
      * @alias AsyncSteps#await
      * @returns {AsyncSteps} self
      */
@@ -620,7 +620,7 @@ class AsyncSteps {
  * non-blocking body calling:  *as.success()* or *as.error()* or *as.add()/as.parallel()*.
  * @callback ExecFunc
  * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
- * @param {...*} [val] - any result values passed to the previous as.success() call
+ * @param {...any} [val] - any result values passed to the previous as.success() call
  * @alias execute_callback
  */
 
@@ -643,6 +643,12 @@ class AsyncSteps {
  * It must be used to cancel any external processing to avoid invalidated AsyncSteps object use.
  * @param {AsyncSteps} as - the only valid reference to AsyncSteps with required level of protection
  * @alias cancel_callback
+ */
+
+/**
+ * A generic callback with no parameters expected.
+ * @callback GenericFunc
+ * @alias generic_callback
  */
 
 /**

@@ -39,6 +39,7 @@ export default [
             "comma-style": ["error", "last"],
             "jsdoc/require-returns": ["off"],
             "jsdoc/require-jsdoc": "error",
+            "jsdoc/reject-any-type": ["off"],
             "no-template-curly-in-string": ["error"],
             "curly": ["error", "multi-line"],
             "no-multi-spaces": ["error"],

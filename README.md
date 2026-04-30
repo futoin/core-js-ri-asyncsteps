@@ -496,7 +496,7 @@ $as.await(func);
 ## Functions
 
 <dl>
-<dt><a href="#$as_test">$as_test(func, [onerror])</a> ⇒ <code>function</code></dt>
+<dt><a href="#$as_test">$as_test(func, [onerror])</a> ⇒ <code>GenericFunc</code></dt>
 <dd><p>Mocha-compatible test case based on AsyncSteps.</p>
 <p>Example:</p>
 <pre><code class="language-javascript">it(&#39;should ...&#39;, $as_test( (as) =&gt; {}, (as, err) =&gt; {} );
@@ -602,7 +602,7 @@ Wrapper for setTimeout()
 
 | Param | Type | Description |
 | --- | --- | --- |
-| func | <code>function</code> | callback to execute |
+| func | <code>GenericFunc</code> | callback to execute |
 | [timeout_ms] | <code>number</code> | optional timeout in ms |
 
 <a name="AsyncTool.cancelCall"></a>
@@ -626,7 +626,7 @@ Wrapper for setImmediate()
 
 | Param | Type | Description |
 | --- | --- | --- |
-| func | <code>function</code> | callback to execute |
+| func | <code>GenericFunc</code> | callback to execute |
 
 <a name="AsyncTool.cancelImmediate"></a>
 
@@ -665,7 +665,7 @@ Adds callback to internal queue
 
 | Param | Type | Description |
 | --- | --- | --- |
-| func | <code>function</code> | callback to execute |
+| func | <code>GenericFunc</code> | callback to execute |
 | [timeout_ms] | <code>number</code> | optional timeout in ms |
 
 <a name="AsyncToolTest.callLater"></a>
@@ -923,7 +923,7 @@ Integrate a promise as a step.
 | Param | Type | Description |
 | --- | --- | --- |
 | promise | <code>Promise</code> | promise to add as a step |
-| [onerror] | <code>function</code> | error handler to check |
+| [onerror] | <code>ErrorFunc</code> | error handler to check |
 
 <a name="AsyncSteps+promise"></a>
 
@@ -1219,7 +1219,7 @@ Integrate a promise as a step.
 | Param | Type | Description |
 | --- | --- | --- |
 | promise | <code>Promise</code> | promise to add as a step |
-| [onerror] | <code>function</code> | error handler to check |
+| [onerror] | <code>ErrorFunc</code> | error handler to check |
 
 <a name="AsyncSteps+promise"></a>
 
@@ -1420,7 +1420,7 @@ Must be used only internally and should never travel in request message
 **Kind**: static constant of [<code>FutoInErrors</code>](#FutoInErrors)  
 <a name="$as_test"></a>
 
-## $as\_test(func, [onerror]) ⇒ <code>function</code>
+## $as\_test(func, [onerror]) ⇒ <code>GenericFunc</code>
 Mocha-compatible test case based on AsyncSteps.
 
 Example:
@@ -1429,7 +1429,7 @@ it('should ...', $as_test( (as) => {}, (as, err) => {} );
 ```
 
 **Kind**: global function  
-**Returns**: <code>function</code> - suitable for `it()` Mocha call  
+**Returns**: <code>GenericFunc</code> - suitable for `it()` Mocha call  
 
 | Param | Type | Description |
 | --- | --- | --- |
